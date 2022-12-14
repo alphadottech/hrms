@@ -9,6 +9,7 @@ import lombok.Setter;
 @Document(collection = "employee")
 @Data
 public class Employee {
+	
 	@Id
 	private Integer empId;
 	private String name;

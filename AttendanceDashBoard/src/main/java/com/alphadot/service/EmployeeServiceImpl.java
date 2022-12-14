@@ -10,6 +10,7 @@ import com.alphadot.model.Employee;
 import com.alphadot.repository.EmployeeRepo;
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
+	
 	@Autowired
 	private EmployeeRepo employeeRepo;
 	@Override
