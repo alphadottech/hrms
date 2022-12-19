@@ -15,6 +15,7 @@ public class Employee {
 	private Integer empId;
 	private String name;
 	private Long mobileNo;
+	private String emailId;
 	private String designation;
 	private LocalDate joinDate;
 	
