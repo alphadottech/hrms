@@ -1,5 +1,5 @@
 package com.alphadot.service;
 
-public interface AttendanceInfoService {
+public interface AttendanceInfoService  {
 
 }

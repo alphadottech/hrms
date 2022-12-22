@@ -1,11 +1,21 @@
 package com.alphadot.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import java.io.Serializable;
+import java.util.List;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.alphadot.model.Employee;
-@Repository
-public interface EmployeeRepo extends MongoRepository<Employee, Integer> {
+
+
+public interface EmployeeRepo extends JpaRepository<Employee, Serializable> {
+	
+	/*
+	 * @Query(value="Select e from Employee e where e.mobileNo:%mobileNo% ") public
+	 * List<Employee> findEmployeeDetailsByPhoneNo(Long mobileNo);
+	 */
+	
+	
 
 }

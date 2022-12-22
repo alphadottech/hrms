@@ -7,15 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alphadot.model.Employee;
+import com.alphadot.model.EmployeeStatus;
 import com.alphadot.repository.EmployeeRepo;
+import com.alphadot.repository.EmployeeStatusRepo;
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
 	
 	@Autowired
 	private EmployeeRepo employeeRepo;
+	
+	@Autowired
+	private EmployeeStatusRepo employeeStatusRepo;
+	
 	@Override
 	public List<Employee> getAllEmps() {
-		return employeeRepo.findAll();
+		List<Employee> list=employeeRepo.findAll();
+		return list;
 	}
 
 	@Override
@@ -51,4 +58,17 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public Employee updateEmp(Employee emp) {		
 		return employeeRepo.save(emp);
 	}
+
+	@Override
+	public EmployeeStatus getEmployeeById(Integer empId) {
+		
+		Optional<EmployeeStatus> opt=employeeStatusRepo.findById(empId);
+		if (opt.isPresent()) 
+			return opt.get();
+		else
+			return null;	
+	}
+
+
+	
 }

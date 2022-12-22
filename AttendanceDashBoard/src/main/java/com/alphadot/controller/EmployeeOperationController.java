@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.alphadot.model.Employee;
+import com.alphadot.model.EmployeeStatus;
 import com.alphadot.service.EmployeeService;
 
 @RestController
+@RequestMapping("/employee")
 public class EmployeeOperationController {
 	
 	@Autowired
@@ -33,7 +36,7 @@ public class EmployeeOperationController {
 
 	@GetMapping("/getAllEmp")
 	public ResponseEntity<List<Employee>> getAllEmps() {
-		return new ResponseEntity<>(employeeService.getAllEmps(), HttpStatus.OK);
+			return new ResponseEntity<>(employeeService.getAllEmps(), HttpStatus.OK);
 	}
 	
 	@PutMapping("/updateEmp")
@@ -44,6 +47,12 @@ public class EmployeeOperationController {
 	@DeleteMapping("/delete/{empId}")
 	public ResponseEntity<String> deleteEmp(@PathVariable("empId") int empId) {
 		return new ResponseEntity<String>(employeeService.deleteEmpById(empId), HttpStatus.OK);
+	}
+	@GetMapping("/findById/{empId}")
+	public ResponseEntity<EmployeeStatus> findEmployeeByEmployeeId(@PathVariable(name="empId") Integer empId ){
+		
+		return new ResponseEntity<EmployeeStatus>(employeeService.getEmployeeById(empId), HttpStatus.OK);
+		
 	}
 
 }
