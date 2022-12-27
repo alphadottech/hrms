@@ -1,4 +1,4 @@
-package com.alphadot.service;
+package com.adt.hrms.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,10 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alphadot.model.Employee;
-import com.alphadot.model.EmployeeStatus;
-import com.alphadot.repository.EmployeeRepo;
-import com.alphadot.repository.EmployeeStatusRepo;
+import com.adt.hrms.model.Employee;
+import com.adt.hrms.model.EmployeeStatus;
+import com.adt.hrms.repository.EmployeeRepo;
+import com.adt.hrms.repository.EmployeeStatusRepo;
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
 	
@@ -68,6 +68,14 @@ public class EmployeeServiceImpl implements EmployeeService{
 		else
 			return null;	
 	}
+
+	@Override
+	public Employee getEmployeeById(int empId) {
+		Employee emp = employeeRepo.findByEmpId(empId);
+		return emp;
+	}
+	
+	
 
 
 	
