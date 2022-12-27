@@ -1,13 +1,13 @@
-package com.alphadot.controller;
-
-
+package com.adt.hrms.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-
-
 @RestController
-public class AttendanceOperationsController {
+public class InterviewPositionController {
 	
 	
+
+	
+	
+
 }

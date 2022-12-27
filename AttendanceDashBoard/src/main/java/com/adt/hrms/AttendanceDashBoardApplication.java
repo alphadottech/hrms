@@ -1,4 +1,4 @@
-package com.alphadot;
+package com.adt.hrms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

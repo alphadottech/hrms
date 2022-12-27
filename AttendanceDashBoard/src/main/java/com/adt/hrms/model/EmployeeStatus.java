@@ -1,4 +1,4 @@
-package com.alphadot.model;
+package com.adt.hrms.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

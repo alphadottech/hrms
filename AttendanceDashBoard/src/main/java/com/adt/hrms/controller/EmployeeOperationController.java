@@ -1,4 +1,4 @@
-package com.alphadot.controller;
+package com.adt.hrms.controller;
 
 import java.util.List;
 
@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.alphadot.model.Employee;
-import com.alphadot.model.EmployeeStatus;
-import com.alphadot.service.EmployeeService;
+
+import com.adt.hrms.model.Employee;
+import com.adt.hrms.model.EmployeeStatus;
+import com.adt.hrms.service.EmployeeService;
 
 @RestController
 @RequestMapping("/employee")

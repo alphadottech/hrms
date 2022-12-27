@@ -1,9 +1,9 @@
-package com.alphadot.service;
+package com.adt.hrms.service;
 
 import java.util.List;
 
-import com.alphadot.model.Employee;
-import com.alphadot.model.EmployeeStatus;
+import com.adt.hrms.model.Employee;
+import com.adt.hrms.model.EmployeeStatus;
 
 public interface EmployeeService {
 	
@@ -13,4 +13,5 @@ public interface EmployeeService {
 	public String deleteEmpById(Integer empId);
 	public Employee updateEmp(Employee emp);
 	public EmployeeStatus getEmployeeById(Integer empId);
+	public Employee getEmployeeById(int empId);
 }
