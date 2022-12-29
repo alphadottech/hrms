@@ -14,4 +14,5 @@ public interface EmployeeService {
 	public Employee updateEmp(Employee emp);
 	public EmployeeStatus getEmployeeById(Integer empId);
 	public Employee getEmployeeById(int empId);
+	
 }

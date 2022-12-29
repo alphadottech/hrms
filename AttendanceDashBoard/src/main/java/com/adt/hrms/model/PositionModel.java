@@ -1,5 +1,8 @@
 package com.adt.hrms.model;
 
+
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -13,28 +16,28 @@ public class PositionModel {
 	
 	@Id
 	@Column(name = "id")
-	private Integer Id;
+	private Integer id;
 	
 	@Column(name = "tech_id")
-	private Integer TechId;
+	private Integer techId;
 	
 	@Column(name = "position_open_date")
-	private String PositionOpenDate;
+	private LocalDateTime positionOpenDate;
 	
 	@Column(name = "position_close_date")
-	private String PositionCloseDate;
+	private LocalDateTime positionCloseDate;
 	
 	@Column(name = "status")
-	private String Status;
+	private String status;
 	
 	@Column(name = "Experience_in_year")
-	private String ExperienceInYear;
+	private double experienceInYear;
 	
 	@Column(name = "remote")
-	private String Remote;
+	private boolean remote;
 	
 	@Column(name = "position_type")
-	private String PositionType;
+	private String positionType;
 	
 	
 }
