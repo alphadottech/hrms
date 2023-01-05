@@ -14,22 +14,31 @@ public class Employee {
 	@Id
 	@Column(name = "EmpId")
 	private Integer empId;
+	
 	@Column(name = "FirstName")
 	private String fName;
+	
 	@Column(name = "LastName")
 	private String lName;
+	
 	@Column(name = "MobileNo")
 	private Long mobileNo;
+	
 	@Column(name = "EmailId")
 	private String emailId;
+	
 	@Column(name = "Designamtion")
 	private String designation;
+	
 	@Column(name = "JoiningDate")
 	private String joinDate;
+	
 	@Column(name = "Gender")
 	private String gender;
+	
 	@Column(name = "DOB")
 	private String dob;
+	
 	@Column(name = "MaritalStatus")
 	private String maritalStatus;
 	

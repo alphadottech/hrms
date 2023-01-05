@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.adt.hrms.model.Employee;
+
 import com.adt.hrms.model.PositionModel;
 import com.adt.hrms.repository.PositionRepo;
 

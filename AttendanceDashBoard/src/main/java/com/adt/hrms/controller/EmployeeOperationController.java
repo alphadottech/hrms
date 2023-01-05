@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adt.hrms.model.Employee;
@@ -42,7 +42,7 @@ public class EmployeeOperationController {
 	}
 	
 	@PutMapping("/updateEmp")
-	public ResponseEntity<Employee> updateEmp(@RequestBody Employee emp) {
+	public ResponseEntity<String> updateEmp(@RequestBody Employee emp) {
 		return new ResponseEntity<>(employeeService.updateEmp(emp), HttpStatus.OK);
 	}
 
@@ -50,13 +50,21 @@ public class EmployeeOperationController {
 	public ResponseEntity<String> deleteEmp(@PathVariable("empId") int empId) {
 		return new ResponseEntity<String>(employeeService.deleteEmpById(empId), HttpStatus.OK);
 	}
-	@GetMapping("/findById/{empId}")
-	public ResponseEntity<EmployeeStatus> findEmployeeByEmployeeId(@PathVariable(name="empId") Integer empId ){
+	@GetMapping("/findStatusById/{empId}")
+	public ResponseEntity<EmployeeStatus> findEmployeeByEmployeeId(@PathVariable("empId") Integer empId ){
 		
 		return new ResponseEntity<EmployeeStatus>(employeeService.getEmployeeById(empId), HttpStatus.OK);
 		
 	}
 	
-
+	@GetMapping("/searchByFirstLastname")
+	public ResponseEntity<List<Employee>> SearchEmployee(@RequestParam("query") String query){
+		return ResponseEntity.ok(employeeService.SearchEmployee(query));
+	}
+	
+	@GetMapping("/emailId")
+	public ResponseEntity<List<Employee>> SearchByEmailId(@RequestParam("query") String query){
+		return ResponseEntity.ok(employeeService.SearchByEmailId(query));
+	}
 
 }
