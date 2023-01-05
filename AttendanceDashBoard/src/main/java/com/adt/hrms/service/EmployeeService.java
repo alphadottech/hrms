@@ -11,8 +11,11 @@ public interface EmployeeService {
 	public Employee getEmp(Integer empId);
 	public String saveEmp(Employee emp);
 	public String deleteEmpById(Integer empId);
-	public Employee updateEmp(Employee emp);
+	public String updateEmp(Employee emp);
 	public EmployeeStatus getEmployeeById(Integer empId);
 	public Employee getEmployeeById(int empId);
+	List<Employee> SearchEmployee(String query);
+	List<Employee> SearchByEmailId(String query);
+	
 	
 }

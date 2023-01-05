@@ -10,6 +10,8 @@ import com.adt.hrms.model.Employee;
 import com.adt.hrms.model.EmployeeStatus;
 import com.adt.hrms.repository.EmployeeRepo;
 import com.adt.hrms.repository.EmployeeStatusRepo;
+
+	
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
 	
@@ -25,21 +27,12 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return list;
 	}
 
-	@Override
-	public Employee getEmp(Integer empId) {
-		Optional<Employee> opt=employeeRepo.findById(empId);
-		if (opt.isPresent()) 
-			return opt.get();
-		else
-			return null;
-		
-	}
-	
+
 	@Override
 	public String saveEmp(Employee emp) {
 		Optional<Employee> opt=employeeRepo.findById(emp.getEmpId());
 		if(opt.isPresent())
-			return "Employee with Id "+emp.getEmpId()+" is alredy avalable Pls Insert new ID....";
+			return "Employee with Id "+emp.getEmpId()+" is already avalable Pls Insert new ID....";
 		return employeeRepo.save(emp).getEmpId()+" Employee is Saved";
 	}
 
@@ -55,8 +48,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
  
 	@Override
-	public Employee updateEmp(Employee emp) {		
-		return employeeRepo.save(emp);
+	public String updateEmp(Employee emp) {		
+		return employeeRepo.save(emp).getEmpId()+ " Details Updated Successfully";
 	}
 
 	@Override
@@ -75,8 +68,29 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return emp;
 	}
 
+	@Override
+	public List<Employee> SearchEmployee(String query) {
+		List<Employee> emplist = employeeRepo.SearchEmployee(query);
+		return emplist;
+	}
 
+	@Override
+	public List<Employee> SearchByEmailId(String query) {
+		List<Employee> emailemp = employeeRepo.SearchByEmailId(query);
+		return emailemp;
+	}
 
+	@Override
+	public Employee getEmp(Integer empId) {
+		Optional<Employee> opt = employeeRepo.findById(empId);
+		if(opt.isPresent())
+			return opt.get();
+		else
+			return null; 
+	}
+	
 
 	
+
+
 }
