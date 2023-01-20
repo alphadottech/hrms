@@ -2,13 +2,14 @@ package com.adt.hrms.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
-
-@Entity
-@Table(name = "Attendance")
 @Data
+@Entity
+@Table(catalog = "EmployeeDB", schema = "employee_schema",name = "Attendance")
 public class AttendanceModel {
 	
 	@Id
