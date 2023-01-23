@@ -4,18 +4,51 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.0</version>
+		<version>2.7.7</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.alphadot</groupId>
 	<artifactId>AttendanceDashBoard</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>AttendanceDashBoard</name>
-	<description>Demo project for Spring Boot</description>
+	<description>AttendanceDashBoard service</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>1.8</java.version>
 		<spring-cloud.version>2021.0.5</spring-cloud.version>
 	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-sleuth</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-sleuth-zipkin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -27,89 +60,48 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	<dependencies>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-log4j2</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-sleuth</artifactId>
-		</dependency>
-
-
-	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.19.1</version>
-			</plugin>
-
-
 		</plugins>
 	</build>
-
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/snapshot</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
 </project>
