@@ -3,6 +3,7 @@ package com.adt.hrms.service;
 import java.util.List;
 
 import com.adt.hrms.model.PositionModel;
+import com.adt.hrms.ui.PositionUIModel;
 
 public interface PositionService {
 	
@@ -11,6 +12,7 @@ public interface PositionService {
 	public String savePosition(PositionModel pm);
 	//public String deletePositionById(Integer id);
 	public String updatePosition(PositionModel pm);
+	public List<PositionUIModel> getAllUIPosition();
 	
 
 }

@@ -2,24 +2,27 @@ package com.adt.hrms.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "EmployeeDetails")
+@Table(catalog = "EmployeeDB", schema = "employee_schema", name = "EmployeeDetails")
 public class Employee {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "EmpId")
 	private Integer empId;
 	
 	@Column(name = "FirstName")
-	private String fName;
+	private String firstName;
 	
 	@Column(name = "LastName")
-	private String lName;
+	private String lastName;
 	
 	@Column(name = "MobileNo")
 	private Long mobileNo;
@@ -27,7 +30,7 @@ public class Employee {
 	@Column(name = "EmailId")
 	private String emailId;
 	
-	@Column(name = "Designamtion")
+	@Column(name = "designation")
 	private String designation;
 	
 	@Column(name = "JoiningDate")
