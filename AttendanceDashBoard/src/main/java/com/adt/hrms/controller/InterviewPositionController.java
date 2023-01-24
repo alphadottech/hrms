@@ -19,6 +19,7 @@ import com.adt.hrms.model.Interview;
 import com.adt.hrms.model.PositionModel;
 import com.adt.hrms.service.InterviewService;
 import com.adt.hrms.service.PositionService;
+import com.adt.hrms.ui.InterviewUIModel;
 import com.adt.hrms.ui.PositionUIModel;
 
 @RestController
@@ -89,7 +90,12 @@ public class InterviewPositionController {
 	}
 	
 	
-
+	@GetMapping("/getallUIInterviewPosition")
+	public ResponseEntity <List<InterviewUIModel>> getAllUIInterviewDetails() {
+		LOGGER.info("InterviewService:InterviewPosition:getAllUIInterviewDetails info level log message");
+		return new ResponseEntity<>(interviewService.getAllUIInterview(), HttpStatus.OK);
+		
+	}
 	
 	
 	
