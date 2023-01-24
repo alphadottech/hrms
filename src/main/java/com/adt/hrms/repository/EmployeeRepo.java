@@ -13,7 +13,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 	@Query(value = "FROM Employee e WHERE e.firstName LIKE %:query% OR e.lastName LIKE %:query%")
 	List<Employee> SearchEmployee(@Param("query") String query);
 
-	@Query(value = "SELECT * FROM employee_details e WHERE e.email_id LIKE %:query% ", nativeQuery = true)
+	@Query(value = "FROM Employee e WHERE e.emailId LIKE %:query% ")
 	List<Employee> SearchByEmailId(@Param("query") String query);
 
 	Employee findByEmpId(int empId);
