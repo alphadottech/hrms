@@ -18,5 +18,4 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 
 	Employee findByEmpId(int empId);
 
-	List<Employee> findByFirstNameContaining(@Param("name") String name);
 }
