@@ -19,6 +19,7 @@ import com.adt.hrms.model.Interview;
 import com.adt.hrms.model.PositionModel;
 import com.adt.hrms.service.InterviewService;
 import com.adt.hrms.service.PositionService;
+import com.adt.hrms.ui.PositionDateConverter;
 import com.adt.hrms.ui.PositionUIModel;
 
 @RestController
@@ -87,6 +88,22 @@ public class InterviewPositionController {
 		return new ResponseEntity<Interview>(interviewService.getEmployeeByEmpIP(empId), HttpStatus.OK);
 		
 	}
+	
+	@PostMapping("/savePosition")
+	public ResponseEntity<String> savePositionNew(@RequestBody PositionDateConverter pdc) {
+		LOGGER.info("Employeeservice:InterviewPosition:savePositionNew info level log message");
+		return new ResponseEntity<>(positionService.savePositionNew(pdc), HttpStatus.OK);
+		
+	}
+	
+	@GetMapping("/getAllPositionNew")
+	public ResponseEntity <List<PositionDateConverter>> getAllPositionNew() {
+		LOGGER.info("Employeeservice:InterviewPosition:getAllPositionNew info level log message");
+		return new ResponseEntity<>(positionService.getAllPositionNew(), HttpStatus.OK);
+		
+	}
+	
+	
 	
 	
 
