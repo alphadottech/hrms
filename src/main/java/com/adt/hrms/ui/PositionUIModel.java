@@ -1,7 +1,5 @@
 package com.adt.hrms.ui;
 
-import java.time.LocalDateTime;
-
 public class PositionUIModel {
 	
 	
@@ -14,10 +12,10 @@ public class PositionUIModel {
 	private String techDesc;
 	
 	
-	private LocalDateTime positionOpenDate;
+	private String positionOpenDate;
 	
 	
-	private LocalDateTime positionCloseDate;
+	private String positionCloseDate;
 	
 	
 	private String status;
@@ -30,80 +28,98 @@ public class PositionUIModel {
 	
 	
 	private String positionType;
-	
+
+
 	public Integer getId() {
 		return id;
 	}
+
 
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
+
 	public Integer getTechId() {
 		return techId;
 	}
 
+
 	public void setTechId(Integer techId) {
 		this.techId = techId;
 	}
-	
-	
+
+
 	public String getTechDesc() {
 		return techDesc;
 	}
-	
+
+
 	public void setTechDesc(String techDesc) {
 		this.techDesc = techDesc;
 	}
 
-	public LocalDateTime getPositionOpenDate() {
+
+	public String getPositionOpenDate() {
 		return positionOpenDate;
 	}
 
-	public void setPositionOpenDate(LocalDateTime positionOpenDate) {
+
+	public void setPositionOpenDate(String positionOpenDate) {
 		this.positionOpenDate = positionOpenDate;
 	}
 
-	public LocalDateTime getPositionCloseDate() {
+
+	public String getPositionCloseDate() {
 		return positionCloseDate;
 	}
 
-	public void setPositionCloseDate(LocalDateTime positionCloseDate) {
+
+	public void setPositionCloseDate(String positionCloseDate) {
 		this.positionCloseDate = positionCloseDate;
 	}
+
 
 	public String getStatus() {
 		return status;
 	}
 
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
 
 	public double getExperienceInYear() {
 		return experienceInYear;
 	}
 
+
 	public void setExperienceInYear(double experienceInYear) {
 		this.experienceInYear = experienceInYear;
 	}
+
 
 	public boolean isRemote() {
 		return remote;
 	}
 
+
 	public void setRemote(boolean remote) {
 		this.remote = remote;
 	}
+
 
 	public String getPositionType() {
 		return positionType;
 	}
 
+
 	public void setPositionType(String positionType) {
 		this.positionType = positionType;
 	}
-
+	
+	
 	
 	
 	
