@@ -11,6 +11,6 @@ public interface LeaveRequestService {
 
 	public List<LeaveRequestModel> getLeaveDetails();
 
-	public LeaveRequestModel getLeaveDetailsByEmpId(Integer empid);
+	public List<LeaveRequestModel> getLeaveRequestDetailsByEmpId(Integer empid);
 
 }

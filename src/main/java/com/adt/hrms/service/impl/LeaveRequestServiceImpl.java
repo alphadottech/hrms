@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.adt.hrms.model.Employee;
 import com.adt.hrms.model.LeaveRequestModel;
 import com.adt.hrms.repository.LeaveRequestRepo;
 import com.adt.hrms.service.LeaveRequestService;
@@ -40,13 +38,14 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 	}
 
 	@Override
-	public LeaveRequestModel getLeaveDetailsByEmpId(Integer empid) {
-
-		Optional<LeaveRequestModel> opt = leaveRequestRepo.findByempid(empid);
-		if (opt.isPresent())
-			return opt.get();
-		else
+	public List<LeaveRequestModel> getLeaveRequestDetailsByEmpId(Integer empid) {
+		List<LeaveRequestModel> opt = leaveRequestRepo.findByempid(empid);
+		if(!opt.isEmpty()) {
+			return opt;
+		} else {
 			return null;
+		}
+
 	}
 
 }

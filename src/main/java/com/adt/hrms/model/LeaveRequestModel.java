@@ -36,4 +36,5 @@ public class LeaveRequestModel {
 	@Column(name = "leavedate")
 	private List<String> leavedate;
 
+
 }

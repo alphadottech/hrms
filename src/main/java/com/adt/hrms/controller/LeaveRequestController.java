@@ -19,7 +19,7 @@ import com.adt.hrms.service.LeaveRequestService;
 
 @RestController
 @RequestMapping("/leave")
-public class LeaveController {
+public class LeaveRequestController {
 
 	@Autowired
 	private LeaveRequestService leaveRequestService;
@@ -34,10 +34,10 @@ public class LeaveController {
 	public ResponseEntity<List<LeaveRequestModel>> getLeaveDetails() {
 		return new ResponseEntity<>(leaveRequestService.getLeaveDetails(), HttpStatus.OK);
 	}
-
-	@GetMapping("getLeaveByEmpId/{empid}")
-	public ResponseEntity<LeaveRequestModel> getLeaveDetailsByEmpId(@PathVariable("empid") int empid) {
-		return new ResponseEntity<>(leaveRequestService.getLeaveDetailsByEmpId(empid), HttpStatus.OK);
+	
+	@GetMapping("getAllLeaveByEmpId/{empid}")
+	public ResponseEntity<List<LeaveRequestModel>> getLeaveRequestDetailsByEmpId(@PathVariable("empid") int empid){
+		return new ResponseEntity<>(leaveRequestService.getLeaveRequestDetailsByEmpId(empid),HttpStatus.OK);
 	}
 
 }
