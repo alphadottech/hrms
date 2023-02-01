@@ -9,6 +9,6 @@ import com.adt.hrms.model.LeaveRequestModel;
 
 public interface LeaveRequestRepo extends JpaRepository<LeaveRequestModel, Integer> {
 
-	 List<LeaveRequestModel> findByempid(Integer empid);
+List<LeaveRequestModel> findByempid(Integer empid);
 
 }
