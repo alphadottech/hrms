@@ -23,7 +23,7 @@ import com.adt.hrms.ui.PositionDateConverter;
 import com.adt.hrms.ui.PositionUIModel;
 
 @RestController
-@RequestMapping("/intervPosition")
+@RequestMapping("/interViewPosition")
 public class InterviewPositionController {
 	
 	private static final Logger LOGGER = LogManager.getLogger(EmployeeOperationController.class);
@@ -39,21 +39,18 @@ public class InterviewPositionController {
 	public ResponseEntity<String> savePosition(@RequestBody PositionModel pm) {
 		LOGGER.info("Employeeservice:InterviewPosition:savePosition info level log message");
 		return new ResponseEntity<>(positionService.savePosition(pm), HttpStatus.OK);
-		
 	}
 	
 	@GetMapping("/getAllPosition")
 	public ResponseEntity <List<PositionUIModel>> getAllPosition() {
 		LOGGER.info("Employeeservice:InterviewPosition:getAllPosition info level log message");
 		return new ResponseEntity<>(positionService.getAllUIPosition(), HttpStatus.OK);
-		
 	}
 	
 	@GetMapping("/getByPositionId/{id}")
 	public ResponseEntity<PositionModel> getByPositionId(@PathVariable("id") Integer id){
 		LOGGER.info("Employeeservice:InterviewPosition:getByPositionId info level log message");
 		return new ResponseEntity<PositionModel>(positionService.getPosition(id), HttpStatus.OK);
-		
 	}
 	
 	@PutMapping("/updatePosition")
@@ -86,28 +83,17 @@ public class InterviewPositionController {
 	public ResponseEntity<Interview> findEmployeeIPByEmployeeId(@PathVariable("empId") Integer empId ){
 		LOGGER.info("Employeeservice:InterviewPosition:findEmployeeIPByEmployeeId info level log message");
 		return new ResponseEntity<Interview>(interviewService.getEmployeeByEmpIP(empId), HttpStatus.OK);
-		
 	}
 	
 	@PostMapping("/savePosition")
 	public ResponseEntity<String> savePositionNew(@RequestBody PositionDateConverter pdc) {
 		LOGGER.info("Employeeservice:InterviewPosition:savePositionNew info level log message");
 		return new ResponseEntity<>(positionService.savePositionNew(pdc), HttpStatus.OK);
-		
 	}
 	
 	@GetMapping("/getAllPositionNew")
 	public ResponseEntity <List<PositionDateConverter>> getAllPositionNew() {
 		LOGGER.info("Employeeservice:InterviewPosition:getAllPositionNew info level log message");
 		return new ResponseEntity<>(positionService.getAllPositionNew(), HttpStatus.OK);
-		
 	}
-	
-	
-	
-	
-
-	
-	
-	
 }

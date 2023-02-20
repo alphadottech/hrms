@@ -31,10 +31,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Override
 	public String saveEmp(Employee emp) {
-		Optional<Employee> opt=employeeRepo.findById(emp.getEmpId());
+		Optional<Employee> opt=employeeRepo.findById(emp.getEmployeeId());
 		if(opt.isPresent())
-			return "Employee with Id "+emp.getEmpId()+" is already avalable Pls Insert new ID....";
-		return employeeRepo.save(emp).getEmpId()+" Employee is Saved";
+			return "Employee with Id "+emp.getEmployeeId()+" is already avalable Pls Insert new ID....";
+		return employeeRepo.save(emp).getEmployeeId()+" Employee is Saved";
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService{
  
 	@Override
 	public String updateEmp(Employee emp) {		
-		return employeeRepo.save(emp).getEmpId()+ " Details Updated Successfully";
+		return employeeRepo.save(emp).getEmployeeId()+ " Details Updated Successfully";
 	}
 
 	@Override
@@ -65,8 +65,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Override
 	public Employee getEmployeeById(int empId) {
-		Employee emp = employeeRepo.findByEmpId(empId);
-		return emp;
+		Optional<Employee> emp = employeeRepo.findById(empId);
+		return emp.get();
 	}
 
 	@Override
@@ -89,9 +89,4 @@ public class EmployeeServiceImpl implements EmployeeService{
 		else
 			return null; 
 	}
-	
-
-	
-
-
 }
