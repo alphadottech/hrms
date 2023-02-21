@@ -86,7 +86,6 @@ public class CandidatePipelineController {
 	public ResponseEntity<InterviewRounds> getInterviewRoundsById(@PathVariable("id") Integer id){
 		LOGGER.info("Employeeservice:CandidatePipelilne:getInterviewRoundsById info level log message");
 		return new ResponseEntity<>(interviewRoundService.getInterviewRoundsById(id), HttpStatus.OK);
-		
 	}
 }
 

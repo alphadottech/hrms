@@ -1,49 +1,80 @@
 package com.adt.hrms.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import lombok.Data;
+import javax.persistence.*;
 
-@Data
+import lombok.Data;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Proxy;
+
+import java.time.LocalTime;
+
 @Entity
-@Table(catalog = "EmployeeDB", schema = "employee_schema", name = "EmployeeDetails")
-public class Employee {
-	
+@Table(catalog = "EmployeeDB", schema = "user_schema", name = "_EMPLOYEE")
+@Proxy(lazy = false)
+@Data
+public class Employee{
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "EmpId")
-	private Integer empId;
-	
-	@Column(name = "FirstName")
-	private String firstName;
-	
-	@Column(name = "LastName")
-	private String lastName;
-	
-	@Column(name = "MobileNo")
-	private Long mobileNo;
-	
-	@Column(name = "EmailId")
-	private String emailId;
-	
+	@Column(name = "EMPLOYEE_ID")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+	@SequenceGenerator(name = "user_seq", allocationSize = 1)
+	private int employeeId;
+
+	@Column(name = "created_at")
+	private LocalTime createdAt;
+
+	@Column(name = "updated_at")
+	private LocalTime updatedAt;
+
+	@Column(name = "IS_ACTIVE", nullable = false)
+	private Boolean isActive;
+
 	@Column(name = "designation")
 	private String designation;
-	
-	@Column(name = "JoiningDate")
-	private String joinDate;
-	
-	@Column(name = "Gender")
-	private String gender;
-	
+
 	@Column(name = "DOB")
 	private String dob;
-	
-	@Column(name = "MaritalStatus")
-	private String maritalStatus;
-	
 
+	@NaturalId
+	@Column(name = "EMAIL", unique = true)
+	private String email;
+
+	@Column(name = "FIRST_NAME")
+	private String firstName;
+
+	@Column(name = "Gender")
+	private String gender;
+
+	@Column(name = "IS_EMAIL_VERIFIED", nullable = false)
+	private Boolean isEmailVerified;
+
+	@Column(name = "JoiningDate")
+	private String joinDate;
+
+	@Column(name = "LAST_NAME")
+	private String lastName;
+
+	@Column(name = "maritalStatus")
+	private String maritalStatus;
+
+	@Column(name = "MobileNo")
+	private Long mobileNo;
+
+	@Column(name = "PASSWORD")
+	private String password;
+
+	@Column(name = "USERNAME", unique = true)
+	private String username;
+
+	@Column(name = "salary")
+	private double salary;
+
+	@Column(name = "bank_name")
+	private String bankName;
+
+	@Column(name = "account_number")
+	private String accountNumber;
+
+	@Column(name = "ifsc_code")
+	private String ifscCode;
 }

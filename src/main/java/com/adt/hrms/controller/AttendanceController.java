@@ -30,7 +30,6 @@ public class AttendanceController {
 	    public ResponseEntity<String> status(@PathVariable int id, @PathVariable String status) throws ParseException {
 		   LOGGER.info("Employeeservice:Attendance:setStatus info level log message");
 		   return ResponseEntity.ok(attendanceService.setStatus(id, status));
-		   
 	    }
 
 }
