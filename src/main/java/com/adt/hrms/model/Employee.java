@@ -67,7 +67,7 @@ public class Employee{
 	private String username;
 
 	@Column(name = "salary")
-	private double salary;
+	private Double salary;
 
 	@Column(name = "bank_name")
 	private String bankName;

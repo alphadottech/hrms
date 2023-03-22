@@ -30,16 +30,19 @@ public class LeaveRequestController {
 
 	@PostMapping("/leaveRequest")
 	public ResponseEntity<String> saveLeaveRequest(@RequestBody LeaveRequestModel lr) {
+		LOGGER.info("Employeeservice:leave:saveLeaveRequest info level log message");
 		return new ResponseEntity<>(leaveRequestService.saveLeaveRequest(lr), HttpStatus.OK);
 	}
 
 	@GetMapping("/getLeaveDetails")
 	public ResponseEntity<List<LeaveRequestModel>> getLeaveDetails() {
+		LOGGER.info("Employeeservice:leave:getLeaveDetails info level log message");
 		return new ResponseEntity<>(leaveRequestService.getLeaveDetails(), HttpStatus.OK);
 	}
 	
 	@GetMapping("getAllLeaveByEmpId/{empid}")
 	public ResponseEntity<List<LeaveRequestModel>> getLeaveRequestDetailsByEmpId(@PathVariable("empid") int empid){
+		LOGGER.info("Employeeservice:leave:getLeaveRequestDetailsByEmpId info level log message");
 		return new ResponseEntity<>(leaveRequestService.getLeaveRequestDetailsByEmpId(empid),HttpStatus.OK);
 	}
 

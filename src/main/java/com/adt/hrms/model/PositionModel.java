@@ -3,13 +3,13 @@
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.Data;
+
 
 
 @Entity
@@ -33,10 +33,10 @@ public class PositionModel {
 	private String status;
 	
 //	@Column(name = "Experience_in_year")
-	private double experienceInYear;
+	private Double experienceInYear;
 	
 //	@Column(name = "remote")
-	private boolean remote;
+	private Boolean remote;
 	
 //	@Column(name = "position_type")
 	private String positionType;
