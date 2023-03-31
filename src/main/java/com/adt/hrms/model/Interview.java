@@ -25,9 +25,9 @@ public class Interview {
 	@Column(name = "interview_id", columnDefinition = "serial")
 	private Integer interviewId;
 
-	@ManyToOne(targetEntity= AVTechnology.class,cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-	@JoinColumn( name = "tech_id", referencedColumnName = "tech_id")
-    private AVTechnology avtechnology;
+	
+	@Column(name = "tech_id")
+	private Integer tech_id;
 
 	@Column(name = "Marks")
 	private Integer marks;
@@ -38,7 +38,6 @@ public class Interview {
 	@Column(name = "Enthusiasm")
 	private Integer enthusiasm;
 
-	
 	@Column(name = "Notes")
 	private String notes;
 
@@ -60,11 +59,8 @@ public class Interview {
 	@Column(name = "OfferAccepted")
 	private Boolean offerAccepted;
 
-
-	@ManyToOne
-	@JoinColumn(name = "PositionId", referencedColumnName = "id")
-    private PositionModel position;
-	
+	@Column(name = "position_id")
+	private Integer position_id;
 
 	@Column(name = "Type")
 	private String type;
@@ -84,8 +80,8 @@ public class Interview {
 	@Column(name = "selected")
 	private Boolean selected;
 
-	@ManyToOne(targetEntity= InterviewCandidateDetails.class ,cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-	@JoinColumn(name = "candidate_id", referencedColumnName = "candidate_id")
-	private InterviewCandidateDetails interviewCandidateDetails;
+	
+	@Column(name = "candidate_id")
+	private Integer candidate_id;
 
 }
