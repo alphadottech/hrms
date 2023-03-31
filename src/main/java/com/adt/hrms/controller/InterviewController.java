@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adt.hrms.model.InboundInterview;
 import com.adt.hrms.model.Interview;
-import com.adt.hrms.model.OutboundInterview;
 import com.adt.hrms.model.PositionModel;
 import com.adt.hrms.service.InterviewService;
 import com.adt.hrms.service.PositionService;
@@ -61,30 +59,32 @@ public class InterviewController {
 		return new ResponseEntity<>(positionService.updatePosition(pm), HttpStatus.OK);
 	}
 	
+	
+	/* saves interview details */
 	@PostMapping("/saveInterviewDetails")
 	public ResponseEntity<String> saveInterviewDetails(@RequestBody Interview interviewRequest) {
-		LOGGER.info("Employeeservice:InterviewPosition:saveInterviewPosition info level log message");
-		return new ResponseEntity<>(interviewService.saveEmpIP(interviewRequest), HttpStatus.OK);
+		LOGGER.info("Employeeservice:Interview:saveInterviewDetails info level log message");
+		return new ResponseEntity<>(interviewService.saveInterview(interviewRequest), HttpStatus.OK);
 	}
 	
 	
 	@GetMapping("/getAllInterviewDetails")
-	public ResponseEntity<List<Interview>> getAllInterviewPosition() {
-		LOGGER.info("Employeeservice:InterviewPosition:getAllInterviewPosition info level log message");
-			return new ResponseEntity<>(interviewService.getAllEmpIP(), HttpStatus.OK);
+	public ResponseEntity<List<Interview>> getAllInterviewDetails() {
+		LOGGER.info("Employeeservice:InterviewDetails:getAllInterviewDetails info level log message");
+			return new ResponseEntity<>(interviewService.listAllInterviewDetails(), HttpStatus.OK);
 	}
 
 	@PutMapping("/updateInterviewDetails")
 	public ResponseEntity<String> updateInterviewDetails(@RequestBody Interview interviewRequest) {
-		LOGGER.info("Employeeservice:InterviewPosition:updateInterviewPosition info level log message");
-		return new ResponseEntity<>(interviewService.updateEmpIP(interviewRequest), HttpStatus.OK);
+		LOGGER.info("Employeeservice:Interview:updateInterviewDetails info level log message");
+		return new ResponseEntity<>(interviewService.updateToInterviewDetails(interviewRequest), HttpStatus.OK);
 	}
 
 	
 	@GetMapping("/findByDetailsByEmployeeId/{empId}")
 	public ResponseEntity<Interview> findEmployeeIPByEmployeeId(@PathVariable("empId") Integer empId ){
-		LOGGER.info("Employeeservice:InterviewPosition:findEmployeeIPByEmployeeId info level log message");
-		return new ResponseEntity<Interview>(interviewService.getEmployeeByEmpIP(empId), HttpStatus.OK);
+		LOGGER.info("Employeeservice:Interview:findEmployeeIPByEmployeeId info level log message");
+		return new ResponseEntity<Interview>(interviewService.getInterviewDetailsById(empId), HttpStatus.OK);
 	}
 	
 	@PostMapping("/savePosition")
@@ -99,18 +99,6 @@ public class InterviewController {
 		return new ResponseEntity<>(positionService.getAllPositionNew(), HttpStatus.OK);
 	}
 	
-	@PostMapping("/saveInboundInterviewDetails")
-	public ResponseEntity<String> saveInboundInterviewDetails(@RequestBody InboundInterview inboundInterviewRequest){
-		LOGGER.info("Employeeservice:InterviewPositionInboundInterviewDetails:save info level log message");
-		return new ResponseEntity<>(interviewService.saveInboundInterview(inboundInterviewRequest), HttpStatus.OK);
 
-	}
-	
-	@PostMapping("/saveOutboundInterviewDetails")
-	public ResponseEntity<String> saveOutboundInterviewDetails(@RequestBody OutboundInterview outboundInterviewRequest){
-		LOGGER.info("Employeeservice:InterviewPositionInboundInterviewDetails:save info level log message");
-		return new ResponseEntity<>(interviewService.saveOutboundInterview(outboundInterviewRequest), HttpStatus.OK);
-
-	}
 	
 }
