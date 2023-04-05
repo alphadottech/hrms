@@ -23,4 +23,5 @@ public class AVStatus {
 	@Column(name="description")
 	private String description;
 
+	
 }
