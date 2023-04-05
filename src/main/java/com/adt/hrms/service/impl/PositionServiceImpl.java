@@ -143,7 +143,7 @@ List<PositionModel> poslist = getAllPosition();
 			String positionopenstr = date1.toString();
 			obj.setPositionopendate(positionopenstr);
 			
-			LocalDate date2 = pm.getPositionOpenDate().toLocalDate();
+			LocalDate date2 = pm.getPositionCloseDate().toLocalDate();
 			String positionclosestr = date2.toString();
 			obj.setPositionclosedate(positionclosestr);
 
