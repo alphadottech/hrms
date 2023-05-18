@@ -23,8 +23,6 @@ public class InterviewServiceImpl implements InterviewService {
 //           return "Interview Id "+in.getInterviewId()+" is already avalable Pls Insert new ID....";
 		interviewRepository.save(in);
 		return " New interview ID is Saved";
-			
-		
 	}
 
 	@Override
@@ -47,8 +45,20 @@ public class InterviewServiceImpl implements InterviewService {
 		else
 			return null;	
 	}
-	
 
-	
+	//HRMS-56 START New method added
+	@Override
+	public Interview getInterviewDetailByInterviewIdAndRound(Integer interviewId, Integer round) {
+		// TODO Auto-generated method stub
+		
+		Optional<Interview> optional = interviewRepository.getInterviewDetailByInterviewIdAndRound(interviewId, round);
+		
+		if(optional.isEmpty())
+			return null;
+		
+		return optional.get();
+
+	}
+	//HRMS-56 END
 }
 

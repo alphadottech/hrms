@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adt.hrms.model.Interview;
@@ -28,7 +29,7 @@ public class InterviewController {
 	
 	private static final Logger LOGGER = LogManager.getLogger(EmployeeOperationController.class);
 	
-	@Autowired
+	@Autowired(required = true)
 	private PositionService positionService;
 	
 	@Autowired
@@ -73,6 +74,16 @@ public class InterviewController {
 		LOGGER.info("Employeeservice:InterviewDetails:getAllInterviewDetails info level log message");
 			return new ResponseEntity<>(interviewService.listAllInterviewDetails(), HttpStatus.OK);
 	}
+	//HRMS-56 START New method added
+	@GetMapping("/getInterviewDetailByIdAndRound")
+	public ResponseEntity<Interview> getInterviewDetailByID(@RequestParam("interviewId") int interviewId, @RequestParam("round") int round){
+		LOGGER.info("Employeeservice:InterviewController:getInterviewDetailByID info level log message");
+		Interview interview = interviewService.getInterviewDetailByInterviewIdAndRound(interviewId, round);
+		if(interview == null) return ResponseEntity.badRequest().build();
+		return ResponseEntity.ok(interview);
+	}
+	// HRMS-56 END
+	
 
 	@PutMapping("/updateInterviewDetails")
 	public ResponseEntity<String> updateInterviewDetails(@RequestBody Interview interviewRequest) {
