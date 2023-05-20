@@ -55,7 +55,7 @@ public class InterviewServiceImpl implements InterviewService {
 		
 		Optional<Interview> optional = interviewRepository.getInterviewDetailByInterviewIdAndRound(interviewId, round);
 		
-		if(optional.isEmpty())
+		if(!optional.isPresent())
 			return null;
 		
 		return optional.get();
