@@ -14,6 +14,8 @@ public interface InterviewService {
 
 	public	Interview getInterviewDetailsById(Integer empId);
 	
-
+	//HRMS-56 START
+	public Interview getInterviewDetailByInterviewIdAndRound(Integer interviewId, Integer round);
+	//HRMS-56 END
 
 }
