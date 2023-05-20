@@ -1,136 +1,177 @@
    package com.adt.hrms.model;
 
 
-import java.time.LocalDateTime;
+   import java.time.LocalDateTime;
+   import java.util.List;
+
+   import javax.persistence.CollectionTable;
+   import javax.persistence.Column;
+   import javax.persistence.ElementCollection;
+   import javax.persistence.Entity;
+   import javax.persistence.GeneratedValue;
+   import javax.persistence.GenerationType;
+   import javax.persistence.Id;
+   import javax.persistence.JoinColumn;
+
+   import javax.persistence.Table;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
+   @Entity
+   @Table(catalog = "EmployeeDB", schema = "employee_schema", name="PositionModel")
+   public class PositionModel {
+   	
+   	@Id
+   	@GeneratedValue(strategy = GenerationType.IDENTITY)
+   	@Column(name = "positionId")
+   	private Integer positionId;
+   	
+   	private String  positionName; 
+   	
+   	@ElementCollection
+   	@CollectionTable(catalog = "EmployeeDB", schema = "employee_schema", name = "TECH_STACK", joinColumns = @JoinColumn(name = "POSITION_ID"))
+   	@Column(name = "tech_stack")
+   	private List<String> techStack;
+   	
+//   	@Column(name = "position_open_date")
+   	private LocalDateTime positionOpenDate;
+   	
+//   	@Column(name = "position_close_date")
+   	private LocalDateTime positionCloseDate;
+   	
+//   	@Column(name = "status")
+   	private String status;
+   	
+//   	@Column(name = "Experience_in_year")
+   	private Double experienceInYear;
+   	
+//   	@Column(name = "remote")
+   	private Boolean remote;
+   	
+//   	@Column(name = "position_type")
+   	private String positionType;
+   	
+   	private Integer vacancy;
 
+   	public Integer getPositionId() {
+   		return positionId;
+   	}
+   	
+   	public void setPositionId(Integer positionId) {
+   		this.positionId = positionId;
+   	}
 
-@Entity
-@Table(catalog = "EmployeeDB", schema = "employee_schema", name="Position")
-public class PositionModel {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
-	
-//	@Column(name = "tech_id")
-	private Integer techId;
-	
-//	@Column(name = "position_open_date")
-	private LocalDateTime positionOpenDate;
-	
-//	@Column(name = "position_close_date")
-	private LocalDateTime positionCloseDate;
-	
-//	@Column(name = "status")
-	private String status;
-	
-//	@Column(name = "Experience_in_year")
-	private Double experienceInYear;
-	
-//	@Column(name = "remote")
-	private Boolean remote;
-	
-//	@Column(name = "position_type")
-	private String positionType;
+   	public String getPositionName() {
+   		return positionName;
+   	}
 
-	public Integer getId() {
-		return id;
-	}
+   	public void setPositionName(String positionName) {
+   		this.positionName = positionName;
+   	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+   	public List<String> getTechStack() {
+   		return techStack;
+   	}
 
-	public Integer getTechId() {
-		return techId;
-	}
+   	public void setTechStack(List<String> techStack) {
+   		this.techStack = techStack;
+   	}
 
-	public void setTechId(Integer techId) {
-		this.techId = techId;
-	}
+//   	public Integer getTechId() {
+//   		return techId;
+//   	}
 
-	public LocalDateTime getPositionOpenDate() {
-		return positionOpenDate;
-	}
+//   	public void setTechId(Integer techId) {
+//   		this.techId = techId;
+//   	}
 
-	public void setPositionOpenDate(LocalDateTime positionOpenDate) {
-		this.positionOpenDate = positionOpenDate;
-	}
+   	public LocalDateTime getPositionOpenDate() {
+   		return positionOpenDate;
+   	}
 
-	public LocalDateTime getPositionCloseDate() {
-		return positionCloseDate;
-	}
+   	public void setPositionOpenDate(LocalDateTime positionOpenDate) {
+   		this.positionOpenDate = positionOpenDate;
+   	}
 
-	public void setPositionCloseDate(LocalDateTime positionCloseDate) {
-		this.positionCloseDate = positionCloseDate;
-	}
+   	public LocalDateTime getPositionCloseDate() {
+   		return positionCloseDate;
+   	}
 
-	public String getStatus() {
-		return status;
-	}
+   	public void setPositionCloseDate(LocalDateTime positionCloseDate) {
+   		this.positionCloseDate = positionCloseDate;
+   	}
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+   	public String getStatus() {
+   		return status;
+   	}
 
-	public double getExperienceInYear() {
-		return experienceInYear;
-	}
+   	public void setStatus(String status) {
+   		this.status = status;
+   	}
 
-	public void setExperienceInYear(double experienceInYear) {
-		this.experienceInYear = experienceInYear;
-	}
+   	public Double getExperienceInYear() {
+   		return experienceInYear;
+   	}
 
-	public boolean isRemote() {
-		return remote;
-	}
+   	public void setExperienceInYear(Double experienceInYear) {
+   		this.experienceInYear = experienceInYear;
+   	}
 
-	public void setRemote(boolean remote) {
-		this.remote = remote;
-	}
+   	public Boolean getRemote() {
+   		return remote;
+   	}
 
-	public String getPositionType() {
-		return positionType;
-	}
+   	public void setRemote(Boolean remote) {
+   		this.remote = remote;
+   	}
 
-	public void setPositionType(String positionType) {
-		this.positionType = positionType;
-	}
+   	public String getPositionType() {
+   		return positionType;
+   	}
 
-	public PositionModel(Integer id, Integer techId, LocalDateTime positionOpenDate, LocalDateTime positionCloseDate,
-			String status, double experienceInYear, boolean remote, String positionType) {
-		super();
-		this.id = id;
-		this.techId = techId;
-		this.positionOpenDate = positionOpenDate;
-		this.positionCloseDate = positionCloseDate;
-		this.status = status;
-		this.experienceInYear = experienceInYear;
-		this.remote = remote;
-		this.positionType = positionType;
-	}
+   	public void setPositionType(String positionType) {
+   		this.positionType = positionType;
+   	}
 
-	public PositionModel() {
-		super();
-		
-	}
+   	public Integer getVacancy() {
+   		return vacancy;
+   	}
 
-	@Override
-	public String toString() {
-		return "PositionModel [id=" + id + ", techId=" + techId + ", positionOpenDate=" + positionOpenDate
-				+ ", positionCloseDate=" + positionCloseDate + ", status=" + status + ", experienceInYear="
-				+ experienceInYear + ", remote=" + remote + ", positionType=" + positionType + "]";
-	}
-	
-	
-	
-	
-}
+   	public void setVacancy(Integer vacancy) {
+   		this.vacancy = vacancy;
+   	}
+
+   	public PositionModel(Integer positionId, String positionName, List<String> techStack,
+   			LocalDateTime positionOpenDate, LocalDateTime positionCloseDate, String status, Double experienceInYear,
+   			Boolean remote, String positionType, Integer vacancy) {
+   		super();
+   		this.positionId = positionId;
+   		this.positionName = positionName;
+   		this.techStack = techStack;
+//   		this.techId = techId;
+   		this.positionOpenDate = positionOpenDate;
+   		this.positionCloseDate = positionCloseDate;
+   		this.status = status;
+   		this.experienceInYear = experienceInYear;
+   		this.remote = remote;
+   		this.positionType = positionType;
+   		this.vacancy = vacancy;
+   	}
+
+   	public PositionModel() {
+   		super();
+   		// TODO Auto-generated constructor stub
+   	}
+
+   	@Override
+   	public String toString() {
+   		return "PositionModel [positionId=" + positionId + ", positionName=" + positionName + ", techStack=" + techStack
+   				+ ", positionOpenDate=" + positionOpenDate + ", positionCloseDate="
+   				+ positionCloseDate + ", status=" + status + ", experienceInYear=" + experienceInYear + ", remote="
+   				+ remote + ", positionType=" + positionType + ", vacancy=" + vacancy + "]";
+   	}
+   	
+   	
+
+   	
+   }

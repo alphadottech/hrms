@@ -1,11 +1,19 @@
 package com.adt.hrms.ui;
 
+import java.util.List;
+
+
+import javax.persistence.Id;
 
 public class PositionDateConverter {
 	
-	private int uiid;
+	@Id
+	private Integer uiid;
 	
-	private int techid;
+	//private int techid;
+	private String positionName;
+	
+	private List<String> techStack;
 	
 	private String positionopendate;
 	
@@ -18,21 +26,31 @@ public class PositionDateConverter {
 	private boolean remote;
 	
 	private String positionType;
+	
+	private Integer vacancy;
 
-	public int getUiid() {
+	public Integer getUiid() {
 		return uiid;
 	}
 
-	public void setUiid(int uiid) {
+	public void setUiid(Integer uiid) {
 		this.uiid = uiid;
 	}
 
-	public int getTechid() {
-		return techid;
+	public String getPositionName() {
+		return positionName;
 	}
 
-	public void setTechid(int techid) {
-		this.techid = techid;
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
+	}
+
+	public List<String> getTechStack() {
+		return techStack;
+	}
+
+	public void setTechStack(List<String> techStack) {
+		this.techStack = techStack;
 	}
 
 	public String getPositionopendate() {
@@ -83,37 +101,40 @@ public class PositionDateConverter {
 		this.positionType = positionType;
 	}
 
-	public PositionDateConverter(int uiid, int techid, String positionopendate, String positionclosedate, String status,
-			double experienceInYear, boolean remote, String positionType) {
+	public Integer getVacancy() {
+		return vacancy;
+	}
+
+	public void setVacancy(Integer vacancy) {
+		this.vacancy = vacancy;
+	}
+
+	public PositionDateConverter(Integer uiid, String positionName, List<String> techStack, String positionopendate,
+			String positionclosedate, String status, double experienceInYear, boolean remote, String positionType,
+			Integer vacancy) {
 		super();
 		this.uiid = uiid;
-		this.techid = techid;
+		this.positionName = positionName;
+		this.techStack = techStack;
 		this.positionopendate = positionopendate;
 		this.positionclosedate = positionclosedate;
 		this.status = status;
 		this.experienceInYear = experienceInYear;
 		this.remote = remote;
 		this.positionType = positionType;
-	}
-
-	public PositionDateConverter() {
-		super();
-		
+		this.vacancy = vacancy;
 	}
 
 	@Override
 	public String toString() {
-		return "PositionDateConverter [uiid=" + uiid + ", techid=" + techid + ", positionopendate=" + positionopendate
-				+ ", positionclosedate=" + positionclosedate + ", status=" + status + ", experienceInYear="
-				+ experienceInYear + ", remote=" + remote + ", positionType=" + positionType + "]";
+		return "PositionDateConverter [uiid=" + uiid + ", positionName=" + positionName + ", techStack=" + techStack
+				+ ", positionopendate=" + positionopendate + ", positionclosedate=" + positionclosedate + ", status="
+				+ status + ", experienceInYear=" + experienceInYear + ", remote=" + remote + ", positionType="
+				+ positionType + ", vacancy=" + vacancy + "]";
 	}
-	
-	
-	
-	
 
-	
-	
-	
-
+	public PositionDateConverter() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 }

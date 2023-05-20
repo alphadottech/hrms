@@ -11,7 +11,8 @@ public interface EmployeeService {
 	public Employee getEmp(Integer empId);
 	public String saveEmp(Employee emp);
 	public String deleteEmpById(Integer empId);
-	public String updateEmp(Employee emp);
+//	public String updateEmp(Employee emp);
+	public String updateEmp(Integer empId, Employee emp);
 	public EmployeeStatus getEmployeeById(Integer empId);
 	public Employee getEmployeeById(int empId);
 	List<Employee> SearchEmployee(String query);
