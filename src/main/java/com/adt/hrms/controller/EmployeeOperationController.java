@@ -48,10 +48,10 @@ private static final Logger LOGGER = LogManager.getLogger(EmployeeOperationContr
 			return new ResponseEntity<>(employeeService.getAllEmps(), HttpStatus.OK);
 	}
 	
-	@PutMapping("/updateEmp")
-	public ResponseEntity<String> updateEmp(@RequestBody Employee emp) {
+	@PutMapping("/updateEmp/{empId}")
+	public ResponseEntity<String> updateEmp(@PathVariable("empId") int empId, @RequestBody Employee emp) {
 		LOGGER.info("Employeeservice:employee:updateEmp info level log message");
-		return new ResponseEntity<>(employeeService.updateEmp(emp), HttpStatus.OK);
+		return new ResponseEntity<>(employeeService.updateEmp(empId,emp), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete/{empId}")

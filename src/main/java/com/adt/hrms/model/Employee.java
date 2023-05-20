@@ -5,8 +5,9 @@ import javax.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Proxy;
-
-import java.time.LocalTime;
+import org.springframework.data.annotation.LastModifiedDate;
+ 
+import java.time.Instant;
 
 @Entity
 @Table(catalog = "EmployeeDB", schema = "user_schema", name = "_EMPLOYEE")
@@ -19,12 +20,10 @@ public class Employee{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
 	@SequenceGenerator(name = "user_seq", allocationSize = 1)
 	private int employeeId;
-
-	@Column(name = "created_at")
-	private LocalTime createdAt;
-
-	@Column(name = "updated_at")
-	private LocalTime updatedAt;
+	
+	@LastModifiedDate
+	@Column(name = "updated_at", nullable = false)
+	private Instant updatedAt;
 
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean isActive;
@@ -59,12 +58,12 @@ public class Employee{
 
 	@Column(name = "MobileNo")
 	private Long mobileNo;
-
-	@Column(name = "PASSWORD")
-	private String password;
-
-	@Column(name = "USERNAME", unique = true)
-	private String username;
+//
+//	@Column(name = "PASSWORD")
+//	private String password;
+//
+//	@Column(name = "USERNAME", unique = true)
+//	private String username;
 
 	@Column(name = "salary")
 	private Double salary;
