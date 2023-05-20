@@ -48,6 +48,21 @@ public class InterviewServiceImpl implements InterviewService {
 			return null;	
 	}
 	
+	//HRMS-56 START New method added
+	@Override
+	public Interview getInterviewDetailByInterviewIdAndRound(Integer interviewId, Integer round) {
+		// TODO Auto-generated method stub
+		
+		Optional<Interview> optional = interviewRepository.getInterviewDetailByInterviewIdAndRound(interviewId, round);
+		
+		if(optional.isEmpty())
+			return null;
+		
+		return optional.get();
+
+	}
+	//HRMS-56 END
+	
 
 	
 }
