@@ -12,14 +12,13 @@ import lombok.Data;
 @Entity
 @Table(catalog = "EmployeeDB", schema = "av_schema", name = "Technology")
 public class AVTechnology {
-	
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="tech_id")
+	@Column(name = "tech_id")
 	private Integer techId;
-	
-	@Column(name="description")
+
+	@Column(name = "description")
 	private String description;
-	
+
 }

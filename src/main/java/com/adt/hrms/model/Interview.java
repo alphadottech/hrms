@@ -2,15 +2,11 @@ package com.adt.hrms.model;
 
 import java.time.LocalDate;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -25,7 +21,6 @@ public class Interview {
 	@Column(name = "interview_id", columnDefinition = "serial")
 	private Integer interviewId;
 
-	
 	@Column(name = "tech_id")
 	private Integer tech_id;
 
@@ -80,7 +75,6 @@ public class Interview {
 	@Column(name = "selected")
 	private Boolean selected;
 
-	
 	@Column(name = "candidate_id")
 	private Integer candidate_id;
 

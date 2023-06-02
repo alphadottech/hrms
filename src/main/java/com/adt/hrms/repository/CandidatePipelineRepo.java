@@ -6,5 +6,4 @@ import com.adt.hrms.model.CandidatePipeline;
 
 public interface CandidatePipelineRepo extends JpaRepository<CandidatePipeline, Integer> {
 
-
 }

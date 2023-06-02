@@ -15,22 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.adt.hrms.service.AttendanceService;
 
-
 @RestController
 @RequestMapping("/attendance")
 public class AttendanceController {
-	
+
 	private static final Logger LOGGER = LogManager.getLogger(AttendanceController.class);
 
 	@Autowired
 	private AttendanceService attendanceService;
 
-	
-	   @PutMapping("/punching/{id}/{status}")
-	    public ResponseEntity<String> status(@PathVariable int id, @PathVariable String status) throws ParseException {
-		   LOGGER.info("Employeeservice:Attendance:setStatus info level log message");
-		   return ResponseEntity.ok(attendanceService.setStatus(id, status));
-	    }
+	@PutMapping("/punching/{id}/{status}")
+	public ResponseEntity<String> status(@PathVariable int id, @PathVariable String status) throws ParseException {
+		LOGGER.info("Employeeservice:Attendance:setStatus info level log message");
+		return ResponseEntity.ok(attendanceService.setStatus(id, status));
+	}
 
 }
-

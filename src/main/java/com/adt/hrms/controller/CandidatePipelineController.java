@@ -24,69 +24,67 @@ import com.adt.hrms.service.InterviewRoundService;
 @RestController
 @RequestMapping("/candidatePipeline")
 public class CandidatePipelineController {
-	
+
 	private static final Logger LOGGER = LogManager.getLogger(CandidatePipelineController.class);
-	
+
 	@Autowired
 	private CandidatePipelineService candidatePipelineService;
-	
+
 	@Autowired
 	private InterviewRoundService interviewRoundService;
-	
+
 	@PostMapping("saveCandidate")
-	public ResponseEntity<String> saveCandidatePipeline(@RequestBody CandidatePipeline cp){
+	public ResponseEntity<String> saveCandidatePipeline(@RequestBody CandidatePipeline cp) {
 		LOGGER.info("Employeeservice:CandidatePipelineController:saveCandidatePipeline info level log message");
 		return new ResponseEntity<>(candidatePipelineService.saveCandidatePipelineDetails(cp), HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getCandidatePipelineDetails")
-	public ResponseEntity<List<CandidatePipeline>> getAllCandidatePipeline(){
+	public ResponseEntity<List<CandidatePipeline>> getAllCandidatePipeline() {
 		LOGGER.info("Employeeservice:CandidatePipelilne:getAllCandidatePipeline info level log message");
 		return new ResponseEntity<>(candidatePipelineService.getAllCandidatePipeline(), HttpStatus.OK);
-		
+
 	}
-	
+
 	@PutMapping("/updateCandidatePipelineDetails")
-	public ResponseEntity<String> updateCandidatePipelineDetails(@RequestBody CandidatePipeline cp){
+	public ResponseEntity<String> updateCandidatePipelineDetails(@RequestBody CandidatePipeline cp) {
 		LOGGER.info("Employeeservice:CandidatePipelilne:updateCandidatePipelineDetails info level log message");
 		return new ResponseEntity<>(candidatePipelineService.updateCandidatePipelineDetails(cp), HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getCandidatePipelineById/{id}")
-	public ResponseEntity<CandidatePipeline> getCandidatePipelineDetailsById(@PathVariable("id") Integer id){
+	public ResponseEntity<CandidatePipeline> getCandidatePipelineDetailsById(@PathVariable("id") Integer id) {
 		LOGGER.info("Employeeservice:CandidatePipelilne:getCandidatePipelineDetailsById info level log message");
 		return new ResponseEntity<>(candidatePipelineService.getCandidatePipelineById(id), HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("/deleteCandidatePipelineById/{id}")
-	public ResponseEntity<String> deleteCandidatePipelineById(@PathVariable("id") Integer id){
+	public ResponseEntity<String> deleteCandidatePipelineById(@PathVariable("id") Integer id) {
 		LOGGER.info("Employeeservice:CandidatePipelilne:deleteCandidatePipelineById info level log message");
 		return new ResponseEntity<>(candidatePipelineService.deleteCandidateById(id), HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/saveInterviewRounds")
-	public ResponseEntity<String> saveInterviewRouds(@RequestBody InterviewRounds ir){
+	public ResponseEntity<String> saveInterviewRouds(@RequestBody InterviewRounds ir) {
 		LOGGER.info("Employeeservice:CandidatePipelilne:saveInterviewRouds info level log message");
 		return new ResponseEntity<>(interviewRoundService.saveInterviewRounds(ir), HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getAllInterviewRounds")
-	public ResponseEntity<List<InterviewRounds>> getAllInterviewRounds(){
+	public ResponseEntity<List<InterviewRounds>> getAllInterviewRounds() {
 		LOGGER.info("Employeeservice:CandidatePipelilne:getAllInterviewRounds info level log message");
 		return new ResponseEntity<List<InterviewRounds>>(interviewRoundService.getAllInterviewRounds(), HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/updateInterviewRounds")
-	public ResponseEntity<String> updateInterviewRounds(@RequestBody InterviewRounds ir){
+	public ResponseEntity<String> updateInterviewRounds(@RequestBody InterviewRounds ir) {
 		LOGGER.info("Employeeservice:CandidatePipelilne:updateInterviewRounds info level log message");
 		return new ResponseEntity<>(interviewRoundService.updateInterviewRounds(ir), HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getInterviewRoundsById/{id}")
-	public ResponseEntity<InterviewRounds> getInterviewRoundsById(@PathVariable("id") Integer id){
+	public ResponseEntity<InterviewRounds> getInterviewRoundsById(@PathVariable("id") Integer id) {
 		LOGGER.info("Employeeservice:CandidatePipelilne:getInterviewRoundsById info level log message");
 		return new ResponseEntity<>(interviewRoundService.getInterviewRoundsById(id), HttpStatus.OK);
 	}
 }
-
-

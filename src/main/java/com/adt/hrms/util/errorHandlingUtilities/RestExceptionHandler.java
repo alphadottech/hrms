@@ -31,104 +31,99 @@ import java.util.Map;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-    @Autowired
-    private MessageSource messageSource;
+	@Autowired
+	private MessageSource messageSource;
 
-    //Handle All Exceptions
-    @ExceptionHandler(Exception.class)
-    public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
-        String error = ex.getMessage();
-        ApiError errors = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex);
-        ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), errors.getMessage(), errors.getTimestamp());
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+	// Handle All Exceptions
+	@ExceptionHandler(Exception.class)
+	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
+		String error = ex.getMessage();
+		ApiError errors = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex);
+		ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), errors.getMessage(),
+				errors.getTimestamp());
+		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
-    @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, 
-    		HttpHeaders headers, HttpStatus status, WebRequest request) {
-        String error = "Malformed JSON request";
-        return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
-    }
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		String error = "Malformed JSON request";
+		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
+	}
 
-    private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
-        return new ResponseEntity<>(apiError, apiError.getStatus());
-    }
+	private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
+		return new ResponseEntity<>(apiError, apiError.getStatus());
+	}
 
-    //other exception handlers below
-    @ExceptionHandler(EntityNotFoundException.class)
-    protected ResponseEntity<Object> handleEntityNotFound(
-            EntityNotFoundException ex) {
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND);
-        apiError.setMessage(ex.getMessage());
-        return buildResponseEntity(apiError);
-    }
+	// other exception handlers below
+	@ExceptionHandler(EntityNotFoundException.class)
+	protected ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex) {
+		ApiError apiError = new ApiError(HttpStatus.NOT_FOUND);
+		apiError.setMessage(ex.getMessage());
+		return buildResponseEntity(apiError);
+	}
 
-    @ExceptionHandler({ AccessDeniedException.class })
-    public ResponseEntity<?> handleAccessDeniedException(
-            AccessDeniedException ex) {
-        String message = messageSource.getMessage("api.error.access.denied", null, Locale.ENGLISH);
-        ApiError errors = new ApiError(HttpStatus.FORBIDDEN,message, ex);
-        ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), errors.getMessage(), errors.getTimestamp());
-        return new ResponseEntity<>(errorResponse, errors.getStatus());
-    }
+	@ExceptionHandler({ AccessDeniedException.class })
+	public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex) {
+		String message = messageSource.getMessage("api.error.access.denied", null, Locale.ENGLISH);
+		ApiError errors = new ApiError(HttpStatus.FORBIDDEN, message, ex);
+		ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), errors.getMessage(),
+				errors.getTimestamp());
+		return new ResponseEntity<>(errorResponse, errors.getStatus());
+	}
 
-    @ExceptionHandler({ NoSuchFieldException.class })
-    public ResponseEntity<?> handleNoSuchFieldException(NoSuchFieldException ex) {
-        String error = ex.getLocalizedMessage();
-        ApiError errors = new ApiError(HttpStatus.NOT_FOUND,error, ex);
-        ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), errors.getMessage(), errors.getTimestamp());
-        return new ResponseEntity<>(errorResponse, errors.getStatus());
-    }
+	@ExceptionHandler({ NoSuchFieldException.class })
+	public ResponseEntity<?> handleNoSuchFieldException(NoSuchFieldException ex) {
+		String error = ex.getLocalizedMessage();
+		ApiError errors = new ApiError(HttpStatus.NOT_FOUND, error, ex);
+		ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), errors.getMessage(),
+				errors.getTimestamp());
+		return new ResponseEntity<>(errorResponse, errors.getStatus());
+	}
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            HttpHeaders headers, HttpStatus status, WebRequest request) {
-        Map<String, String> errors = new HashMap<>();
-        List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-        List<ObjectError> globalErrors = ex.getBindingResult().getGlobalErrors();
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		Map<String, String> errors = new HashMap<>();
+		List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+		List<ObjectError> globalErrors = ex.getBindingResult().getGlobalErrors();
 
-        String message = messageSource.getMessage("api.error.validation", null, Locale.ENGLISH);
-        for(FieldError fieldError: fieldErrors) {
-            errors.put(fieldError.getField(), fieldError.getDefaultMessage());
-        }
-        for (ObjectError objectError : globalErrors) {
-            errors.put(objectError.getObjectName(), objectError.getDefaultMessage());
-        }
+		String message = messageSource.getMessage("api.error.validation", null, Locale.ENGLISH);
+		for (FieldError fieldError : fieldErrors) {
+			errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+		}
+		for (ObjectError objectError : globalErrors) {
+			errors.put(objectError.getObjectName(), objectError.getDefaultMessage());
+		}
 
-        ApiError errorResponse = new ApiError(HttpStatus.BAD_REQUEST, message, ex);
-        FieldErrors fieldError = new FieldErrors(errorResponse.getStatus().value(), message, errors);
-        return new ResponseEntity<>(fieldError, errorResponse.getStatus());
-    }
+		ApiError errorResponse = new ApiError(HttpStatus.BAD_REQUEST, message, ex);
+		FieldErrors fieldError = new FieldErrors(errorResponse.getStatus().value(), message, errors);
+		return new ResponseEntity<>(fieldError, errorResponse.getStatus());
+	}
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {
-        ApiError errors = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), ex);
-        ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), errors.getMessage(), errors.getTimestamp());
-        return new ResponseEntity<>(errorResponse, errors.getStatus());
-    }
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {
+		ApiError errors = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), ex);
+		ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), errors.getMessage(),
+				errors.getTimestamp());
+		return new ResponseEntity<>(errorResponse, errors.getStatus());
+	}
 
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<Object> handleNullPointerException(NullPointerException ex) {
-        String message = ex.getLocalizedMessage();
-        ApiError errors = new ApiError(HttpStatus.BAD_REQUEST,message, ex);
-        ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), errors.getMessage(), errors.getTimestamp());
-        return new ResponseEntity<>(errorResponse, errors.getStatus());
-    }
+	@ExceptionHandler(NullPointerException.class)
+	public ResponseEntity<Object> handleNullPointerException(NullPointerException ex) {
+		String message = ex.getLocalizedMessage();
+		ApiError errors = new ApiError(HttpStatus.BAD_REQUEST, message, ex);
+		ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), errors.getMessage(),
+				errors.getTimestamp());
+		return new ResponseEntity<>(errorResponse, errors.getStatus());
+	}
 
-//    @ExceptionHandler({BadCredentialsException.class})
-//    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
-//        String message = ex.getLocalizedMessage();
-//        ApiError errors = new ApiError(HttpStatus.BAD_REQUEST, message, ex);
-//        ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), errors.getMessage(), errors.getTimestamp());
-//        return new ResponseEntity<>(errorResponse, errors.getStatus());
-//    }
-
-    @ExceptionHandler(SQLException.class)
-    public ResponseEntity<Object> handleSqlException(SQLException ex) {
-        String message = ex.getMessage();
-        ApiError errors = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, message, ex);
-        ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), errors.getMessage(), errors.getTimestamp());
-        return new ResponseEntity<>(errorResponse, errors.getStatus());
-    }
+	@ExceptionHandler(SQLException.class)
+	public ResponseEntity<Object> handleSqlException(SQLException ex) {
+		String message = ex.getMessage();
+		ApiError errors = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, message, ex);
+		ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), errors.getMessage(),
+				errors.getTimestamp());
+		return new ResponseEntity<>(errorResponse, errors.getStatus());
+	}
 }

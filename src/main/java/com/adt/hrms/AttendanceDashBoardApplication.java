@@ -8,6 +8,7 @@ import com.adt.hrms.service.impl.AVHashMapServiceImpl;
 
 /**
  * SpringBoot Main app
+ * 
  * @author hp
  *
  */
@@ -17,11 +18,10 @@ public class AttendanceDashBoardApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AttendanceDashBoardApplication.class, args);
 	}
-	
+
 	@Bean
 	public AVHashMapServiceImpl getAllAVHashMapServiceDetails() {
 		return new AVHashMapServiceImpl();
 	}
 
 }
-
