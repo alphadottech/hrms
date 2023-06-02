@@ -16,19 +16,19 @@ import lombok.Data;
 public class CandidatePipeline {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="id")
+	@Column(name = "id")
 	private Integer id;
-	
-	@Column(name="interview_id")
+
+	@Column(name = "interview_id")
 	private Integer interviewId;
-	
-	@Column(name="offer_release_date")
+
+	@Column(name = "offer_release_date")
 	private LocalDateTime offerReleaseDate;
-	
-	@Column(name="last_communication_date")
+
+	@Column(name = "last_communication_date")
 	private LocalDateTime lastCommunicationDate;
-	
-	@Column(name="target_onboarding_date")
+
+	@Column(name = "target_onboarding_date")
 	private LocalDateTime targetOnboardingDate;
-	
+
 }

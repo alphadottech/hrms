@@ -1,26 +1,33 @@
 package com.adt.hrms.model;
 
-import javax.persistence.*;
+import java.time.Instant;
 
-import lombok.Data;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Proxy;
 import org.springframework.data.annotation.LastModifiedDate;
- 
-import java.time.Instant;
+
+import lombok.Data;
 
 @Entity
 @Table(catalog = "EmployeeDB", schema = "user_schema", name = "_EMPLOYEE")
 @Proxy(lazy = false)
 @Data
-public class Employee{
+public class Employee {
 
 	@Id
 	@Column(name = "EMPLOYEE_ID")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
 	@SequenceGenerator(name = "user_seq", allocationSize = 1)
 	private int employeeId;
-	
+
 	@LastModifiedDate
 	@Column(name = "updated_at", nullable = false)
 	private Instant updatedAt;
@@ -58,12 +65,6 @@ public class Employee{
 
 	@Column(name = "MobileNo")
 	private Long mobileNo;
-//
-//	@Column(name = "PASSWORD")
-//	private String password;
-//
-//	@Column(name = "USERNAME", unique = true)
-//	private String username;
 
 	@Column(name = "salary")
 	private Double salary;

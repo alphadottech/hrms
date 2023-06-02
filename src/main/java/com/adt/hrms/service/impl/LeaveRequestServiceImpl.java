@@ -40,12 +40,10 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 	@Override
 	public List<LeaveRequestModel> getLeaveRequestDetailsByEmpId(Integer empid) {
 		List<LeaveRequestModel> opt = leaveRequestRepo.findByempid(empid);
-		if(!opt.isEmpty()) {
+		if (!opt.isEmpty()) {
 			return opt;
 		} else {
 			return null;
 		}
-
 	}
-
 }

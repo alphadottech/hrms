@@ -2,31 +2,29 @@ package com.adt.hrms.ui;
 
 import java.util.List;
 
-
 import javax.persistence.Id;
 
 public class PositionDateConverter {
-	
+
 	@Id
 	private Integer uiid;
-	
-	//private int techid;
+
 	private String positionName;
-	
+
 	private List<String> techStack;
-	
+
 	private String positionopendate;
-	
+
 	private String positionclosedate;
-	
+
 	private String status;
-	
+
 	private double experienceInYear;
-	
+
 	private boolean remote;
-	
+
 	private String positionType;
-	
+
 	private Integer vacancy;
 
 	public Integer getUiid() {
@@ -135,6 +133,5 @@ public class PositionDateConverter {
 
 	public PositionDateConverter() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 }

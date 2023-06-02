@@ -63,7 +63,6 @@ public class AttendanceServiceImpl implements AttendanceService {
                     long differenceInMinutes = (differenceInMilliSeconds / (60 * 1000)) % 60;
                     long differenceInSeconds = (differenceInMilliSeconds / 1000) % 60;
                     attendanceStatus.setWorkingHour(differenceInHours + ":" + differenceInMinutes + ":" + differenceInSeconds);
-//                                attendanceRepository.deleteByAttendanceIdAndDate(id, date);
                     attendanceRepository.save(attendanceStatus);
                     return name + " checkout successfully AT :" + time;
                 }
@@ -73,6 +72,4 @@ public class AttendanceServiceImpl implements AttendanceService {
             return "Invalid Status";
         }
     }
-
-
 }

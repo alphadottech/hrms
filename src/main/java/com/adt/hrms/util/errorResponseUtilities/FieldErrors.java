@@ -8,12 +8,12 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 public class FieldErrors {
-    private int status;
-    private String message;
-    private Map<String, String> field_errors;
+	private int status;
+	private String message;
+	private Map<String, String> field_errors;
 
-    public FieldErrors(int status, String message) {
-        this.status = status;
-        this.message = message;
-    }
+	public FieldErrors(int status, String message) {
+		this.status = status;
+		this.message = message;
+	}
 }

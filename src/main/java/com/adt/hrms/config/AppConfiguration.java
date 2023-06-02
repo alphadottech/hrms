@@ -16,6 +16,6 @@ public class AppConfiguration {
             "classpath:/messages/api_response_messages"
         );
         messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
+		return messageSource;
+	}
 }

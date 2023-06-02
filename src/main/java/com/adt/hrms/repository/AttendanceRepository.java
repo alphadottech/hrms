@@ -6,17 +6,12 @@ import org.springframework.stereotype.Repository;
 import com.adt.hrms.model.AttendanceModel;
 
 @Repository
+public interface AttendanceRepository extends JpaRepository<AttendanceModel, Integer> {
 
-public interface AttendanceRepository extends JpaRepository<AttendanceModel, Integer>{
+	AttendanceModel findByAttendanceIdAndDate(int id, String localDates);
 
-    AttendanceModel findByAttendanceIdAndDate(int id, String localDates);
+	AttendanceModel findByAttendanceId(int id);
 
-
-
-    AttendanceModel findByAttendanceId(int id);
-
-
-
-    void deleteByAttendanceIdAndDate(int id,String localDates);
+	void deleteByAttendanceIdAndDate(int id, String localDates);
 
 }
