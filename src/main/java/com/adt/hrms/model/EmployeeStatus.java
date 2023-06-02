@@ -12,7 +12,7 @@ import lombok.Data;
 @Entity
 @Table(catalog = "EmployeeDB", schema = "employee_schema", name = "Employeestatus")
 public class EmployeeStatus {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "EmpId")
@@ -25,7 +25,5 @@ public class EmployeeStatus {
 	private String empStatus;
 	@Column(name = "EmploymentType")
 	private String employmentType;
-	
-	
 
 }

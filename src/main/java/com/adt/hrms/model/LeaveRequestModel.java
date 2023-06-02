@@ -1,6 +1,5 @@
 package com.adt.hrms.model;
 
-
 import java.util.List;
 
 import javax.persistence.CollectionTable;
@@ -10,8 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 
 import lombok.Data;
 
@@ -35,6 +34,5 @@ public class LeaveRequestModel {
 	@CollectionTable(catalog = "EmployeeDB", schema = "employee_schema", name = "LEAVE_DATES", joinColumns = @JoinColumn(name = "LEAVE_ID"))
 	@Column(name = "leavedate")
 	private List<String> leavedate;
-
 
 }
