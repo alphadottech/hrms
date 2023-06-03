@@ -1,24 +1,26 @@
 package com.adt.hrms.service.impl;
 
-import com.adt.hrms.model.InterviewCandidateDetails;
-import com.adt.hrms.repository.InterviewCandidateRepo;
-import com.adt.hrms.service.InterviewCandidateService;
-import com.adt.hrms.util.MobileNumberValidation;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Service;
+
+import com.adt.hrms.model.InterviewCandidateDetails;
+import com.adt.hrms.repository.InterviewCandidateRepo;
+import com.adt.hrms.service.InterviewCandidateService;
+import com.adt.hrms.util.MobileNumberValidation;
+
 @Service
 public class InterviewCandidateServiceImpl implements InterviewCandidateService {
 
-	private static final Logger LOGGER = LogManager.getLogger(InterviewCandidateServiceImpl.class);
+	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	InterviewCandidateRepo interviewCandidateRepo;
