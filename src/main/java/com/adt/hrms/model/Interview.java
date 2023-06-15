@@ -7,22 +7,47 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.adt.hrms.ui.InterviewIdRound;
+
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@IdClass(InterviewIdRound.class)
 @Table(catalog = "EmployeeDB", schema = "employee_schema", name = "interview")
+@NoArgsConstructor
 public class Interview {
 
+	// PK
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "interview_id", columnDefinition = "serial")
+	@Column(name = "interview_id")
 	private Integer interviewId;
 
-	@Column(name = "tech_id")
-	private Integer tech_id;
+	// PK
+	@Id
+	@Column(name = "Rounds")
+	private Integer rounds;
+
+	// FK
+	@OneToOne
+	@JoinColumn(name = "candidate_id")
+	private InterviewCandidateDetails candidate_id;
+
+	// FK
+	@OneToOne
+	@JoinColumn(name = "tech_id")
+	private AVTechnology tech_id;
+
+	// FK
+	@OneToOne
+	@JoinColumn(name = "position_id")
+	private PositionModel position_id;
 
 	@Column(name = "Marks")
 	private Integer marks;
@@ -54,9 +79,6 @@ public class Interview {
 	@Column(name = "OfferAccepted")
 	private Boolean offerAccepted;
 
-	@Column(name = "position_id")
-	private Integer position_id;
-
 	@Column(name = "Type")
 	private String type;
 
@@ -69,13 +91,7 @@ public class Interview {
 	@Column(name = "client_name")
 	private String clientName;
 
-	@Column(name = "Rounds")
-	private Integer rounds;
-
 	@Column(name = "selected")
 	private Boolean selected;
-
-	@Column(name = "candidate_id")
-	private Integer candidate_id;
 
 }
