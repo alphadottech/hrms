@@ -51,7 +51,7 @@ public class EmployeeOperationController {
 		return new ResponseEntity<>(employeeService.getAllEmps(), HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
 	@PutMapping("/updateEmp/{empId}")
 	public ResponseEntity<String> updateEmp(@PathVariable("empId") int empId, @RequestBody Employee emp) {
 		LOGGER.info("Employeeservice:employee:updateEmp info level log message");
