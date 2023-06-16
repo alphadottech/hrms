@@ -1,5 +1,7 @@
 package com.adt.hrms.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -50,4 +52,7 @@ public class InterviewCandidateDetails {
 
 	@Column(name = "notice_period")
 	private Integer noticePeriod;
+	
+	@Column(name = "dob")
+	private LocalDate dob;
 }
