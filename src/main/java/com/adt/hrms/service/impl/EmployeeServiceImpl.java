@@ -131,10 +131,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 		opt.get().setResume(resume.getBytes());
 		return employeeRepo.save(opt.get()).getEmployeeId() + " Employee Updated Successfully";
 	}
+	//Jira no :- HRMS-77 End--	
+	
+	//Jira no :- HRMS-82 start--
 	 public byte[] downloadImage(int id){
 	        Optional<Employee> dbImageData = employeeRepo.findById(id);
 	        byte[] images= dbImageData.get().getResume();
 	        return images;
 	    }
-	//Jira no :- HRMS-77 End--	
+	//Jira no :- HRMS-82 End--	
 }

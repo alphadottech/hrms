@@ -78,7 +78,7 @@ public class EmployeeOperationController {
 	}
 	//Jira no :- HRMS-77 End--
 	
-	//Jira no :- HRMS-77 start--
+	//Jira no :- HRMS-82 start--
 	@GetMapping("downloadResume/{id}")
 	public ResponseEntity<?> downloadImage(@PathVariable int id){
 		byte[] imageData=employeeService.downloadImage(id);
@@ -86,7 +86,7 @@ public class EmployeeOperationController {
 				.contentType(MediaType.valueOf("image/png"))
 				.body(imageData);
 	}
-	//Jira no :- HRMS-77 End--
+	//Jira no :- HRMS-82 End--
 	
 	//@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@DeleteMapping("/delete/{empId}")

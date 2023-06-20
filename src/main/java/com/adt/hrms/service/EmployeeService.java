@@ -22,9 +22,11 @@ public interface EmployeeService {
 	
 	//Jira no :- HRMS-77 start--
 	public String updateEmp(Employee emp,MultipartFile resume)throws IOException ;
-	
-	public byte[] downloadImage(int id);
 	//Jira no :- HRMS-77 End--
+
+	//Jira no :- HRMS-82 start--
+	public byte[] downloadImage(int id);
+	//Jira no :- HRMS-82 End--
 	
 	public EmployeeStatus getEmployeeById(Integer empId);
 
