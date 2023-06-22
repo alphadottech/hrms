@@ -1,11 +1,13 @@
 package com.adt.hrms.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,11 +18,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.adt.hrms.model.Employee;
 import com.adt.hrms.model.EmployeeStatus;
 import com.adt.hrms.service.EmployeeService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/employee")
@@ -50,14 +55,30 @@ public class EmployeeOperationController {
 		LOGGER.info("Employeeservice:employee:getAllEmps info level log message");
 		return new ResponseEntity<>(employeeService.getAllEmps(), HttpStatus.OK);
 	}
-
-	@PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
-	@PutMapping("/updateEmp/{empId}")
-	public ResponseEntity<String> updateEmp(@PathVariable("empId") int empId, @RequestBody Employee emp) {
+	//Jira no :- HRMS-77 START--
+	//Jira no :- HRMS-78 START--
+	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+	@PutMapping("/updateEmp")
+	public ResponseEntity<String> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp,
+			@RequestPart("image") MultipartFile aadhar,@RequestPart("image1") MultipartFile pan) throws IOException {
 		LOGGER.info("Employeeservice:employee:updateEmp info level log message");
-		return new ResponseEntity<>(employeeService.updateEmp(empId, emp), HttpStatus.OK);
+		ObjectMapper mapper=new ObjectMapper();
+		Employee e=mapper.readValue(emp,Employee.class);
+		return new ResponseEntity<>(employeeService.updateEmp(e,resume,aadhar,pan), HttpStatus.OK);
 	}
-
+	//Jira no :- HRMS-77 END--
+	//Jira no :- HRMS-78 END--
+	
+	//Jira no :- HRMS-82 start--
+	@GetMapping("downloadResume/{id}")
+	public ResponseEntity<?> downloadImage(@PathVariable int id){
+		byte[] imageData=employeeService.downloadImage(id);
+		return ResponseEntity.status(HttpStatus.OK)
+				.contentType(MediaType.valueOf("image/png"))
+				.body(imageData);
+	}
+	//Jira no :- HRMS-82 End--
+	
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@DeleteMapping("/delete/{empId}")
 	public ResponseEntity<String> deleteEmp(@PathVariable("empId") int empId) {
