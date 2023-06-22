@@ -3,8 +3,6 @@ package com.adt.hrms.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.swing.text.html.FormSubmitEvent.MethodType;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,25 +55,19 @@ public class EmployeeOperationController {
 		LOGGER.info("Employeeservice:employee:getAllEmps info level log message");
 		return new ResponseEntity<>(employeeService.getAllEmps(), HttpStatus.OK);
 	}
-
-//	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
-//	@PutMapping("/updateEmp")
-//	public ResponseEntity<String> updateEmp(@PathVariable("empId") int empId,@RequestParam("image")MultipartFile resume , @RequestBody Employee emp) {
-//		LOGGER.info("Employeeservice:employee:updateEmp info level log message");
-//		return new ResponseEntity<>(employeeService.updateEmp(empId, emp,resume), HttpStatus.OK);
-//	}
-
-	
-	//Jira no :- HRMS-77 start--
+	//Jira no :- HRMS-77 START--
+	//Jira no :- HRMS-78 START--
 	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
 	@PutMapping("/updateEmp")
-	public ResponseEntity<String> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp ) throws IOException {
+	public ResponseEntity<String> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp,
+			@RequestPart("image") MultipartFile aadhar,@RequestPart("image1") MultipartFile pan) throws IOException {
 		LOGGER.info("Employeeservice:employee:updateEmp info level log message");
 		ObjectMapper mapper=new ObjectMapper();
 		Employee e=mapper.readValue(emp,Employee.class);
-		return new ResponseEntity<>(employeeService.updateEmp(e,resume), HttpStatus.OK);
+		return new ResponseEntity<>(employeeService.updateEmp(e,resume,aadhar,pan), HttpStatus.OK);
 	}
-	//Jira no :- HRMS-77 End--
+	//Jira no :- HRMS-77 END--
+	//Jira no :- HRMS-78 END--
 	
 	//Jira no :- HRMS-82 start--
 	@GetMapping("downloadResume/{id}")
@@ -88,7 +79,7 @@ public class EmployeeOperationController {
 	}
 	//Jira no :- HRMS-82 End--
 	
-	//@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@DeleteMapping("/delete/{empId}")
 	public ResponseEntity<String> deleteEmp(@PathVariable("empId") int empId) {
 		LOGGER.info("Employeeservice:employee:deleteEmp info level log message");
