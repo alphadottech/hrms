@@ -20,5 +20,11 @@ public interface MasterAssetService {
 	public List<MasterAsset> SearchByAssetType(String assetType);
 	//JyotiPancholi - Jira no ->  HRMS-83(END)
 
+	//RitikaBhawsar - Jira no ->  HRMS-63(START)
+	public String updateMasterAssetById(MasterAsset masterAsset);
+
+	public List<MasterAsset> findAllMasterAsset();
+	//RitikaBhawsar - Jira no ->  HRMS-63(END)
+
 }
 //JyotiPancholi - Jira no ->  HRMS-63(END)
