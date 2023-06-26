@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,8 +38,7 @@ public class MasterAssetController {
 	}
 	
 	@GetMapping("/GetAssetById/{id}")
-	public ResponseEntity<MasterAsset> GetAssetById(@PathVariable
-			Integer id){
+	public ResponseEntity<MasterAsset> GetAssetById(@PathVariable Integer id){
 	return ResponseEntity.ok(service.TakeAssetById(id));
 }
 	
@@ -59,6 +59,26 @@ public class MasterAssetController {
 		return ResponseEntity.ok(service.SearchByAssetType(query));
 	}
 	//JyotiPancholi - Jira no ->  HRMS-83(END)
+	
+	//RitikaBhawsar - Jira no ->  HRMS-63(START)
+	@PutMapping("/updateMasterAssetbyid")
+	public ResponseEntity<String> updateMasterAssetbyid( @RequestBody MasterAsset asset) 
+	{
+		// service.updateMasterAsset(asset);
+		//LOGGER.info("MasterAssetService:masterAsset:updateMasterAssetbyid info level log message");
+
+		return new ResponseEntity<String>(service.updateMasterAssetById(asset), HttpStatus.OK);
+	}
+	
+	@GetMapping("/getAllMasterAsset")
+	public ResponseEntity<List<MasterAsset>> findAllAssets()
+	{
+		//LOGGER.info("MasterAssetService:masterAsset:findAllAssets info level log message");
+
+		return new ResponseEntity<List<MasterAsset>>(service.findAllMasterAsset(), HttpStatus.OK);
+	}
+	//RitikaBhawsar - Jira no ->  HRMS-63(END)
+
 
 }
 //JyotiPancholi - Jira no ->  HRMS-63(END)
