@@ -84,4 +84,14 @@ public class Employee {
 	@Column(name = "resume", length = 1000)
 	private byte[] resume;
 	//Jira no :- HRMS-77 End--
+	
+	//jira no-HRMS-78 ---- START
+	@Lob
+	@Column(name="aadhar_card", length=1000)
+	private byte[] aadharCard;
+		
+	@Lob
+	@Column(name="pan_card", length =1000)
+	private byte[] panCard;
+	//jira no-HRMS-78 ---- END
 }
