@@ -48,6 +48,40 @@ public class MasterAssetServiceImpl implements MasterAssetService{
 	}
 	//JyotiPancholi - Jira no ->  HRMS-83(END)
 
+	//RitikaBhawsar - Jira no ->  HRMS-63(START)
+	@Override
+	public String updateMasterAssetById(MasterAsset masterAsset) 
+	{
+		MasterAsset dbAsset = repo.findAssetById(masterAsset.getId());
+		if(dbAsset!=null) 
+		{
+			dbAsset.setAssetName(masterAsset.getAssetName());
+			dbAsset.setAssetNo(masterAsset.getAssetNo());
+			dbAsset.setAssetType(masterAsset.getAssetType());
+			dbAsset.setAssetUser(masterAsset.getAssetUser());
+			dbAsset.setDiskType(masterAsset.getDiskType());
+			dbAsset.setOperatingSystem(masterAsset.getOperatingSystem());
+			dbAsset.setProcessor(masterAsset.getProcessor());
+			dbAsset.setRam(masterAsset.getRam());
+			dbAsset.setStatus(masterAsset.getStatus());
+			dbAsset.setWarrenty(masterAsset.getWarrenty());
+			dbAsset.setPurchesDate(masterAsset.getPurchesDate());
+			dbAsset.setWarrentyDate(masterAsset.getWarrentyDate());
+			
+			return repo.save(dbAsset).getAssetId()+" Updated Successfully";
+		}
+		
+		
+		return masterAsset.getAssetId()+" Not Updated ";
+	}
+
+	@Override
+	public List<MasterAsset> findAllMasterAsset()
+	{
+	return (List<MasterAsset>) repo.findAll();
+	}
+	//RitikaBhawsar - Jira no ->  HRMS-63(END)
+
 }
 
 //JyotiPancholi - Jira no ->  HRMS-63(END)
