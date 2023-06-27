@@ -62,18 +62,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Optional<Employee> emp = employeeRepo.findById(empId);
 		return emp.get();
 	}
-
+	
+	//Jira no :- HRMS-86 START--
 	@Override
-	public List<Employee> SearchEmployee(String query) {
-		List<Employee> emplist = employeeRepo.SearchEmployee(query);
+	public List<Employee> SearchByName(String name) {
+		List<Employee> emplist = employeeRepo.SearchByName(name);
 		return emplist;
 	}
 
 	@Override
-	public List<Employee> SearchByEmailId(String query) {
-		List<Employee> emailemp = employeeRepo.SearchByEmailId(query);
+	public List<Employee> SearchByEmail(String email) {
+		List<Employee> emailemp = employeeRepo.SearchByEmail(email);
 		return emailemp;
 	}
+	//Jira no :- HRMS-86 END--
+
 
 	@Override
 	public Employee getEmp(Integer empId) {
@@ -121,4 +124,5 @@ public class EmployeeServiceImpl implements EmployeeService {
 	        return images;
 	    }
 	//Jira no :- HRMS-82 End--	
+
 }

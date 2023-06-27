@@ -33,10 +33,15 @@ public interface EmployeeService {
 	public EmployeeStatus getEmployeeById(Integer empId);
 
 	public Employee getEmployeeById(int empId);
+	
+	//Jira no :- HRMS-86 START--
+	public List<Employee> SearchByName(String name);
 
-	List<Employee> SearchEmployee(String query);
+	public List<Employee> SearchByEmail(String query);
+	//Jira no :- HRMS-86 END--
 
-	List<Employee> SearchByEmailId(String query);
+	
+
 
 
 }

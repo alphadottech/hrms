@@ -479,3 +479,98 @@ This generated password is for development use only. Your security configuration
 15:30:53.518 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 6492ca55bf5dcb151dba0d3e9455fe89/1dba0d3e9455fe89 - Completed initialization in 2 ms
 19:09:03.221 [http-nio-9093-exec-6] INFO  com.adt.hrms.controller.EmployeeOperationController 6492fd7745008bd344f3040714799b0d/44f3040714799b0d - Employeeservice:employee:updateEmp info level log message
 19:42:44.738 [RMI TCP Connection(276)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+16:34:07.342 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 9464 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+16:34:07.349 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+16:34:07.351 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+16:34:09.055 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+16:34:09.210 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1822 ms
+16:34:12.755 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: bee50a84-20e4-4b71-97c6-ccfdd9f16607
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+16:34:13.006 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+16:34:13.833 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+16:34:13.897 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 6.969 seconds (JVM running for 8.046)
+16:34:56.623 [http-nio-9093-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet 649ac2588b0c7127214150cb27dbb962/214150cb27dbb962 - Initializing Servlet 'dispatcherServlet'
+16:34:56.625 [http-nio-9093-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet 649ac2588b0c7127214150cb27dbb962/214150cb27dbb962 - Completed initialization in 2 ms
+16:35:17.145 [http-nio-9093-exec-3] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac26d5ea7275f8ed0054ab05415b3/8ed0054ab05415b3 - Employeeservice:employee:SearchByName info level log message
+16:40:27.540 [RMI TCP Connection(16)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+16:44:35.071 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 7012 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+16:44:35.079 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+16:44:35.080 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+16:44:36.809 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+16:44:36.967 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1850 ms
+16:44:40.371 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: 69034337-2225-46c0-beaf-bc641e9416ee
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+16:44:40.637 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+16:44:41.444 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+16:44:41.505 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 6.828 seconds (JVM running for 7.799)
+16:45:03.180 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ac4b73b7b81d0ae4be804ee420c89/ae4be804ee420c89 - Initializing Servlet 'dispatcherServlet'
+16:45:03.181 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ac4b73b7b81d0ae4be804ee420c89/ae4be804ee420c89 - Completed initialization in 1 ms
+16:45:03.232 [http-nio-9093-exec-1] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac4b73b7b81d0ae4be804ee420c89/ae4be804ee420c89 - Employeeservice:employee:SearchByName info level log message
+16:48:10.430 [RMI TCP Connection(12)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+16:48:33.948 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 14808 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+16:48:33.956 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+16:48:33.957 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+16:48:35.562 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+16:48:35.724 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1730 ms
+16:48:39.361 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: e044e6bc-e59f-45ee-96ce-3aba7b8a2321
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+16:48:39.625 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+16:48:40.501 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+16:48:40.564 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 7.013 seconds (JVM running for 8.013)
+16:48:45.022 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ac595d82541e1863fb7c5893bbbe5/863fb7c5893bbbe5 - Initializing Servlet 'dispatcherServlet'
+16:48:45.024 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ac595d82541e1863fb7c5893bbbe5/863fb7c5893bbbe5 - Completed initialization in 1 ms
+16:48:45.070 [http-nio-9093-exec-1] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac595d82541e1863fb7c5893bbbe5/863fb7c5893bbbe5 - Employeeservice:employee:getEmp info level log message
+16:49:20.859 [RMI TCP Connection(9)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+16:57:44.298 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 15108 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+16:57:44.309 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+16:57:44.310 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+16:57:46.085 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+16:57:46.282 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1934 ms
+16:57:49.539 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: 3562dbf4-03d0-4a69-a8e6-ff729ba04947
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+16:57:49.838 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+16:57:50.647 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+16:57:50.707 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 6.822 seconds (JVM running for 8.076)
+16:57:57.197 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ac7bd256fba5198cfe6c18011fe7e/98cfe6c18011fe7e - Initializing Servlet 'dispatcherServlet'
+16:57:57.199 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ac7bd256fba5198cfe6c18011fe7e/98cfe6c18011fe7e - Completed initialization in 2 ms
+16:57:57.256 [http-nio-9093-exec-1] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac7bd256fba5198cfe6c18011fe7e/98cfe6c18011fe7e - Employeeservice:employee:SearchByName info level log message
+16:58:02.690 [http-nio-9093-exec-3] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac7c2efd9b90f98d9d9ef5b83a6f3/98d9d9ef5b83a6f3 - Employeeservice:employee:SearchByEmail info level log message
+16:59:01.239 [http-nio-9093-exec-4] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac7fd509c24eed779ee4109172bfa/d779ee4109172bfa - Employeeservice:employee:SearchByName info level log message
+17:01:01.917 [http-nio-9093-exec-7] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac8750df8da733e3f0df6ae41e8f6/3e3f0df6ae41e8f6 - Employeeservice:employee:SearchByName info level log message
+17:02:13.502 [RMI TCP Connection(13)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+17:15:05.087 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 13080 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+17:15:05.095 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+17:15:05.096 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+17:15:06.701 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+17:15:06.858 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1725 ms
+17:15:10.269 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: 855806bf-43ee-41c2-91cf-0b96ee381e72
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+17:15:10.535 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+17:15:11.381 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+17:15:11.445 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 6.746 seconds (JVM running for 7.822)
+17:15:36.011 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649acbdf3d5cf0af75532e386e8ea9be/75532e386e8ea9be - Initializing Servlet 'dispatcherServlet'
+17:15:36.013 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649acbdf3d5cf0af75532e386e8ea9be/75532e386e8ea9be - Completed initialization in 2 ms
+17:15:36.064 [http-nio-9093-exec-1] INFO  com.adt.hrms.controller.EmployeeOperationController 649acbdf3d5cf0af75532e386e8ea9be/75532e386e8ea9be - Employeeservice:employee:SearchByName info level log message
+17:16:54.415 [http-nio-9093-exec-5] INFO  com.adt.hrms.controller.EmployeeOperationController 649acc2e1476f27f42ec5f8e84ccf54e/42ec5f8e84ccf54e - Employeeservice:employee:SearchByName info level log message
+17:17:16.932 [http-nio-9093-exec-6] INFO  com.adt.hrms.controller.EmployeeOperationController 649acc446f6ea5929a00ecde24ed6b5f/9a00ecde24ed6b5f - Employeeservice:employee:SearchByName info level log message
+17:18:18.384 [RMI TCP Connection(10)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.

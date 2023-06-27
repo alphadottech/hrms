@@ -94,17 +94,20 @@ public class EmployeeOperationController {
 
 	}
 
-	@GetMapping("/searchByFirstLastname")
-	public ResponseEntity<List<Employee>> SearchEmployee(@RequestParam("query") String query) {
-		LOGGER.info("Employeeservice:employee:SearchEmployeeByFirstLastName info level log message");
-		return ResponseEntity.ok(employeeService.SearchEmployee(query));
+	//Jira no :- HRMS-86 START--
+	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@GetMapping("/searchByName")
+	public ResponseEntity<List<Employee>> SearchByName(@RequestParam("query") String name) {
+		LOGGER.info("Employeeservice:employee:SearchByName info level log message");
+		return ResponseEntity.ok(employeeService.SearchByName(name));
 	}
 
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-	@GetMapping("/emailId")
-	public ResponseEntity<List<Employee>> SearchByEmailId(@RequestParam("query") String query) {
-		LOGGER.info("Employeeservice:employee:SearchByEmailId info level log message");
-		return ResponseEntity.ok(employeeService.SearchByEmailId(query));
+	@GetMapping("/searchByEmail")
+	public ResponseEntity<List<Employee>> SearchByEmail(@RequestParam("query") String email) {
+		LOGGER.info("Employeeservice:employee:SearchByEmail info level log message");
+		return ResponseEntity.ok(employeeService.SearchByEmail(email));
 	}
+	//Jira no :- HRMS-86 END--
 
 }

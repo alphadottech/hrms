@@ -41,13 +41,16 @@ public class Employee {
 
 	@Column(name = "DOB")
 	private String dob;
-
+	
+	//Jira no :- HRMS-86 START--
 	@NaturalId
 	@Column(name = "EMAIL", unique = true)
 	private String email;
-
+	
 	@Column(name = "FIRST_NAME")
 	private String firstName;
+	//Jira no :- HRMS-86 END--
+
 
 	@Column(name = "Gender")
 	private String gender;
@@ -58,8 +61,11 @@ public class Employee {
 	@Column(name = "JoiningDate")
 	private String joinDate;
 
+	//Jira no :- HRMS-86 START--
 	@Column(name = "LAST_NAME")
 	private String lastName;
+	//Jira no :- HRMS-86 END--
+
 
 	@Column(name = "maritalStatus")
 	private String maritalStatus;
