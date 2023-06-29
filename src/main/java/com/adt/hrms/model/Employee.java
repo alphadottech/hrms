@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -86,17 +85,17 @@ public class Employee {
 	private String ifscCode;
 	
 	//Jira no :- HRMS-77 start--
-	@Lob
+	//@Lob
 	@Column(name = "resume", length = 1000)
 	private byte[] resume;
 	//Jira no :- HRMS-77 End--
 	
 	//jira no-HRMS-78 ---- START
-	@Lob
+	//@Lob
 	@Column(name="aadhar_card", length=1000)
 	private byte[] aadharCard;
 		
-	@Lob
+	//@Lob
 	@Column(name="pan_card", length =1000)
 	private byte[] panCard;
 	//jira no-HRMS-78 ---- END

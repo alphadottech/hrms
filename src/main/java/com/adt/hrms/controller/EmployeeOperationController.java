@@ -59,8 +59,8 @@ public class EmployeeOperationController {
 	//Jira no :- HRMS-78 START--
 	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
 	@PutMapping("/updateEmp")
-	public ResponseEntity<String> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp,
-			@RequestPart("image") MultipartFile aadhar,@RequestPart("image1") MultipartFile pan) throws IOException {
+	public ResponseEntity<Object> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp,
+			@RequestPart("image") MultipartFile aadhar, @RequestPart("image1") MultipartFile pan) throws IOException {
 		LOGGER.info("Employeeservice:employee:updateEmp info level log message");
 		ObjectMapper mapper=new ObjectMapper();
 		Employee e=mapper.readValue(emp,Employee.class);
@@ -94,7 +94,8 @@ public class EmployeeOperationController {
 
 	}
 
-	//Jira no :- HRMS-86 START--
+	
+	//Jira no :- HRMS-86 START--  
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@GetMapping("/searchByName")
 	public ResponseEntity<List<Employee>> SearchByName(@RequestParam("query") String name) {

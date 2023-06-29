@@ -1,0 +1,689 @@
+14:15:07.524 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 13380 (D:\HRMS3\hrms\target\classes started by hp in D:\HRMS3\hrms)
+14:15:07.531 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+14:15:07.532 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+14:15:09.353 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+14:15:09.510 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1936 ms
+14:15:12.889 [main] ERROR com.zaxxer.hikari.pool.HikariPool / - HikariPool-1 - Exception during pool initialization.
+org.postgresql.util.PSQLException: ERROR: remaining connection slots are reserved for non-replication superuser connections
+	at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:646) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:180) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:235) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:49) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:223) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.Driver.makeConnection(Driver.java:402) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.Driver.connect(Driver.java:261) ~[postgresql-42.3.8.jar:42.3.8]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:138) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:364) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:206) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:476) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:561) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:115) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:112) ~[HikariCP-4.0.3.jar:?]
+	at org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl.getConnection(DatasourceConnectionProviderImpl.java:122) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess.obtainConnection(JdbcEnvironmentInitiator.java:181) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:68) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:35) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.boot.registry.internal.StandardServiceRegistryImpl.initiateService(StandardServiceRegistryImpl.java:101) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.createService(AbstractServiceRegistryImpl.java:263) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.initializeService(AbstractServiceRegistryImpl.java:237) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.getService(AbstractServiceRegistryImpl.java:214) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.id.factory.internal.DefaultIdentifierGeneratorFactory.injectServices(DefaultIdentifierGeneratorFactory.java:175) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.injectDependencies(AbstractServiceRegistryImpl.java:286) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.initializeService(AbstractServiceRegistryImpl.java:243) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.getService(AbstractServiceRegistryImpl.java:214) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.<init>(InFlightMetadataCollectorImpl.java:173) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:127) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.metadata(EntityManagerFactoryBuilderImpl.java:1460) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1494) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:58) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:341) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1863) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1800) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:620) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1154) ~[spring-context-5.3.24.jar:5.3.24]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:908) ~[spring-context-5.3.24.jar:5.3.24]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:583) ~[spring-context-5.3.24.jar:5.3.24]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:731) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:408) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:307) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292) ~[spring-boot-2.7.7.jar:2.7.7]
+	at com.adt.hrms.AttendanceDashBoardApplication.main(AttendanceDashBoardApplication.java:19) ~[classes/:?]
+14:15:14.669 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: ec4bda33-2f38-4617-b954-d3f6aaeb8c35
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+14:15:14.935 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+14:15:15.773 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+14:15:15.836 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 8.904 seconds (JVM running for 9.915)
+14:15:17.986 [main] ERROR com.zaxxer.hikari.pool.HikariPool / - HikariPool-1 - Exception during pool initialization.
+org.postgresql.util.PSQLException: ERROR: remaining connection slots are reserved for non-replication superuser connections
+	at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:646) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:180) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:235) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:49) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:223) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.Driver.makeConnection(Driver.java:402) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.Driver.connect(Driver.java:261) ~[postgresql-42.3.8.jar:42.3.8]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:138) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:364) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:206) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:476) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:561) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:115) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:112) ~[HikariCP-4.0.3.jar:?]
+	at org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl.getConnection(DatasourceConnectionProviderImpl.java:122) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.internal.NonContextualJdbcConnectionAccess.obtainConnection(NonContextualJdbcConnectionAccess.java:38) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.acquireConnectionIfNeeded(LogicalConnectionManagedImpl.java:108) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:138) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.internal.SessionImpl.connection(SessionImpl.java:516) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.beginTransaction(HibernateJpaDialect.java:152) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:421) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.startTransaction(AbstractPlatformTransactionManager.java:400) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.getTransaction(AbstractPlatformTransactionManager.java:373) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.createTransactionIfNecessary(TransactionAspectSupport.java:595) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:382) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:137) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:174) ~[spring-data-jpa-2.7.6.jar:2.7.6]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215) ~[spring-aop-5.3.24.jar:5.3.24]
+	at jdk.proxy2.$Proxy175.findAll(Unknown Source) ~[?:?]
+	at com.adt.hrms.service.impl.AVHashMapServiceImpl.run(AVHashMapServiceImpl.java:30) ~[classes/:?]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:768) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:752) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292) ~[spring-boot-2.7.7.jar:2.7.7]
+	at com.adt.hrms.AttendanceDashBoardApplication.main(AttendanceDashBoardApplication.java:19) ~[classes/:?]
+14:15:17.991 [main] ERROR org.hibernate.engine.jdbc.spi.SqlExceptionHelper / - ERROR: remaining connection slots are reserved for non-replication superuser connections
+14:15:18.017 [main] INFO  org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener / - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+14:15:18.046 [main] ERROR org.springframework.boot.SpringApplication / - Application run failed
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:771) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:752) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292) ~[spring-boot-2.7.7.jar:2.7.7]
+	at com.adt.hrms.AttendanceDashBoardApplication.main(AttendanceDashBoardApplication.java:19) ~[classes/:?]
+Caused by: org.springframework.transaction.CannotCreateTransactionException: Could not open JPA EntityManager for transaction; nested exception is org.hibernate.exception.GenericJDBCException: Unable to acquire JDBC Connection
+	at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:467) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.startTransaction(AbstractPlatformTransactionManager.java:400) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.getTransaction(AbstractPlatformTransactionManager.java:373) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.createTransactionIfNecessary(TransactionAspectSupport.java:595) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:382) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:137) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:174) ~[spring-data-jpa-2.7.6.jar:2.7.6]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215) ~[spring-aop-5.3.24.jar:5.3.24]
+	at jdk.proxy2.$Proxy175.findAll(Unknown Source) ~[?:?]
+	at com.adt.hrms.service.impl.AVHashMapServiceImpl.run(AVHashMapServiceImpl.java:30) ~[classes/:?]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:768) ~[spring-boot-2.7.7.jar:2.7.7]
+	... 5 more
+Caused by: org.hibernate.exception.GenericJDBCException: Unable to acquire JDBC Connection
+	at org.hibernate.exception.internal.StandardSQLExceptionConverter.convert(StandardSQLExceptionConverter.java:42) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:113) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:99) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.acquireConnectionIfNeeded(LogicalConnectionManagedImpl.java:111) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:138) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.internal.SessionImpl.connection(SessionImpl.java:516) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.beginTransaction(HibernateJpaDialect.java:152) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:421) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.startTransaction(AbstractPlatformTransactionManager.java:400) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.getTransaction(AbstractPlatformTransactionManager.java:373) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.createTransactionIfNecessary(TransactionAspectSupport.java:595) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:382) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:137) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:174) ~[spring-data-jpa-2.7.6.jar:2.7.6]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215) ~[spring-aop-5.3.24.jar:5.3.24]
+	at jdk.proxy2.$Proxy175.findAll(Unknown Source) ~[?:?]
+	at com.adt.hrms.service.impl.AVHashMapServiceImpl.run(AVHashMapServiceImpl.java:30) ~[classes/:?]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:768) ~[spring-boot-2.7.7.jar:2.7.7]
+	... 5 more
+Caused by: org.postgresql.util.PSQLException: ERROR: remaining connection slots are reserved for non-replication superuser connections
+	at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:646) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:180) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:235) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:49) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:223) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.Driver.makeConnection(Driver.java:402) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.Driver.connect(Driver.java:261) ~[postgresql-42.3.8.jar:42.3.8]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:138) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:364) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:206) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:476) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:561) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:115) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:112) ~[HikariCP-4.0.3.jar:?]
+	at org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl.getConnection(DatasourceConnectionProviderImpl.java:122) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.internal.NonContextualJdbcConnectionAccess.obtainConnection(NonContextualJdbcConnectionAccess.java:38) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.acquireConnectionIfNeeded(LogicalConnectionManagedImpl.java:108) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:138) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.internal.SessionImpl.connection(SessionImpl.java:516) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.beginTransaction(HibernateJpaDialect.java:152) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:421) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.startTransaction(AbstractPlatformTransactionManager.java:400) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.getTransaction(AbstractPlatformTransactionManager.java:373) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.createTransactionIfNecessary(TransactionAspectSupport.java:595) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:382) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:137) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:174) ~[spring-data-jpa-2.7.6.jar:2.7.6]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215) ~[spring-aop-5.3.24.jar:5.3.24]
+	at jdk.proxy2.$Proxy175.findAll(Unknown Source) ~[?:?]
+	at com.adt.hrms.service.impl.AVHashMapServiceImpl.run(AVHashMapServiceImpl.java:30) ~[classes/:?]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:768) ~[spring-boot-2.7.7.jar:2.7.7]
+	... 5 more
+14:26:07.135 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 10520 (D:\HRMS3\hrms\target\classes started by hp in D:\HRMS3\hrms)
+14:26:07.143 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+14:26:07.144 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+14:26:08.942 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+14:26:09.090 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1911 ms
+14:26:13.602 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: b2e54855-59a2-440c-9181-440924f2d741
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+14:26:13.873 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+14:26:14.682 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+14:26:14.742 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 7.995 seconds (JVM running for 8.938)
+14:26:48.123 [RMI TCP Connection(10)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+14:28:09.235 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 128 (D:\HRMS3\hrms\target\classes started by hp in D:\HRMS3\hrms)
+14:28:09.242 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+14:28:09.244 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+14:28:10.854 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+14:28:10.993 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1711 ms
+14:28:16.214 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: 6a035721-8f94-4c7e-b668-8ddaf4465648
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+14:28:16.474 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+14:28:17.279 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+14:28:17.340 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 8.486 seconds (JVM running for 9.425)
+14:33:22.012 [RMI TCP Connection(13)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+14:33:51.218 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 15232 (D:\HRMS3\hrms\target\classes started by hp in D:\HRMS3\hrms)
+14:33:51.225 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+14:33:51.228 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+14:33:52.774 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+14:33:52.917 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1655 ms
+14:33:57.320 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: fa124753-3002-4fd9-b66a-6de600d3239f
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+14:33:57.577 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+14:33:58.374 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+14:33:58.439 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 7.623 seconds (JVM running for 8.624)
+14:34:43.942 [RMI TCP Connection(10)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+14:36:20.717 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 14012 (D:\HRMS3\hrms\target\classes started by hp in D:\HRMS3\hrms)
+14:36:20.724 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+14:36:20.725 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+14:36:22.311 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+14:36:22.466 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1707 ms
+14:36:25.759 [main] ERROR com.zaxxer.hikari.pool.HikariPool / - HikariPool-1 - Exception during pool initialization.
+org.postgresql.util.PSQLException: ERROR: remaining connection slots are reserved for non-replication superuser connections
+	at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:646) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:180) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:235) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:49) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:223) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.Driver.makeConnection(Driver.java:402) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.Driver.connect(Driver.java:261) ~[postgresql-42.3.8.jar:42.3.8]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:138) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:364) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:206) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:476) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:561) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:115) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:112) ~[HikariCP-4.0.3.jar:?]
+	at org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl.getConnection(DatasourceConnectionProviderImpl.java:122) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess.obtainConnection(JdbcEnvironmentInitiator.java:181) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:68) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:35) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.boot.registry.internal.StandardServiceRegistryImpl.initiateService(StandardServiceRegistryImpl.java:101) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.createService(AbstractServiceRegistryImpl.java:263) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.initializeService(AbstractServiceRegistryImpl.java:237) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.getService(AbstractServiceRegistryImpl.java:214) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.id.factory.internal.DefaultIdentifierGeneratorFactory.injectServices(DefaultIdentifierGeneratorFactory.java:175) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.injectDependencies(AbstractServiceRegistryImpl.java:286) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.initializeService(AbstractServiceRegistryImpl.java:243) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.getService(AbstractServiceRegistryImpl.java:214) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.<init>(InFlightMetadataCollectorImpl.java:173) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:127) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.metadata(EntityManagerFactoryBuilderImpl.java:1460) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1494) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:58) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:409) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:396) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:341) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1863) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1800) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:620) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208) ~[spring-beans-5.3.24.jar:5.3.24]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1154) ~[spring-context-5.3.24.jar:5.3.24]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:908) ~[spring-context-5.3.24.jar:5.3.24]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:583) ~[spring-context-5.3.24.jar:5.3.24]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:731) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:408) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:307) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292) ~[spring-boot-2.7.7.jar:2.7.7]
+	at com.adt.hrms.AttendanceDashBoardApplication.main(AttendanceDashBoardApplication.java:19) ~[classes/:?]
+14:36:27.477 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: d5ee276e-691b-4ad0-a32f-ea5a3f3dbbc6
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+14:36:27.738 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+14:36:28.540 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+14:36:28.603 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 8.272 seconds (JVM running for 9.247)
+14:36:30.847 [main] ERROR com.zaxxer.hikari.pool.HikariPool / - HikariPool-1 - Exception during pool initialization.
+org.postgresql.util.PSQLException: ERROR: remaining connection slots are reserved for non-replication superuser connections
+	at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:646) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:180) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:235) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:49) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:223) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.Driver.makeConnection(Driver.java:402) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.Driver.connect(Driver.java:261) ~[postgresql-42.3.8.jar:42.3.8]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:138) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:364) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:206) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:476) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:561) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:115) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:112) ~[HikariCP-4.0.3.jar:?]
+	at org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl.getConnection(DatasourceConnectionProviderImpl.java:122) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.internal.NonContextualJdbcConnectionAccess.obtainConnection(NonContextualJdbcConnectionAccess.java:38) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.acquireConnectionIfNeeded(LogicalConnectionManagedImpl.java:108) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:138) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.internal.SessionImpl.connection(SessionImpl.java:516) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.beginTransaction(HibernateJpaDialect.java:152) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:421) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.startTransaction(AbstractPlatformTransactionManager.java:400) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.getTransaction(AbstractPlatformTransactionManager.java:373) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.createTransactionIfNecessary(TransactionAspectSupport.java:595) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:382) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:137) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:174) ~[spring-data-jpa-2.7.6.jar:2.7.6]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215) ~[spring-aop-5.3.24.jar:5.3.24]
+	at jdk.proxy2.$Proxy175.findAll(Unknown Source) ~[?:?]
+	at com.adt.hrms.service.impl.AVHashMapServiceImpl.run(AVHashMapServiceImpl.java:30) ~[classes/:?]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:768) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:752) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292) ~[spring-boot-2.7.7.jar:2.7.7]
+	at com.adt.hrms.AttendanceDashBoardApplication.main(AttendanceDashBoardApplication.java:19) ~[classes/:?]
+14:36:30.852 [main] ERROR org.hibernate.engine.jdbc.spi.SqlExceptionHelper / - ERROR: remaining connection slots are reserved for non-replication superuser connections
+14:36:30.874 [main] INFO  org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener / - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+14:36:30.913 [main] ERROR org.springframework.boot.SpringApplication / - Application run failed
+java.lang.IllegalStateException: Failed to execute CommandLineRunner
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:771) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.callRunners(SpringApplication.java:752) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303) ~[spring-boot-2.7.7.jar:2.7.7]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292) ~[spring-boot-2.7.7.jar:2.7.7]
+	at com.adt.hrms.AttendanceDashBoardApplication.main(AttendanceDashBoardApplication.java:19) ~[classes/:?]
+Caused by: org.springframework.transaction.CannotCreateTransactionException: Could not open JPA EntityManager for transaction; nested exception is org.hibernate.exception.GenericJDBCException: Unable to acquire JDBC Connection
+	at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:467) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.startTransaction(AbstractPlatformTransactionManager.java:400) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.getTransaction(AbstractPlatformTransactionManager.java:373) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.createTransactionIfNecessary(TransactionAspectSupport.java:595) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:382) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:137) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:174) ~[spring-data-jpa-2.7.6.jar:2.7.6]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215) ~[spring-aop-5.3.24.jar:5.3.24]
+	at jdk.proxy2.$Proxy175.findAll(Unknown Source) ~[?:?]
+	at com.adt.hrms.service.impl.AVHashMapServiceImpl.run(AVHashMapServiceImpl.java:30) ~[classes/:?]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:768) ~[spring-boot-2.7.7.jar:2.7.7]
+	... 5 more
+Caused by: org.hibernate.exception.GenericJDBCException: Unable to acquire JDBC Connection
+	at org.hibernate.exception.internal.StandardSQLExceptionConverter.convert(StandardSQLExceptionConverter.java:42) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:113) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:99) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.acquireConnectionIfNeeded(LogicalConnectionManagedImpl.java:111) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:138) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.internal.SessionImpl.connection(SessionImpl.java:516) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.beginTransaction(HibernateJpaDialect.java:152) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:421) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.startTransaction(AbstractPlatformTransactionManager.java:400) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.getTransaction(AbstractPlatformTransactionManager.java:373) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.createTransactionIfNecessary(TransactionAspectSupport.java:595) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:382) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:137) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:174) ~[spring-data-jpa-2.7.6.jar:2.7.6]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215) ~[spring-aop-5.3.24.jar:5.3.24]
+	at jdk.proxy2.$Proxy175.findAll(Unknown Source) ~[?:?]
+	at com.adt.hrms.service.impl.AVHashMapServiceImpl.run(AVHashMapServiceImpl.java:30) ~[classes/:?]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:768) ~[spring-boot-2.7.7.jar:2.7.7]
+	... 5 more
+Caused by: org.postgresql.util.PSQLException: ERROR: remaining connection slots are reserved for non-replication superuser connections
+	at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:646) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.tryConnect(ConnectionFactoryImpl.java:180) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:235) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:49) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:223) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.Driver.makeConnection(Driver.java:402) ~[postgresql-42.3.8.jar:42.3.8]
+	at org.postgresql.Driver.connect(Driver.java:261) ~[postgresql-42.3.8.jar:42.3.8]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:138) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:364) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:206) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:476) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:561) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:115) ~[HikariCP-4.0.3.jar:?]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:112) ~[HikariCP-4.0.3.jar:?]
+	at org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl.getConnection(DatasourceConnectionProviderImpl.java:122) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.internal.NonContextualJdbcConnectionAccess.obtainConnection(NonContextualJdbcConnectionAccess.java:38) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.acquireConnectionIfNeeded(LogicalConnectionManagedImpl.java:108) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl.getPhysicalConnection(LogicalConnectionManagedImpl.java:138) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.hibernate.internal.SessionImpl.connection(SessionImpl.java:516) ~[hibernate-core-5.6.14.Final.jar:5.6.14.Final]
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.beginTransaction(HibernateJpaDialect.java:152) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.orm.jpa.JpaTransactionManager.doBegin(JpaTransactionManager.java:421) ~[spring-orm-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.startTransaction(AbstractPlatformTransactionManager.java:400) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.support.AbstractPlatformTransactionManager.getTransaction(AbstractPlatformTransactionManager.java:373) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.createTransactionIfNecessary(TransactionAspectSupport.java:595) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:382) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:137) ~[spring-tx-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.data.jpa.repository.support.CrudMethodMetadataPostProcessor$CrudMethodMetadataPopulatingMethodInterceptor.invoke(CrudMethodMetadataPostProcessor.java:174) ~[spring-data-jpa-2.7.6.jar:2.7.6]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186) ~[spring-aop-5.3.24.jar:5.3.24]
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:215) ~[spring-aop-5.3.24.jar:5.3.24]
+	at jdk.proxy2.$Proxy175.findAll(Unknown Source) ~[?:?]
+	at com.adt.hrms.service.impl.AVHashMapServiceImpl.run(AVHashMapServiceImpl.java:30) ~[classes/:?]
+	at org.springframework.boot.SpringApplication.callRunner(SpringApplication.java:768) ~[spring-boot-2.7.7.jar:2.7.7]
+	... 5 more
+15:14:34.890 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 11280 (D:\HRMS3\hrms\target\classes started by hp in D:\HRMS3\hrms)
+15:14:34.897 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+15:14:34.898 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+15:14:36.469 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+15:14:36.619 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1685 ms
+15:14:40.998 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: d00ae02f-26c1-49ee-a755-75e08c2efdb0
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+15:14:41.279 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+15:14:42.088 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+15:14:42.149 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 7.647 seconds (JVM running for 8.602)
+15:30:53.516 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 6492ca55bf5dcb151dba0d3e9455fe89/1dba0d3e9455fe89 - Initializing Servlet 'dispatcherServlet'
+15:30:53.518 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 6492ca55bf5dcb151dba0d3e9455fe89/1dba0d3e9455fe89 - Completed initialization in 2 ms
+19:09:03.221 [http-nio-9093-exec-6] INFO  com.adt.hrms.controller.EmployeeOperationController 6492fd7745008bd344f3040714799b0d/44f3040714799b0d - Employeeservice:employee:updateEmp info level log message
+19:42:44.738 [RMI TCP Connection(276)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+16:34:07.342 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 9464 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+16:34:07.349 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+16:34:07.351 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+16:34:09.055 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+16:34:09.210 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1822 ms
+16:34:12.755 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: bee50a84-20e4-4b71-97c6-ccfdd9f16607
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+16:34:13.006 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+16:34:13.833 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+16:34:13.897 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 6.969 seconds (JVM running for 8.046)
+16:34:56.623 [http-nio-9093-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet 649ac2588b0c7127214150cb27dbb962/214150cb27dbb962 - Initializing Servlet 'dispatcherServlet'
+16:34:56.625 [http-nio-9093-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet 649ac2588b0c7127214150cb27dbb962/214150cb27dbb962 - Completed initialization in 2 ms
+16:35:17.145 [http-nio-9093-exec-3] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac26d5ea7275f8ed0054ab05415b3/8ed0054ab05415b3 - Employeeservice:employee:SearchByName info level log message
+16:40:27.540 [RMI TCP Connection(16)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+16:44:35.071 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 7012 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+16:44:35.079 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+16:44:35.080 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+16:44:36.809 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+16:44:36.967 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1850 ms
+16:44:40.371 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: 69034337-2225-46c0-beaf-bc641e9416ee
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+16:44:40.637 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+16:44:41.444 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+16:44:41.505 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 6.828 seconds (JVM running for 7.799)
+16:45:03.180 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ac4b73b7b81d0ae4be804ee420c89/ae4be804ee420c89 - Initializing Servlet 'dispatcherServlet'
+16:45:03.181 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ac4b73b7b81d0ae4be804ee420c89/ae4be804ee420c89 - Completed initialization in 1 ms
+16:45:03.232 [http-nio-9093-exec-1] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac4b73b7b81d0ae4be804ee420c89/ae4be804ee420c89 - Employeeservice:employee:SearchByName info level log message
+16:48:10.430 [RMI TCP Connection(12)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+16:48:33.948 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 14808 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+16:48:33.956 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+16:48:33.957 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+16:48:35.562 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+16:48:35.724 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1730 ms
+16:48:39.361 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: e044e6bc-e59f-45ee-96ce-3aba7b8a2321
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+16:48:39.625 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+16:48:40.501 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+16:48:40.564 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 7.013 seconds (JVM running for 8.013)
+16:48:45.022 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ac595d82541e1863fb7c5893bbbe5/863fb7c5893bbbe5 - Initializing Servlet 'dispatcherServlet'
+16:48:45.024 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ac595d82541e1863fb7c5893bbbe5/863fb7c5893bbbe5 - Completed initialization in 1 ms
+16:48:45.070 [http-nio-9093-exec-1] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac595d82541e1863fb7c5893bbbe5/863fb7c5893bbbe5 - Employeeservice:employee:getEmp info level log message
+16:49:20.859 [RMI TCP Connection(9)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+16:57:44.298 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 15108 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+16:57:44.309 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+16:57:44.310 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+16:57:46.085 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+16:57:46.282 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1934 ms
+16:57:49.539 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: 3562dbf4-03d0-4a69-a8e6-ff729ba04947
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+16:57:49.838 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+16:57:50.647 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+16:57:50.707 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 6.822 seconds (JVM running for 8.076)
+16:57:57.197 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ac7bd256fba5198cfe6c18011fe7e/98cfe6c18011fe7e - Initializing Servlet 'dispatcherServlet'
+16:57:57.199 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ac7bd256fba5198cfe6c18011fe7e/98cfe6c18011fe7e - Completed initialization in 2 ms
+16:57:57.256 [http-nio-9093-exec-1] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac7bd256fba5198cfe6c18011fe7e/98cfe6c18011fe7e - Employeeservice:employee:SearchByName info level log message
+16:58:02.690 [http-nio-9093-exec-3] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac7c2efd9b90f98d9d9ef5b83a6f3/98d9d9ef5b83a6f3 - Employeeservice:employee:SearchByEmail info level log message
+16:59:01.239 [http-nio-9093-exec-4] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac7fd509c24eed779ee4109172bfa/d779ee4109172bfa - Employeeservice:employee:SearchByName info level log message
+17:01:01.917 [http-nio-9093-exec-7] INFO  com.adt.hrms.controller.EmployeeOperationController 649ac8750df8da733e3f0df6ae41e8f6/3e3f0df6ae41e8f6 - Employeeservice:employee:SearchByName info level log message
+17:02:13.502 [RMI TCP Connection(13)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+17:15:05.087 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 13080 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+17:15:05.095 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+17:15:05.096 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+17:15:06.701 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+17:15:06.858 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1725 ms
+17:15:10.269 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: 855806bf-43ee-41c2-91cf-0b96ee381e72
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+17:15:10.535 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+17:15:11.381 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+17:15:11.445 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 6.746 seconds (JVM running for 7.822)
+17:15:36.011 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649acbdf3d5cf0af75532e386e8ea9be/75532e386e8ea9be - Initializing Servlet 'dispatcherServlet'
+17:15:36.013 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649acbdf3d5cf0af75532e386e8ea9be/75532e386e8ea9be - Completed initialization in 2 ms
+17:15:36.064 [http-nio-9093-exec-1] INFO  com.adt.hrms.controller.EmployeeOperationController 649acbdf3d5cf0af75532e386e8ea9be/75532e386e8ea9be - Employeeservice:employee:SearchByName info level log message
+17:16:54.415 [http-nio-9093-exec-5] INFO  com.adt.hrms.controller.EmployeeOperationController 649acc2e1476f27f42ec5f8e84ccf54e/42ec5f8e84ccf54e - Employeeservice:employee:SearchByName info level log message
+17:17:16.932 [http-nio-9093-exec-6] INFO  com.adt.hrms.controller.EmployeeOperationController 649acc446f6ea5929a00ecde24ed6b5f/9a00ecde24ed6b5f - Employeeservice:employee:SearchByName info level log message
+17:18:18.384 [RMI TCP Connection(10)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+18:27:19.462 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 12532 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+18:27:19.469 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+18:27:19.470 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+18:27:21.067 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+18:27:21.236 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1730 ms
+18:27:24.608 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: b70a8f56-9f65-4b65-8c36-de7f904ff541
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+18:27:24.877 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+18:27:25.699 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+18:27:25.761 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 6.712 seconds (JVM running for 7.675)
+18:28:31.147 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649adcf7a553c13eb42c74ace6933d9d/b42c74ace6933d9d - Initializing Servlet 'dispatcherServlet'
+18:28:31.148 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649adcf7a553c13eb42c74ace6933d9d/b42c74ace6933d9d - Completed initialization in 1 ms
+18:28:31.201 [http-nio-9093-exec-1] INFO  com.adt.hrms.controller.EmployeeOperationController 649adcf7a553c13eb42c74ace6933d9d/b42c74ace6933d9d - Employeeservice:employee:SearchByName info level log message
+18:29:22.199 [http-nio-9093-exec-4] INFO  com.adt.hrms.controller.EmployeeOperationController 649add2a675f2b3590acc86c38c25c6d/90acc86c38c25c6d - Employeeservice:employee:SearchByName info level log message
+18:29:52.625 [http-nio-9093-exec-5] INFO  com.adt.hrms.controller.EmployeeOperationController 649add4810abc7e989c29765e9d73d45/89c29765e9d73d45 - Employeeservice:employee:SearchByEmail info level log message
+18:32:32.706 [http-nio-9093-exec-7] INFO  com.adt.hrms.controller.EmployeeOperationController 649adde859340828333f28561eefd5a1/333f28561eefd5a1 - Employeeservice:employee:SearchByEmail info level log message
+18:33:36.054 [http-nio-9093-exec-2] INFO  com.adt.hrms.controller.EmployeeOperationController 649ade28e95d18557431bfaf649076aa/7431bfaf649076aa - Employeeservice:employee:SearchByEmail info level log message
+18:34:12.194 [http-nio-9093-exec-1] INFO  com.adt.hrms.controller.EmployeeOperationController 649ade4c4a15540bc9b6f08cff06a8f6/c9b6f08cff06a8f6 - Employeeservice:employee:SearchByName info level log message
+18:35:23.443 [http-nio-9093-exec-4] INFO  com.adt.hrms.controller.EmployeeOperationController 649ade937556f2e089520acdaed955b6/89520acdaed955b6 - Employeeservice:employee:SearchByName info level log message
+18:35:51.286 [http-nio-9093-exec-5] INFO  com.adt.hrms.controller.EmployeeOperationController 649adeafa0740edf630832fe26875914/630832fe26875914 - Employeeservice:employee:SearchByName info level log message
+18:37:42.757 [http-nio-9093-exec-7] INFO  com.adt.hrms.controller.EmployeeOperationController 649adf1e4d1a95fd5dc9f77525114038/5dc9f77525114038 - Employeeservice:employee:SearchByEmail info level log message
+18:39:58.354 [http-nio-9093-exec-10] INFO  com.adt.hrms.controller.EmployeeOperationController 649adfa6ab5ee2bc86d46e434c9014a9/86d46e434c9014a9 - Employeeservice:employee:SearchByName info level log message
+18:40:56.610 [http-nio-9093-exec-2] INFO  com.adt.hrms.controller.EmployeeOperationController 649adfe066717d6d5d2395b8fe744ac0/5d2395b8fe744ac0 - Employeeservice:employee:SearchByEmail info level log message
+18:43:54.682 [RMI TCP Connection(26)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+18:44:17.365 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 6588 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+18:44:17.374 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+18:44:17.375 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+18:44:19.149 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+18:44:19.297 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1880 ms
+18:44:23.172 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: 16e6a0e8-7768-4e16-a3e6-5b8e671b6017
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+18:44:23.509 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+18:44:24.433 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+18:44:24.495 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 7.554 seconds (JVM running for 9.07)
+18:44:32.469 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ae0b8d5021bfedbdbec72471ff9d9/dbdbec72471ff9d9 - Initializing Servlet 'dispatcherServlet'
+18:44:32.473 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ae0b8d5021bfedbdbec72471ff9d9/dbdbec72471ff9d9 - Completed initialization in 3 ms
+18:44:32.539 [http-nio-9093-exec-1] INFO  com.adt.hrms.controller.EmployeeOperationController 649ae0b8d5021bfedbdbec72471ff9d9/dbdbec72471ff9d9 - Employeeservice:employee:SearchByEmail info level log message
+18:47:38.803 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 16068 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+18:47:38.811 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+18:47:38.812 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+18:47:40.632 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+18:47:40.782 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1906 ms
+18:47:44.531 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: 0871fae1-ef84-4c29-bf7c-0f77c8142e93
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+18:47:44.845 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+18:47:45.778 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+18:47:45.837 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 7.476 seconds (JVM running for 8.873)
+18:48:10.808 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ae1926486db3e63141f0e4d80e9f2/63141f0e4d80e9f2 - Initializing Servlet 'dispatcherServlet'
+18:48:10.810 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ae1926486db3e63141f0e4d80e9f2/63141f0e4d80e9f2 - Completed initialization in 2 ms
+18:48:10.872 [http-nio-9093-exec-1] INFO  com.adt.hrms.controller.EmployeeOperationController 649ae1926486db3e63141f0e4d80e9f2/63141f0e4d80e9f2 - Employeeservice:employee:SearchByEmail info level log message
+18:48:49.893 [http-nio-9093-exec-4] INFO  com.adt.hrms.controller.EmployeeOperationController 649ae1b9e39d8fa0a829533728c4bf7a/a829533728c4bf7a - Employeeservice:employee:SearchByEmail info level log message
+18:55:44.508 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 13744 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+18:55:44.516 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+18:55:44.517 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+18:55:46.259 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+18:55:46.409 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1851 ms
+18:55:50.232 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: 42be0884-b629-4f24-9379-b6bd40d320db
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+18:55:50.540 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+18:55:51.413 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+18:55:51.476 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 7.392 seconds (JVM running for 8.72)
+18:55:59.264 [http-nio-9093-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet 649ae367c39925052df37f01dec91bbf/2df37f01dec91bbf - Initializing Servlet 'dispatcherServlet'
+18:55:59.266 [http-nio-9093-exec-2] INFO  org.springframework.web.servlet.DispatcherServlet 649ae367c39925052df37f01dec91bbf/2df37f01dec91bbf - Completed initialization in 2 ms
+18:56:03.143 [http-nio-9093-exec-2] INFO  com.adt.hrms.controller.EmployeeOperationController 649ae367c39925052df37f01dec91bbf/2df37f01dec91bbf - Employeeservice:employee:SearchByEmail info level log message
+18:56:37.349 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 4548 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+18:56:37.357 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+18:56:37.358 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+18:56:39.137 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+18:56:39.288 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1885 ms
+18:56:43.101 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: d02c3ca9-4646-485f-b1da-7c3f3bcb2b39
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+18:56:43.418 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+18:56:44.287 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+18:56:44.357 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 7.45 seconds (JVM running for 8.813)
+18:58:53.310 [RMI TCP Connection(7)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
+19:04:45.556 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Starting AttendanceDashBoardApplication using Java 17.0.7 on DESKTOP-VMOID57 with PID 2176 (D:\HRMS_Employee4\hrms\target\classes started by hp in D:\HRMS_Employee4\hrms)
+19:04:45.564 [main] DEBUG com.adt.hrms.AttendanceDashBoardApplication / - Running with Spring Boot v2.7.7, Spring v5.3.24
+19:04:45.566 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - No active profile set, falling back to 1 default profile: "default"
+19:04:47.162 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat initialized with port(s): 9093 (http)
+19:04:47.350 [main] INFO  org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext / - Root WebApplicationContext: initialization completed in 1746 ms
+19:04:50.642 [main] WARN  org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration / - 
+
+Using generated security password: aabd80c8-8760-430d-9926-bd927125c9ca
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+19:04:50.915 [main] WARN  org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration / - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+19:04:51.714 [main] INFO  org.springframework.boot.web.embedded.tomcat.TomcatWebServer / - Tomcat started on port(s): 9093 (http) with context path '/hrms'
+19:04:51.771 [main] INFO  com.adt.hrms.AttendanceDashBoardApplication / - Started AttendanceDashBoardApplication in 6.603 seconds (JVM running for 7.611)
+19:04:59.237 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ae583b23938019c18771d7473dab7/9c18771d7473dab7 - Initializing Servlet 'dispatcherServlet'
+19:04:59.238 [http-nio-9093-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet 649ae583b23938019c18771d7473dab7/9c18771d7473dab7 - Completed initialization in 1 ms
+19:04:59.283 [http-nio-9093-exec-1] INFO  com.adt.hrms.controller.EmployeeOperationController 649ae583b23938019c18771d7473dab7/9c18771d7473dab7 - Employeeservice:employee:SearchByEmail info level log message
+19:22:58.981 [RMI TCP Connection(25)-127.0.0.1] INFO  org.springframework.boot.admin.SpringApplicationAdminMXBeanRegistrar$SpringApplicationAdmin / - Application shutdown requested.
