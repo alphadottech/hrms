@@ -35,7 +35,7 @@ public class InterviewCandidateServiceImpl implements InterviewCandidateService 
 		if (opt.size() > 0)
 			return "Interview Candidate With Id: " + opt.get(0).getCandidateId() + " is Already Present";
 		if (!MobileNumberValidation.isValidMobileNo(interviewCandidateDetails.getContactNo()))
-			return "Interview Candidate Contact Number: " + opt.get(0).getCandidateId() + " is Invalid";
+			return "Interview Candidate Contact Number: " + interviewCandidateDetails.getContactNo() + " is Invalid";
 		return "Candidate With Id: " + interviewCandidateRepo.save(interviewCandidateDetails).getCandidateId()
 				+ " is Successfully Saved";
 	}
@@ -63,8 +63,9 @@ public class InterviewCandidateServiceImpl implements InterviewCandidateService 
 		candidateDetails.get().setNoticePeriod(interviewCandidateDetails.getNoticePeriod());
 		candidateDetails.get().setTechnicalStack(interviewCandidateDetails.getTechnicalStack());
 		candidateDetails.get().setWorkExperience(interviewCandidateDetails.getWorkExperience());
-		interviewCandidateRepo.save(candidateDetails.get());
-		return "Successfully Updated";
+		candidateDetails.get().setDob(interviewCandidateDetails.getDob());
+		return "Candidate With Id: " + interviewCandidateRepo.save(candidateDetails.get()).getCandidateId()
+			+ " is Successfully Updated";
 	}
 
 	@Override
