@@ -23,5 +23,10 @@ public interface MasterAssetRepository extends JpaRepository<MasterAsset, Intege
 	@Query(value = "SELECT ma FROM MasterAsset ma WHERE ma.assetType like %:query%")
 	List<MasterAsset> findByAssetType(@Param("query") String query);
 	//JyotiPancholi - Jira no ->  HRMS-83(END)
+	
+	//RitikaBhawsar - Jira no ->  HRMS-63(START)
+	public MasterAsset findAssetById(Integer id);
+	//RitikaBhawsar - Jira no ->  HRMS-63(END)
+
 
 }

@@ -34,9 +34,12 @@ public interface EmployeeService {
 
 	public Employee getEmployeeById(int empId);
 
-	List<Employee> SearchEmployee(String query);
+	//Jira no :- HRMS-86 START--
+	public List<Employee> SearchByName(String name);
 
-	List<Employee> SearchByEmailId(String query);
+	public List<Employee> SearchByEmail(String email);
+	//Jira no :- HRMS-86 END--
+
 
 
 }
