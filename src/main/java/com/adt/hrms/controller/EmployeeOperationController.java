@@ -59,7 +59,7 @@ public class EmployeeOperationController {
 	//Jira no :- HRMS-78 START--
 	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
 	@PutMapping("/updateEmp")
-	public ResponseEntity<String> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp,
+	public ResponseEntity<Object> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp,
 			@RequestPart("image") MultipartFile aadhar,@RequestPart("image1") MultipartFile pan) throws IOException {
 		LOGGER.info("Employeeservice:employee:updateEmp info level log message");
 		ObjectMapper mapper=new ObjectMapper();
@@ -94,17 +94,20 @@ public class EmployeeOperationController {
 
 	}
 
-	@GetMapping("/searchByFirstLastname")
-	public ResponseEntity<List<Employee>> SearchEmployee(@RequestParam("query") String query) {
-		LOGGER.info("Employeeservice:employee:SearchEmployeeByFirstLastName info level log message");
-		return ResponseEntity.ok(employeeService.SearchEmployee(query));
-	}
+		//Jira no :- HRMS-86 START--  
+		@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+		@GetMapping("/searchByName")
+		public ResponseEntity<List<Employee>> SearchByName(@RequestParam("query") String name) {
+			LOGGER.info("Employeeservice:employee:SearchByName info level log message");
+			return ResponseEntity.ok(employeeService.SearchByName(name));
+		}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-	@GetMapping("/emailId")
-	public ResponseEntity<List<Employee>> SearchByEmailId(@RequestParam("query") String query) {
-		LOGGER.info("Employeeservice:employee:SearchByEmailId info level log message");
-		return ResponseEntity.ok(employeeService.SearchByEmailId(query));
-	}
+		@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+		@GetMapping("/searchByEmail")
+		public ResponseEntity<List<Employee>> SearchByEmail(@RequestParam("query") String email) {
+			LOGGER.info("Employeeservice:employee:SearchByEmail info level log message");
+			return ResponseEntity.ok(employeeService.SearchByEmail(email));
+		}
+		//Jira no :- HRMS-86 END--
 
 }
