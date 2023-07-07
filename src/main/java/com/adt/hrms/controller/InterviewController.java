@@ -171,7 +171,7 @@ public class InterviewController {
 	//HRMS-66 END
 
 	//HRMS-93
-	//@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@GetMapping("/getInterviewDetailsExcel")
 	public void getAllInterviewDetailsInExcel(@NotNull HttpServletResponse responseExcel)  throws Exception{
 		LOGGER.info("Employeeservice:InterviewDetails:getAllInterviewDetailsInExcel info level log message");
