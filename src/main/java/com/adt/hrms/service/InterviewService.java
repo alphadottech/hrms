@@ -1,9 +1,12 @@
 package com.adt.hrms.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.adt.hrms.model.Interview;
 import com.adt.hrms.ui.InterviewModelDTO;
+
+import javax.servlet.http.HttpServletResponse;
 
 public interface InterviewService {
 
@@ -29,4 +32,6 @@ public interface InterviewService {
 
 	public List<Interview> SearchByClientName(String clientName);
    //HRMS-92 ->END
+
+	public void listAllInterviewDetailsInExcel(HttpServletResponse responseExcel) throws IOException;
 }
