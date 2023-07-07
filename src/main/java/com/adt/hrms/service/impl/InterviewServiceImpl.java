@@ -183,4 +183,22 @@ public class InterviewServiceImpl implements InterviewService {
 		return null;
 	}
 	// HRMS-66 END
+
+	//HRMS-92 -> START
+	@Override
+	public List<Interview> SearchByCandidateName(String candidateName) {
+		return interviewRepository.findByCandidateName(candidateName);
+	}
+
+	@Override
+	public List<Interview> SearchBySource(String source) {
+		return interviewRepository.findBySource(source);
+
+	}
+
+	@Override
+	public List<Interview> SearchByClientName(String clientName) {
+		return interviewRepository.findByClientName(clientName);
+	}
+	//HRMS-92 ->END
 }

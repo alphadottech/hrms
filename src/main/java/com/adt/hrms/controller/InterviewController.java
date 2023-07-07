@@ -167,4 +167,20 @@ public class InterviewController {
 	}
 	//HRMS-66 END
 
+//	HRMS-92 ---- search by candidate_name,source and client name----------------
+	@GetMapping("/SearchByCandidateName")
+	public ResponseEntity<List<Interview>> SearchByCandidateName(@RequestParam("search") String candidateName ) {
+		return ResponseEntity.ok(interviewService.SearchByCandidateName(candidateName));
+	}
+	
+	@GetMapping("/SearchBySource")
+	public ResponseEntity<List<Interview>> SearchBySource(@RequestParam("search") String source ) {
+		return ResponseEntity.ok(interviewService.SearchBySource(source));
+	}
+	
+	@GetMapping("/SearchByClientName")
+	public ResponseEntity<List<Interview>> SearchByClientName(@RequestParam("search") String clientName ) {
+		return ResponseEntity.ok(interviewService.SearchByClientName(clientName));
+	}
+//	HRMS-92 ->END
 }
