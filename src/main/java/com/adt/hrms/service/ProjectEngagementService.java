@@ -6,13 +6,22 @@ import java.util.List;
 
 public interface ProjectEngagementService {
 
-    String saveProjectEngagementDetail(ProjectEngagement projectEngagement);
+	String saveProjectEngagementDetail(ProjectEngagement projectEngagement);
 
-    List<ProjectEngagement> allProjectEngagement();
+	List<ProjectEngagement> allProjectEngagement();
 
-    String updateProjectDetail(String projectId, ProjectEngagement projectEngagement);
+	String updateProjectDetail(String projectId, ProjectEngagement projectEngagement);
 
-    ProjectEngagement getProjectDetailById(String projectId);
+	ProjectEngagement getProjectDetailById(String projectId);
 
-    String deleteProjectDetailById(String projectId);
+	String deleteProjectDetailById(String projectId);
+
+	// JIRA no. :- HRMS-90 START---
+	public List<ProjectEngagement> SearchByEngagedEmployee(String empName);
+
+	public List<ProjectEngagement> SearchByProjectName(String projectName);
+
+	public List<ProjectEngagement> SearchProjectsByDate(String startDate, String endDate);
+	// JIRA no. :- HRMS-90 END---
+
 }

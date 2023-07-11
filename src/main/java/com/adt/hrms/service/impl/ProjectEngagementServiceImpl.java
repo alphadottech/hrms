@@ -16,75 +16,93 @@ import java.util.Optional;
 
 @Service
 public class ProjectEngagementServiceImpl implements ProjectEngagementService {
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    public ProjectEngagementRepo projectEngagementRepo;
+	@Autowired
+	public ProjectEngagementRepo projectEngagementRepo;
 
-    @Autowired
-    private MessageSource messageSource;
+	@Autowired
+	private MessageSource messageSource;
 
-    @Override
-    public String saveProjectEngagementDetail(ProjectEngagement projectEngagement) {
-        List<ProjectEngagement> opt = projectEngagementRepo
-                .findProjectEngagementByProjectName(projectEngagement.getProjectName());
+	@Override
+	public String saveProjectEngagementDetail(ProjectEngagement projectEngagement) {
+		List<ProjectEngagement> opt = projectEngagementRepo
+				.findProjectEngagementByProjectName(projectEngagement.getProjectName());
 
-        if (opt.size() > 0)
-            return "Project With Id: " + opt.get(0).getProjectId() + " is Already Present";
+		if (opt.size() > 0)
+			return "Project With Id: " + opt.get(0).getProjectId() + " is Already Present";
 
-        String projectId= "PROJ0"+ (projectEngagementRepo.findCount()+1);
-        projectEngagement.setProjectId(projectId);
+		String projectId = "PROJ0" + (projectEngagementRepo.findCount() + 1);
+		projectEngagement.setProjectId(projectId);
 
-        return "Project With Id:: " + projectEngagementRepo.save(projectEngagement).getProjectId()
-                + " is Successfully Saved";
+		return "Project With Id:: " + projectEngagementRepo.save(projectEngagement).getProjectId()
+				+ " is Successfully Saved";
 
-    }
+	}
 
-    @Override
-    public List<ProjectEngagement> allProjectEngagement() {
-        List<ProjectEngagement> projectEngagementsDetail = projectEngagementRepo.findAll();
-        return projectEngagementsDetail;
-    }
+	@Override
+	public List<ProjectEngagement> allProjectEngagement() {
+		List<ProjectEngagement> projectEngagementsDetail = projectEngagementRepo.findAll();
+		return projectEngagementsDetail;
+	}
 
-    @Override
-    public String updateProjectDetail(String projectId, ProjectEngagement projectEngagement) {
-        Optional<ProjectEngagement> projectDetails = projectEngagementRepo.findByProjectId(projectId);
-        if (projectDetails.isEmpty())
-            return "Project With Id: " + projectId + " is Not Present";
+	@Override
+	public String updateProjectDetail(String projectId, ProjectEngagement projectEngagement) {
+		Optional<ProjectEngagement> projectDetails = projectEngagementRepo.findByProjectId(projectId);
+		if (projectDetails.isEmpty())
+			return "Project With Id: " + projectId + " is Not Present";
 
-        projectDetails.get().setProjectName(projectEngagement.getProjectName());
-        projectDetails.get().setProjectId(projectEngagement.getProjectId());
-        projectDetails.get().setProjectDescription(projectEngagement.getProjectDescription());
-        projectDetails.get().setEngagedEmployee(projectEngagement.getEngagedEmployee());
-        projectDetails.get().setStartDate(projectEngagement.getStartDate());
-        projectDetails.get().setEndDate(projectEngagement.getEndDate());
-        projectDetails.get().setStatus(projectEngagement.isStatus());
+		projectDetails.get().setProjectName(projectEngagement.getProjectName());
+		projectDetails.get().setProjectId(projectEngagement.getProjectId());
+		projectDetails.get().setProjectDescription(projectEngagement.getProjectDescription());
+		projectDetails.get().setEngagedEmployee(projectEngagement.getEngagedEmployee());
+		projectDetails.get().setStartDate(projectEngagement.getStartDate());
+		projectDetails.get().setEndDate(projectEngagement.getEndDate());
+		projectDetails.get().setStatus(projectEngagement.isStatus());
 
-        return "Project With Id: " + projectEngagementRepo.save(projectDetails.get()).getProjectId()
-                + " is Successfully Updated";
-    }
+		return "Project With Id: " + projectEngagementRepo.save(projectDetails.get()).getProjectId()
+				+ " is Successfully Updated";
+	}
 
-    @Override
-    public ProjectEngagement getProjectDetailById(String projectId) {
-        Optional<ProjectEngagement> projectDetail = projectEngagementRepo.findByProjectId(projectId);
-        if (projectDetail.isEmpty()) {
-            String message = messageSource.getMessage("api.error.data.not.found.id", null, Locale.ENGLISH);
-            LOGGER.error(message = message + projectId);
-            throw new EntityNotFoundException(message);
-        }
-        return projectDetail.get();
-    }
+	@Override
+	public ProjectEngagement getProjectDetailById(String projectId) {
+		Optional<ProjectEngagement> projectDetail = projectEngagementRepo.findByProjectId(projectId);
+		if (projectDetail.isEmpty()) {
+			String message = messageSource.getMessage("api.error.data.not.found.id", null, Locale.ENGLISH);
+			LOGGER.error(message = message + projectId);
+			throw new EntityNotFoundException(message);
+		}
+		return projectDetail.get();
+	}
 
-    @Override
-    public String deleteProjectDetailById(String projectId) {
-        if (projectEngagementRepo.findByProjectId(projectId).isPresent()) {
-            Optional<ProjectEngagement> projectDetails = projectEngagementRepo.findByProjectId(projectId);
-            projectDetails.get().setStatus(false);
-            projectEngagementRepo.save(projectDetails.get());
-            return "Project With Id: " + projectId + " is  Inactive Successfully";
-        }
-        return "Project With Id: " + projectId + " is Not Present";
-    }
+	@Override
+	public String deleteProjectDetailById(String projectId) {
+		if (projectEngagementRepo.findByProjectId(projectId).isPresent()) {
+			Optional<ProjectEngagement> projectDetails = projectEngagementRepo.findByProjectId(projectId);
+			projectDetails.get().setStatus(false);
+			projectEngagementRepo.save(projectDetails.get());
+			return "Project With Id: " + projectId + " is  Inactive Successfully";
+		}
+		return "Project With Id: " + projectId + " is Not Present";
+	}
 
+	// JIRA no. :- HRMS-90 START---
+	@Override
+	public List<ProjectEngagement> SearchByEngagedEmployee(String empName) {
+		List<ProjectEngagement> emplist = projectEngagementRepo.SearchByEngagedEmployee(empName);
+		return emplist;
+	}
+
+	@Override
+	public List<ProjectEngagement> SearchByProjectName(String projectName) {
+		List<ProjectEngagement> projectList = projectEngagementRepo.SearchByProjectName(projectName);
+		return projectList;
+	}
+
+	@Override
+	public List<ProjectEngagement> SearchProjectsByDate(String startDate, String endDate) {
+		return projectEngagementRepo.findByProjectDate(startDate, endDate);
+	}
+	// JIRA no. :- HRMS-90 END---
 
 }
