@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,9 +48,6 @@ public class HolidayServiceImpl implements HolidayService {
 	@Autowired
 	private ImageRepository imgRepo;
 
-	@Value("${downloadlocation}")
-	private String calendarDownloadPath;
-
 	@Override
 	public String saveHoliday(String holidayName, String date) {
 
@@ -75,11 +74,11 @@ public class HolidayServiceImpl implements HolidayService {
 		if(isHolidayPresent) {
 			return "Holiday already present in Database";
 		}
-		
+
 		else if(isDatePresent) {
 			return "Date already present in Database";
 		}
-		
+
 		else {
 			//** Getting the month from the date **
 			String month = localDate.getMonth().toString().substring(0, 1) + localDate.getMonth().toString().substring(1).toLowerCase();
@@ -106,12 +105,17 @@ public class HolidayServiceImpl implements HolidayService {
 	}
 
 	@Override
-	public String downloadHolidayCalendar() {
+	public String downloadHolidayCalendar(HttpServletResponse resp) {
 
 		//*** Getting list of holidays ***
 		List<Holiday> listOfHolidays = holidayRepo.findAll();
 
-		String fullPath = calendarDownloadPath + File.separator+ "Holiday_Calendar_";
+		//*** Set the header key and header value ***
+		String headerKey ="Content-Disposition";
+		String headerValue = "attachment;filename=";
+
+		String fileName = "Holiday_Calendar_";
+		String fullFileName = "";
 
 		if(listOfHolidays.size() <= 0) return "Holiday Calendar is unavailable";
 
@@ -123,16 +127,35 @@ public class HolidayServiceImpl implements HolidayService {
 			int year = firstRecord.getDate().getYear();
 
 			//*** Dynamically adjusting File name of holiday with the current year in DB ***
-			fullPath += year + ".pdf";
-			System.out.println(fullPath);
+			fullFileName = fileName + year +".pdf";
+
+			headerValue += fullFileName;
+
+			ServletOutputStream outputStreamObj = null;
+			Document document = null;
+
 
 			//** Writing into the PDF file **
 			try {
-				File file = new File(calendarDownloadPath);
-				//** Create a new folder if not present and then save the pdf file there **
-				file.mkdir();
 
-				PdfWriter pdfWr = new PdfWriter(fullPath);
+				/* If we want to download the file in other systems, we need to use the HttpServletResponse obj
+				 * and get the output stream of it and pass it in PdfWriter obj.
+				 * 
+				 *  Moreover, we need to give the filename in header and set the content type as "application/pdf"
+				 *  and set the header by giving:-  String headerKey ="Content-Disposition";
+				                                            String headerValue = "attachment;filename=AnyFileName";
+				 */
+
+				//*** Get the ServletOutputStream obj ***
+				outputStreamObj = resp.getOutputStream();
+
+				//*** Set the content type of the response ***
+				resp.setContentType("application/pdf; charset=utf-8");
+				//*** Set the header ***
+				resp.setHeader(headerKey, headerValue);
+
+				//** Pass the ServletOutputStream obj ***
+				PdfWriter pdfWr = new PdfWriter(outputStreamObj);
 
 				float colWidth[] = { 60, 250, 110, 90 };
 				Table table = new Table(colWidth);
@@ -144,6 +167,7 @@ public class HolidayServiceImpl implements HolidayService {
 				int count = 0;
 
 				for(int i=0; i<listOfHolidays.size(); i++) {
+
 					//** Adjust the serial number in PDF ***
 					table.addCell(new Cell().add(""+ ++count));
 
@@ -159,7 +183,7 @@ public class HolidayServiceImpl implements HolidayService {
 					//*** Set the day of week in PDF ***
 					table.addCell(new Cell().add(listOfHolidays.get(i).getDay())).setPaddingLeft(300f);
 				}
-				
+
 				table.setRelativePosition(0, -60, 0, 0); //left top right bottom
 
 				//*** Getting the image from DB ***
@@ -183,27 +207,40 @@ public class HolidayServiceImpl implements HolidayService {
 				PdfDocument pdfDocument = new PdfDocument(pdfWr);
 				pdfDocument.setDefaultPageSize(com.itextpdf.kernel.geom.PageSize.A4);
 
-				Document document = new Document(pdfDocument);
+				document = new Document(pdfDocument);
 				//document.setMargins(20, 30, 20, 40); //top, right, bottom, left
 
 				document.add(headerImg);
 				document.add(table);
 
-				document.close();
-				return "The file has been downloaded successfully to location:- "+fullPath;
+				//*** Flush the output stream ***
+				outputStreamObj.flush();
+
+				return "File has been downloaded successfully";
 
 			}catch(Exception e) {
 				e.printStackTrace();
 				return "File not downloaded";
+			}finally {
+
+				if(document != null)
+					document.close();
+
+				try {
+					if(outputStreamObj != null)
+						outputStreamObj.close();
+				}catch(IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 
 	@Override
 	public String updateHolidayCalendar(Integer hId, String holidayName, String date) {
-		
+
 		Optional<Holiday> holiday = holidayRepo.findById(hId);
-		
+
 		//** Parsing the date from String to LocalDate **
 		LocalDate localDate = LocalDate.parse(date);
 
@@ -226,24 +263,24 @@ public class HolidayServiceImpl implements HolidayService {
 
 	@Override
 	public String deleteHolidayFromCalendar(Integer hId) {
-		
+
 		Optional<Holiday> holiday = holidayRepo.findById(hId);
-		
+
 		if(!holiday.isPresent()) {
 			return "Holiday not present";
 		}
 		holidayRepo.delete(holiday.get());
 		return "Holiday deleted successfully";
-		
+
 	}
 
 	@Override
 	public Holiday getHolidayById(Integer hId) {
 		Optional<Holiday> holiday = holidayRepo.findById(hId);
-		
+
 		if(!holiday.isPresent())
 			return null;
-		
+
 		return holiday.get();
 	}
 
