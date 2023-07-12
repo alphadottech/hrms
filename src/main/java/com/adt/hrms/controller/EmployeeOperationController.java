@@ -55,30 +55,29 @@ public class EmployeeOperationController {
 		LOGGER.info("Employeeservice:employee:getAllEmps info level log message");
 		return new ResponseEntity<>(employeeService.getAllEmps(), HttpStatus.OK);
 	}
-	//Jira no :- HRMS-77 START--
-	//Jira no :- HRMS-78 START--
+
+	// Jira no :- HRMS-77 START--
+	// Jira no :- HRMS-78 START--
 	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
 	@PutMapping("/updateEmp")
 	public ResponseEntity<Object> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp,
-			@RequestPart("image") MultipartFile aadhar,@RequestPart("image1") MultipartFile pan) throws IOException {
+			@RequestPart("image") MultipartFile aadhar, @RequestPart("image1") MultipartFile pan) throws IOException {
 		LOGGER.info("Employeeservice:employee:updateEmp info level log message");
-		ObjectMapper mapper=new ObjectMapper();
-		Employee e=mapper.readValue(emp,Employee.class);
-		return new ResponseEntity<>(employeeService.updateEmp(e,resume,aadhar,pan), HttpStatus.OK);
+		ObjectMapper mapper = new ObjectMapper();
+		Employee e = mapper.readValue(emp, Employee.class);
+		return new ResponseEntity<>(employeeService.updateEmp(e, resume, aadhar, pan), HttpStatus.OK);
 	}
-	//Jira no :- HRMS-77 END--
-	//Jira no :- HRMS-78 END--
-	
-	//Jira no :- HRMS-82 start--
+	// Jira no :- HRMS-77 END--
+	// Jira no :- HRMS-78 END--
+
+	// Jira no :- HRMS-82 start--
 	@GetMapping("downloadResume/{id}")
-	public ResponseEntity<?> downloadImage(@PathVariable int id){
-		byte[] imageData=employeeService.downloadImage(id);
-		return ResponseEntity.status(HttpStatus.OK)
-				.contentType(MediaType.valueOf("image/png"))
-				.body(imageData);
+	public ResponseEntity<?> downloadImage(@PathVariable int id) {
+		byte[] imageData = employeeService.downloadImage(id);
+		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(imageData);
 	}
-	//Jira no :- HRMS-82 End--
-	
+	// Jira no :- HRMS-82 End--
+
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@DeleteMapping("/delete/{empId}")
 	public ResponseEntity<String> deleteEmp(@PathVariable("empId") int empId) {
@@ -94,20 +93,20 @@ public class EmployeeOperationController {
 
 	}
 
-		//Jira no :- HRMS-86 START--  
-		@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-		@GetMapping("/searchByName")
-		public ResponseEntity<List<Employee>> SearchByName(@RequestParam("query") String name) {
-			LOGGER.info("Employeeservice:employee:SearchByName info level log message");
-			return ResponseEntity.ok(employeeService.SearchByName(name));
-		}
+	// Jira no :- HRMS-86 START--
+	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@GetMapping("/searchByName")
+	public ResponseEntity<List<Employee>> SearchByName(@RequestParam("query") String name) {
+		LOGGER.info("Employeeservice:employee:SearchByName info level log message");
+		return ResponseEntity.ok(employeeService.SearchByName(name));
+	}
 
-		@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-		@GetMapping("/searchByEmail")
-		public ResponseEntity<List<Employee>> SearchByEmail(@RequestParam("query") String email) {
-			LOGGER.info("Employeeservice:employee:SearchByEmail info level log message");
-			return ResponseEntity.ok(employeeService.SearchByEmail(email));
-		}
-		//Jira no :- HRMS-86 END--
+	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@GetMapping("/searchByEmail")
+	public ResponseEntity<List<Employee>> SearchByEmail(@RequestParam("query") String email) {
+		LOGGER.info("Employeeservice:employee:SearchByEmail info level log message");
+		return ResponseEntity.ok(employeeService.SearchByEmail(email));
+	}
+	// Jira no :- HRMS-86 END--
 
 }

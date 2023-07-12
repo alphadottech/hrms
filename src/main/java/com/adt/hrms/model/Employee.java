@@ -25,7 +25,7 @@ public class Employee {
 	@Id
 	@Column(name = "EMPLOYEE_ID")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-	@SequenceGenerator(name = "user_seq", allocationSize = 1)
+	@SequenceGenerator(name = "user_seq", allocationSize = 1, schema = "user_schema")
 	private int employeeId;
 
 	@LastModifiedDate
