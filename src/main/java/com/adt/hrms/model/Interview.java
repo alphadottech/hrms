@@ -84,14 +84,18 @@ public class Interview {
 
 	@Column(name = "interview_date")
 	private LocalDate date;
-
-	@Column(name = "screening_round")
-	private Boolean screeningRound;
-
+	
 	@Column(name = "client_name")
 	private String clientName;
 
-	@Column(name = "selected")
-	private Boolean selected;
+	//HRMS-102 - start
+	@Column(name = "status")
+	private String status;
 
+//	@Column(name = "screening_round")
+//	private Boolean screeningRound;
+//
+//	@Column(name = "selected")
+//	private Boolean selected;
+	//HRMS-102 - end
 }
