@@ -1,10 +1,14 @@
 package com.adt.hrms.service.impl;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,9 @@ import com.adt.hrms.repository.InterviewRepository;
 import com.adt.hrms.repository.PositionRepo;
 import com.adt.hrms.service.InterviewService;
 import com.adt.hrms.ui.InterviewModelDTO;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 @Service
 public class InterviewServiceImpl implements InterviewService {
@@ -201,4 +208,68 @@ public class InterviewServiceImpl implements InterviewService {
 		return interviewRepository.findByClientName(clientName);
 	}
 	//HRMS-92 ->END
+
+	// HRMS-93
+	public void listAllInterviewDetailsInExcel(HttpServletResponse responseExcel) throws IOException {
+		List<Interview> list = interviewRepository.findAll();
+
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet sheet = workbook.createSheet("Interview Details");
+		HSSFRow row =  sheet.createRow(0);
+
+		row.createCell(0).setCellValue("INTERVIEWID");
+		row.createCell(1).setCellValue("ROUNDS");
+		row.createCell(2).setCellValue("TECHID");
+		row.createCell(3).setCellValue("POSITION ID");
+		row.createCell(4).setCellValue("CANDIDATE ID");
+		row.createCell(5).setCellValue("MARKS");
+		row.createCell(6).setCellValue("COMMUNICATION");
+		row.createCell(7).setCellValue("ENTHUSIASM");
+		row.createCell(8).setCellValue("NOTES");
+		row.createCell(9).setCellValue("WORK EXP IN YEARS");
+		row.createCell(10).setCellValue("INTERVIEWER NAME");
+		row.createCell(11).setCellValue("CANDIDATE NAME");
+		row.createCell(12).setCellValue("SOURCE");
+		row.createCell(13).setCellValue("OFFER ACCEPTED");
+		row.createCell(14).setCellValue("SCREENING ROUND");
+		row.createCell(15).setCellValue("SELECTED");
+		row.createCell(16).setCellValue("OFFER RELEASED");
+		row.createCell(17).setCellValue("TYPE");
+		row.createCell(18).setCellValue("CLIENT NAME");
+		row.createCell(19).setCellValue("DATE");
+
+		int dataRowIndex =1;
+
+		for(Interview interview : list ){
+			HSSFRow dataRow = sheet.createRow(dataRowIndex);
+			dataRow.createCell(0).setCellValue(interview.getInterviewId());
+			dataRow.createCell(1).setCellValue(interview.getRounds());
+			dataRow.createCell(2).setCellValue(interview.getTech_id().toString());
+			dataRow.createCell(3).setCellValue(interview.getPosition_id().toString());
+			dataRow.createCell(4).setCellValue(interview.getCandidate_id().toString());
+			dataRow.createCell(5).setCellValue(interview.getMarks());
+			dataRow.createCell(6).setCellValue(interview.getCommunication());
+			dataRow.createCell(7).setCellValue(interview.getEnthusiasm());
+			dataRow.createCell(8).setCellValue(interview.getNotes());
+			dataRow.createCell(9).setCellValue(interview.getWorkExInYears());
+			dataRow.createCell(10).setCellValue(interview.getInterviewerName());
+			dataRow.createCell(11).setCellValue(interview.getCandidateName());
+			dataRow.createCell(12).setCellValue(interview.getSource());
+			dataRow.createCell(13).setCellValue(interview.getOfferAccepted());
+			dataRow.createCell(14).setCellValue(interview.getScreeningRound());
+			dataRow.createCell(15).setCellValue(interview.getSelected());
+			dataRow.createCell(16).setCellValue(interview.getOfferReleased());
+			dataRow.createCell(17).setCellValue(interview.getType());
+			dataRow.createCell(18).setCellValue(interview.getClientName());
+			dataRow.createCell(19).setCellValue(interview.getDate().toString());
+			dataRowIndex++;
+
+		}
+
+		ServletOutputStream ops = responseExcel.getOutputStream();
+		workbook.write(ops);
+		workbook.close();
+		ops.close();
+	}
+	// HRMS-93
 }
