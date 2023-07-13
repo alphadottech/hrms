@@ -2,6 +2,8 @@ package com.adt.hrms.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.adt.hrms.model.Holiday;
 
 public interface HolidayService {
@@ -10,7 +12,7 @@ public interface HolidayService {
 	
 	public List<Holiday> getAllHolidays();
 	
-	public String downloadHolidayCalendar();
+	public String downloadHolidayCalendar(HttpServletResponse resp);
 	
 	public String updateHolidayCalendar(Integer hId, String holidayName, String date);
 	

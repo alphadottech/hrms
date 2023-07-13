@@ -2,6 +2,8 @@ package com.adt.hrms.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +42,7 @@ public class HolidayController {
 			return ResponseEntity.badRequest().body(savedHolidayStatus);
 		else if(savedHolidayStatus.toLowerCase().contains("not saved"))
 			return ResponseEntity.internalServerError().body("Error occurred. Data not saved..");
-		
+
 		else return ResponseEntity.ok(savedHolidayStatus);
 	}
 
@@ -56,53 +58,54 @@ public class HolidayController {
 		return ResponseEntity.ok(listOfHolidays);
 	}
 
+	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER')")
 	@GetMapping("/downloadHolidayCalendar")
-	public ResponseEntity<String> downloadHolidayCalendar(){
+	public ResponseEntity<String> downloadHolidayCalendar(HttpServletResponse resp){
 		LOGGER.info("EmployeeService:HolidayController:downloadHolidayCalendar");
-		String downloadedCalendarStatus = holidayService.downloadHolidayCalendar();
-		
+		String downloadedCalendarStatus = holidayService.downloadHolidayCalendar(resp);
+
 		if(downloadedCalendarStatus.equalsIgnoreCase("Holiday Calendar is unavailable"))
 			return new ResponseEntity<String>(downloadedCalendarStatus, HttpStatus.NOT_FOUND);
-		
+
 		else if(downloadedCalendarStatus.equalsIgnoreCase("File not downloaded"))
 			return ResponseEntity.internalServerError().body(downloadedCalendarStatus);
-		
+
 		return ResponseEntity.ok(downloadedCalendarStatus);
-		
+
 	}
-	
+
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@PutMapping("/updateHolidayCalendar/{id}")
 	public ResponseEntity<String> updateHolidayCalendar(@PathVariable(value = "id") Integer hId, @RequestParam(value = "holidayName") String holidayName, @RequestParam(value = "date") String date){
 		LOGGER.info("EmployeeService:HolidayController:updateHolidayCalendar");
 		String status = holidayService.updateHolidayCalendar(hId, holidayName, date);
-		
+
 		if(status.contains("not updated"))
 			return ResponseEntity.internalServerError().body(status);
 		return ResponseEntity.ok(status);
 	}
-	
+
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@DeleteMapping("/deleteHolidayById/{id}")
 	public ResponseEntity<String> deleteHoliday(@PathVariable("id") Integer id){
 		LOGGER.info("EmployeeService:HolidayController:deleteHoliday");
 		String status = holidayService.deleteHolidayFromCalendar(id);
-		
+
 		if(status.contains("not deleted"))
 			return new ResponseEntity<String>(status, HttpStatus.NOT_FOUND);
-		
+
 		return new ResponseEntity<String>(status, HttpStatus.NO_CONTENT);
 	}
-	
+
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@GetMapping("/getHolidayByID/{id}")
 	public ResponseEntity<Holiday> getHolidayById(@PathVariable("id") Integer hId){
 		LOGGER.info("EmployeeService:HolidayController:getHolidayById");
 		Holiday holiday = holidayService.getHolidayById(hId);
-		
+
 		if(holiday == null)
 			return ResponseEntity.notFound().build();
-		
+
 		return ResponseEntity.ok(holiday);
 	}
 
