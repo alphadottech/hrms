@@ -68,6 +68,11 @@ public class Employee {
 
 	@Column(name = "salary")
 	private Double salary;
+	
+	//JIRA NO. :- HRMS-106(Bug Resolved) START---
+	@Column(name = "username")
+	private String userName;
+	//JIRA NO. :- HRMS-106(Bug Resolved) END---
 
 	@Column(name = "bank_name")
 	private String bankName;
@@ -77,14 +82,11 @@ public class Employee {
 
 	@Column(name = "ifsc_code")
 	private String ifscCode;
-	
-	//Jira no :- HRMS-77 start--
+
 //	@Lob
 	@Column(name = "resume", length = 1000)
 	private byte[] resume;
-	//Jira no :- HRMS-77 End--
-	
-	//jira no-HRMS-78 ---- START
+
 //	@Lob
 	@Column(name="aadhar_card", length=1000)
 	private byte[] aadharCard;
@@ -92,5 +94,5 @@ public class Employee {
 //	@Lob
 	@Column(name="pan_card", length =1000)
 	private byte[] panCard;
-	//jira no-HRMS-78 ---- END
+
 }
