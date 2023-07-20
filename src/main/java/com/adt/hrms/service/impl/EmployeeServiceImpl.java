@@ -23,11 +23,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private EmployeeStatusRepo employeeStatusRepo;
 
+	//JIRA NO. :- HRMS-106(Bug Resolved) START---
 	@Override
 	public List<Employee> getAllEmps() {
 		List<Employee> list = employeeRepo.findAll();
 		return list;
 	}
+	//JIRA NO. :- HRMS-106(Bug Resolved) END---
+
 
 	@Override
 	public String saveEmp(Employee emp) {
@@ -63,7 +66,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return emp.get();
 	}
 
-	//Jira no :- HRMS-86 START--
 	@Override
 	public List<Employee> SearchByName(String name) {
 		List<Employee> emplist = employeeRepo.SearchByName(name);
@@ -75,7 +77,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		List<Employee> emailemp = employeeRepo.SearchByEmail(email);
 		return emailemp;
 	}
-	//Jira no :- HRMS-86 END--
 
 	@Override
 	public Employee getEmp(Integer empId) {
@@ -86,8 +87,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 			return null;
 	}
 
-	//Jira no :- HRMS-77 START--
-	//Jira no :- HRMS-78 START--
 	@Override
 	public String updateEmp(Employee emp, MultipartFile resume,MultipartFile aadhar,MultipartFile pan) throws IOException {
 		Optional<Employee> opt = employeeRepo.findById(emp.getEmployeeId());
@@ -106,6 +105,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 			opt.get().setMaritalStatus(emp.getMaritalStatus());
 			opt.get().setMobileNo(emp.getMobileNo());
 			opt.get().setSalary(emp.getSalary());
+	//JIRA NO. :- HRMS-106(Bug Resolved) START---
+			opt.get().setUserName(emp.getUserName());
+	//JIRA NO. :- HRMS-106(Bug Resolved) END---
 			opt.get().setIsActive(emp.getIsActive());
 			opt.get().setResume(resume.getBytes());
 			opt.get().setAadharCard(aadhar.getBytes());
@@ -113,14 +115,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		return employeeRepo.save(opt.get()).getEmployeeId() + " Employee Updated Successfully";
 	}
-	//Jira no :- HRMS-77 END--
-	//Jira no :- HRMS-78 END--	
-	
-	//Jira no :- HRMS-82 start--
+
 	 public byte[] downloadImage(int id){
 	        Optional<Employee> dbImageData = employeeRepo.findById(id);
 	        byte[] images= dbImageData.get().getResume();	        
 	        return images;
 	    }
-	//Jira no :- HRMS-82 End--	
+	
 }

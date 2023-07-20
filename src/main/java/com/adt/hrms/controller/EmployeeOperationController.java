@@ -48,16 +48,16 @@ public class EmployeeOperationController {
 		LOGGER.info("Employeeservice:employee:saveEmp info level log message");
 		return new ResponseEntity<>(employeeService.saveEmp(emp), HttpStatus.OK);
 	}
-
+	
+	//JIRA NO. :- HRMS-106(Bug Resolved) START---
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@GetMapping("/getAllEmp")
 	public ResponseEntity<List<Employee>> getAllEmps() {
 		LOGGER.info("Employeeservice:employee:getAllEmps info level log message");
 		return new ResponseEntity<>(employeeService.getAllEmps(), HttpStatus.OK);
 	}
+	//JIRA NO. :- HRMS-106(Bug Resolved) END---
 
-	// Jira no :- HRMS-77 START--
-	// Jira no :- HRMS-78 START--
 	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
 	@PutMapping("/updateEmp")
 	public ResponseEntity<Object> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp,
@@ -67,16 +67,12 @@ public class EmployeeOperationController {
 		Employee e = mapper.readValue(emp, Employee.class);
 		return new ResponseEntity<>(employeeService.updateEmp(e, resume, aadhar, pan), HttpStatus.OK);
 	}
-	// Jira no :- HRMS-77 END--
-	// Jira no :- HRMS-78 END--
 
-	// Jira no :- HRMS-82 start--
 	@GetMapping("downloadResume/{id}")
 	public ResponseEntity<?> downloadImage(@PathVariable int id) {
 		byte[] imageData = employeeService.downloadImage(id);
 		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(imageData);
 	}
-	// Jira no :- HRMS-82 End--
 
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@DeleteMapping("/delete/{empId}")
@@ -93,7 +89,6 @@ public class EmployeeOperationController {
 
 	}
 
-	// Jira no :- HRMS-86 START--
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@GetMapping("/searchByName")
 	public ResponseEntity<List<Employee>> SearchByName(@RequestParam("query") String name) {
@@ -107,6 +102,4 @@ public class EmployeeOperationController {
 		LOGGER.info("Employeeservice:employee:SearchByEmail info level log message");
 		return ResponseEntity.ok(employeeService.SearchByEmail(email));
 	}
-	// Jira no :- HRMS-86 END--
-
 }
