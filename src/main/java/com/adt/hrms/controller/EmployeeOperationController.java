@@ -3,6 +3,8 @@ package com.adt.hrms.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,18 +52,16 @@ public class EmployeeOperationController {
 		LOGGER.info("Employeeservice:employee:saveEmp info level log message");
 		return new ResponseEntity<>(employeeService.saveEmp(emp), HttpStatus.OK);
 	}
-	
-	//JIRA NO. :- HRMS-106(Bug Resolved) START---
+
+	// JIRA NO. :- HRMS-106(Bug Resolved) START---
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@GetMapping("/getAllEmp")
 	public ResponseEntity<List<Employee>> getAllEmps() {
 		LOGGER.info("Employeeservice:employee:getAllEmps info level log message");
 		return new ResponseEntity<>(employeeService.getAllEmps(), HttpStatus.OK);
 	}
-	//JIRA NO. :- HRMS-106(Bug Resolved) END---
-	
-	
-	//HRMS-77-Start
+	// JIRA NO. :- HRMS-106(Bug Resolved) END---
+
 	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
 	@PutMapping("/updateEmp")
 	public ResponseEntity<String> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp,
@@ -71,26 +71,45 @@ public class EmployeeOperationController {
 		Employee e = mapper.readValue(emp, Employee.class);
 		return new ResponseEntity<>(employeeService.updateEmp(e, resume, aadhar, pan), HttpStatus.OK);
 	}
-	//HRMS-77-End
-	//HRMS-82-Start
-		@GetMapping("/downloadResume/{employeeId}")
-	    public ResponseEntity<byte[]> downloadResume(@PathVariable int employeeId) {
-	        try {
-	            Employee employee = employeeService.getEmployeeById(employeeId);
-	            if (employee == null) {
-	                return ResponseEntity.notFound().build();
-	            }
-	            HttpHeaders headers = new HttpHeaders();
-	            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-	            headers.setContentDisposition(ContentDisposition.parse("attachment; filename=\"" + employee.getFirstName() + "_Resume.pdf\""));
 
-	            return new ResponseEntity<>(employee.getResume(), headers, HttpStatus.OK);
-	        } catch (Exception e) {
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-	        }
-	    }
-	  //HRMS-82-End
-	
+	// HRMS-82-Start
+	@GetMapping("/downloadResume/{employeeId}")
+	public ResponseEntity<byte[]> downloadResume(@PathVariable int employeeId) {
+		try {
+			Employee employee = employeeService.getEmployeeById(employeeId);
+			if (employee == null) {
+				return ResponseEntity.notFound().build();
+			}
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			headers.setContentDisposition(
+					ContentDisposition.parse("attachment; filename=\"" + employee.getFirstName() + "_Resume.pdf\""));
+
+			return new ResponseEntity<>(employee.getResume(), headers, HttpStatus.OK);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	// HRMS-82-End
+
+	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager START---
+	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER')")
+	@GetMapping("downloadAadharCard/{id}")
+	public ResponseEntity<byte[]> downloadAadhar(@PathVariable int id, HttpServletResponse resp) throws IOException {
+		LOGGER.info("EmployeeService:EmployeeOperationController:downloadAadhar:AadharCard info level log message");
+
+		return ResponseEntity.ok(employeeService.downloadAadharCard(id, resp));
+	}
+
+	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER')")
+	@GetMapping("downloadPanCard/{id}")
+	public ResponseEntity<byte[]> downloadPan(@PathVariable int id, HttpServletResponse resp) throws IOException {
+		LOGGER.info("EmployeeService:EmployeeOperationController:downloadPan:PanCard info level log message");
+
+		return ResponseEntity.ok(employeeService.downloadPanCard(id, resp));
+	}
+	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager END---
+
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@DeleteMapping("/delete/{empId}")
 	public ResponseEntity<String> deleteEmp(@PathVariable("empId") int empId) {
@@ -119,5 +138,5 @@ public class EmployeeOperationController {
 		LOGGER.info("Employeeservice:employee:SearchByEmail info level log message");
 		return ResponseEntity.ok(employeeService.SearchByEmail(email));
 	}
-	
+
 }
