@@ -109,17 +109,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 			opt.get().setUserName(emp.getUserName());
 	//JIRA NO. :- HRMS-106(Bug Resolved) END---
 			opt.get().setIsActive(emp.getIsActive());
+			//HRMS-77-Start
 			opt.get().setResume(resume.getBytes());
+			//HRMS-77-Ends
+			//HRMS-78-Start
 			opt.get().setAadharCard(aadhar.getBytes());
 			opt.get().setPanCard(pan.getBytes());
-
+			//HRMS-78-End
 		return employeeRepo.save(opt.get()).getEmployeeId() + " Employee Updated Successfully";
 	}
 
-	 public byte[] downloadImage(int id){
-	        Optional<Employee> dbImageData = employeeRepo.findById(id);
-	        byte[] images= dbImageData.get().getResume();	        
-	        return images;
-	    }
-	
 }

@@ -20,10 +20,10 @@ public interface EmployeeService {
 
 	public String deleteEmpById(Integer empId);
 
+	//HRMS-77-Start
 	public String updateEmp(Employee emp,MultipartFile resume,MultipartFile aadhar,MultipartFile pan)throws IOException ;
-
-	public byte[] downloadImage(int id);
-
+	//HRMS-77-End
+	
 	public EmployeeStatus getEmployeeById(Integer empId);
 
 	public Employee getEmployeeById(int empId);

@@ -6,6 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -57,23 +59,38 @@ public class EmployeeOperationController {
 		return new ResponseEntity<>(employeeService.getAllEmps(), HttpStatus.OK);
 	}
 	//JIRA NO. :- HRMS-106(Bug Resolved) END---
-
+	
+	
+	//HRMS-77-Start
 	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
 	@PutMapping("/updateEmp")
-	public ResponseEntity<Object> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp,
+	public ResponseEntity<String> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp,
 			@RequestPart("image") MultipartFile aadhar, @RequestPart("image1") MultipartFile pan) throws IOException {
 		LOGGER.info("Employeeservice:employee:updateEmp info level log message");
 		ObjectMapper mapper = new ObjectMapper();
 		Employee e = mapper.readValue(emp, Employee.class);
 		return new ResponseEntity<>(employeeService.updateEmp(e, resume, aadhar, pan), HttpStatus.OK);
 	}
+	//HRMS-77-End
+	//HRMS-82-Start
+		@GetMapping("/downloadResume/{employeeId}")
+	    public ResponseEntity<byte[]> downloadResume(@PathVariable int employeeId) {
+	        try {
+	            Employee employee = employeeService.getEmployeeById(employeeId);
+	            if (employee == null) {
+	                return ResponseEntity.notFound().build();
+	            }
+	            HttpHeaders headers = new HttpHeaders();
+	            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+	            headers.setContentDisposition(ContentDisposition.parse("attachment; filename=\"" + employee.getFirstName() + "_Resume.pdf\""));
 
-	@GetMapping("downloadResume/{id}")
-	public ResponseEntity<?> downloadImage(@PathVariable int id) {
-		byte[] imageData = employeeService.downloadImage(id);
-		return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(imageData);
-	}
-
+	            return new ResponseEntity<>(employee.getResume(), headers, HttpStatus.OK);
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	        }
+	    }
+	  //HRMS-82-End
+	
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@DeleteMapping("/delete/{empId}")
 	public ResponseEntity<String> deleteEmp(@PathVariable("empId") int empId) {
@@ -102,4 +119,5 @@ public class EmployeeOperationController {
 		LOGGER.info("Employeeservice:employee:SearchByEmail info level log message");
 		return ResponseEntity.ok(employeeService.SearchByEmail(email));
 	}
+	
 }
