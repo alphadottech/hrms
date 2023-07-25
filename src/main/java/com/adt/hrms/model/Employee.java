@@ -69,11 +69,11 @@ public class Employee {
 
 	@Column(name = "salary")
 	private Double salary;
-	
-	//JIRA NO. :- HRMS-106(Bug Resolved) START---
+
+	// JIRA NO. :- HRMS-106(Bug Resolved) START---
 	@Column(name = "username")
 	private String userName;
-	//JIRA NO. :- HRMS-106(Bug Resolved) END---
+	// JIRA NO. :- HRMS-106(Bug Resolved) END---
 
 	@Column(name = "bank_name")
 	private String bankName;
@@ -84,18 +84,20 @@ public class Employee {
 	@Column(name = "ifsc_code")
 	private String ifscCode;
 
-	//HRMS-82-Start
+	// HRMS-82-Start
 	@Lob
 	@Column(name = "resume", length = 1000)
 	private byte[] resume;
-	//HRMS-82-End
-	
+	// HRMS-82-End
+
+	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager START---
 	@Lob
-	@Column(name="aadhar_card", length=1000)
+	@Column(name = "aadhar_card", length = 1000)
 	private byte[] aadharCard;
-		
+
 	@Lob
-	@Column(name="pan_card", length =1000)
+	@Column(name = "pan_card", length = 1000)
 	private byte[] panCard;
+	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager END---
 
 }
