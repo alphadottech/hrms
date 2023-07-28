@@ -107,8 +107,11 @@ public class InterviewServiceImpl implements InterviewService {
 			opt.get().setNotes(intwDTO.getNotes());
 			opt.get().setOfferAccepted(intwDTO.getOfferAccepted());
 			opt.get().setOfferReleased(intwDTO.getOfferReleased());
-			opt.get().setScreeningRound(intwDTO.getScreeningRound());
-			opt.get().setSelected(intwDTO.getSelected());
+			//HRMS-102 - start
+			opt.get().setStatus(intwDTO.getStatus());
+//			opt.get().setScreeningRound(intwDTO.getScreeningRound());
+//			opt.get().setSelected(intwDTO.getSelected());
+			//HRMS-102 - end
 			opt.get().setSource(intwDTO.getSource());
 			opt.get().setType(intwDTO.getType());
 			opt.get().setWorkExInYears(intwDTO.getWorkExInYears());
@@ -168,12 +171,16 @@ public class InterviewServiceImpl implements InterviewService {
 			intwEntity.setNotes(intwDTO.getNotes());
 			intwEntity.setOfferAccepted(intwDTO.getOfferAccepted());
 			intwEntity.setOfferReleased(intwDTO.getOfferReleased());
-			intwEntity.setScreeningRound(intwDTO.getScreeningRound());
-			intwEntity.setSelected(intwDTO.getSelected());
+			//HRMS-102 - start
+			intwEntity.setStatus(intwDTO.getStatus());
+//			intwEntity.setScreeningRound(intwDTO.getScreeningRound());
+//			intwEntity.setSelected(intwDTO.getSelected());
+			//HRMS-102 - end
 			intwEntity.setSource(intwDTO.getSource());
 			intwEntity.setType(intwDTO.getType());
 			intwEntity.setWorkExInYears(intwDTO.getWorkExInYears());
-			if (candidtateDetails.get() != null) {
+//			if (candidtateDetails.get() != null) {
+			if (!candidtateDetails.isEmpty()) {
 				intwEntity.setCandidate_id(candidtateDetails.get());
 				intwEntity.setCandidateName(candidtateDetails.get().getCandidateName());
 			}
@@ -256,12 +263,15 @@ public class InterviewServiceImpl implements InterviewService {
 			dataRow.createCell(11).setCellValue(interview.getCandidateName());
 			dataRow.createCell(12).setCellValue(interview.getSource());
 			dataRow.createCell(13).setCellValue(interview.getOfferAccepted());
-			dataRow.createCell(14).setCellValue(interview.getScreeningRound());
-			dataRow.createCell(15).setCellValue(interview.getSelected());
-			dataRow.createCell(16).setCellValue(interview.getOfferReleased());
-			dataRow.createCell(17).setCellValue(interview.getType());
-			dataRow.createCell(18).setCellValue(interview.getClientName());
-			dataRow.createCell(19).setCellValue(interview.getDate().toString());
+			//HRMS-102 - start
+//			dataRow.createCell(14).setCellValue(interview.getScreeningRound());
+//			dataRow.createCell(15).setCellValue(interview.getSelected());
+			dataRow.createCell(14).setCellValue(interview.getOfferReleased());
+			dataRow.createCell(15).setCellValue(interview.getType());
+			dataRow.createCell(16).setCellValue(interview.getClientName());
+			dataRow.createCell(17).setCellValue(interview.getStatus());
+			dataRow.createCell(18).setCellValue(interview.getDate().toString());
+			//HRMS-102 - end
 			dataRowIndex++;
 
 		}
