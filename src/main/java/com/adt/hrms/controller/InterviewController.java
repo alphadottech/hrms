@@ -28,6 +28,9 @@ import com.adt.hrms.ui.InterviewModelDTO;
 import com.adt.hrms.ui.PositionDateConverter;
 import com.adt.hrms.ui.PositionUIModel;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
+
 @RestController
 @RequestMapping("/interview")
 public class InterviewController {
@@ -168,19 +171,41 @@ public class InterviewController {
 	//HRMS-66 END
 
 //	HRMS-92 ---- search by candidate_name,source and client name----------------
+	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@GetMapping("/SearchByCandidateName")
 	public ResponseEntity<List<Interview>> SearchByCandidateName(@RequestParam("search") String candidateName ) {
+		LOGGER.info("EmployeeService:interview:SearchByCandidateName info level log message");
 		return ResponseEntity.ok(interviewService.SearchByCandidateName(candidateName));
 	}
 	
+	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@GetMapping("/SearchBySource")
 	public ResponseEntity<List<Interview>> SearchBySource(@RequestParam("search") String source ) {
+		LOGGER.info("EmployeeService:interview:SearchBySource info level log message");
 		return ResponseEntity.ok(interviewService.SearchBySource(source));
 	}
 	
+	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@GetMapping("/SearchByClientName")
 	public ResponseEntity<List<Interview>> SearchByClientName(@RequestParam("search") String clientName ) {
+		LOGGER.info("EmployeeService:interview:SearchByClientName info level log message");
 		return ResponseEntity.ok(interviewService.SearchByClientName(clientName));
 	}
 //	HRMS-92 ->END
+
+
+
+	//HRMS-93
+	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@GetMapping("/getInterviewDetailsExcel")
+	public void getAllInterviewDetailsInExcel(@NotNull HttpServletResponse responseExcel)  throws Exception{
+		LOGGER.info("Employeeservice:InterviewDetails:getAllInterviewDetailsInExcel info level log message");
+		responseExcel.setContentType("application/octet-strem");
+		String headerKey ="Content-Disposition";
+		String headerValue = "attachment;filename=InterviewDetails.xls";
+		responseExcel.setHeader(headerKey,headerValue);
+		interviewService.listAllInterviewDetailsInExcel(responseExcel);
+	}
+	//HRMS-93 END
+
 }

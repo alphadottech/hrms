@@ -48,10 +48,12 @@ public class InterviewModelDTO {
 
 	private String date;
 
-	private Boolean screeningRound;
-
 	private String clientName;
 
-	private Boolean selected;
+	//HRMS-102 - start
+	private String status;
+//	private Boolean screeningRound;
+//	private Boolean selected;
+	//HRMS-102 - end
 
 }
