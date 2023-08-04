@@ -165,8 +165,75 @@ public class PositionServiceImpl implements PositionService {
 		return pdclist;
 	}
 
+//	@Override
+//	public String updatePositionNew(Integer uiid, PositionDateConverter pdc) {
+//		Optional<PositionModel> opt = positionRepo.findById(pdc.getUiid());
+//		if (!opt.isPresent())
+//			return "Position not found with id: " + pdc.getUiid();
+//		else
+//			opt.get().setPositionName(pdc.getPositionName());
+//
+//		List<String> techlist = new ArrayList<>();
+//		List<String> tech = pdc.getTechStack();
+//		HashMap<String, String> map = InMemoryMap.avtechnologymap;
+//		for (String str : tech) {
+//			if (map.keySet().contains(str))
+//				techlist.add(str);
+//
+//		}
+//		opt.get().setTechStack(techlist);
+//
+//		LocalTime time = LocalTime.now();
+//		String str = pdc.getPositionclosedate() + " " + String.valueOf(time);
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+//		LocalDateTime posititonCloseDate = LocalDateTime.parse(str, formatter);
+//		opt.get().setPositionCloseDate(posititonCloseDate);
+//
+//		LocalTime time1 = LocalTime.now();
+//		String str1 = pdc.getPositionopendate() + " " + String.valueOf(time1);
+//		DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+//		LocalDateTime positionOpenDate = LocalDateTime.parse(str1, formatter1);
+//		opt.get().setPositionOpenDate(positionOpenDate);
+//
+//		HashMap<String, String> statusmap = InMemoryMap.avstatusmap;
+//		String stat = pdc.getStatus();
+//		String mapStat = null;
+//		if (statusmap.keySet().contains(stat))
+//			mapStat = stat;
+//		opt.get().setStatus(mapStat);
+//
+//		opt.get().setExperienceInYear(pdc.getExperienceInYear());
+//		opt.get().setRemote(pdc.isRemote());
+//
+//		String postype = pdc.getPositionType();
+//		String mappostype = null;
+//		HashMap<String, String> postypemap = InMemoryMap.avpositiontypemap;
+//		if (postypemap.keySet().contains(postype))
+//			mappostype = postype;
+//		opt.get().setPositionType(mappostype);
+//
+//		opt.get().setVacancy(pdc.getVacancy());
+//
+//		return positionRepo.save(opt.get()).getPositionId() + " Positiion Updated Successfully";
+//	}
+
 	@Override
-	public String updatePositionNew(Integer uiid, PositionDateConverter pdc) {
+	public String deletePositionNew(Integer positionId) {
+		Optional<PositionModel> opt = positionRepo.findById(positionId);
+		if (opt.isPresent()) {
+			positionRepo.deleteById(positionId);
+			return positionId + " has been Deleted";
+		} else {
+			return "Invalid Employe Id :: " + positionId;
+
+		}
+	}
+	
+	
+	@Override
+	public String updatePositionNew(PositionDateConverter pdc) {
+		
+		PositionModel pm = new PositionModel();
 		Optional<PositionModel> opt = positionRepo.findById(pdc.getUiid());
 		if (!opt.isPresent())
 			return "Position not found with id: " + pdc.getUiid();
@@ -182,17 +249,20 @@ public class PositionServiceImpl implements PositionService {
 
 		}
 		opt.get().setTechStack(techlist);
+		
+		SimpleDateFormat sdfForTime1 = new SimpleDateFormat("HH.mm.ss");
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		String str =  pdc.getPositionclosedate() + " " + sdfForTime1.format(timestamp);
+		DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm.ss");
+		LocalDateTime posititonCloseDate = LocalDateTime.parse(str, formatter1);
+		pm.setPositionCloseDate(posititonCloseDate);
 
-		LocalTime time = LocalTime.now();
-		String str = pdc.getPositionclosedate() + " " + String.valueOf(time);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-		LocalDateTime posititonCloseDate = LocalDateTime.parse(str, formatter);
-		opt.get().setPositionCloseDate(posititonCloseDate);
-
-		LocalTime time1 = LocalTime.now();
-		String str1 = pdc.getPositionopendate() + " " + String.valueOf(time1);
-		DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-		LocalDateTime positionOpenDate = LocalDateTime.parse(str1, formatter1);
+		
+		SimpleDateFormat sdfForTime2 = new SimpleDateFormat("HH.mm.ss");
+		Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
+		String str1 = pdc.getPositionopendate() + " " + sdfForTime2.format(timestamp1);
+		DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm.ss");
+		LocalDateTime positionOpenDate = LocalDateTime.parse(str1, formatter2);
 		opt.get().setPositionOpenDate(positionOpenDate);
 
 		HashMap<String, String> statusmap = InMemoryMap.avstatusmap;
@@ -217,15 +287,4 @@ public class PositionServiceImpl implements PositionService {
 		return positionRepo.save(opt.get()).getPositionId() + " Positiion Updated Successfully";
 	}
 
-	@Override
-	public String deletePositionNew(Integer positionId) {
-		Optional<PositionModel> opt = positionRepo.findById(positionId);
-		if (opt.isPresent()) {
-			positionRepo.deleteById(positionId);
-			return positionId + " has been Deleted";
-		} else {
-			return "Invalid Employe Id :: " + positionId;
-
-		}
-	}
 }
