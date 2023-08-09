@@ -282,4 +282,52 @@ public class InterviewServiceImpl implements InterviewService {
 		ops.close();
 	}
 	// HRMS-93
+	
+	
+	
+	public void listAllPositionDetailsInExcel(HttpServletResponse responseExcel) throws IOException {
+		List<PositionModel> list = posRepo.findAll();
+
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet sheet = workbook.createSheet("Position Details");
+		HSSFRow row =  sheet.createRow(0);
+
+		row.createCell(0).setCellValue("POSITIONID");
+		row.createCell(1).setCellValue("POSITION_NAME");
+		row.createCell(2).setCellValue("POSITION_TYPE");
+		row.createCell(3).setCellValue("VACANCY");
+		row.createCell(4).setCellValue("WORK EXP IN YEARS");
+		row.createCell(5).setCellValue("STATUS");
+		row.createCell(6).setCellValue("REMOTE");
+		row.createCell(7).setCellValue("POSITION_OPEN_DATE");
+		row.createCell(8).setCellValue("POSITION_CLOSE_DATE");
+		row.createCell(9).setCellValue("TECH STACK");
+		
+
+		int dataRowIndex =1;
+
+		for(PositionModel position : list ){
+			HSSFRow dataRow = sheet.createRow(dataRowIndex);
+			dataRow.createCell(0).setCellValue(position.getPositionId());
+			dataRow.createCell(1).setCellValue(position.getPositionName());
+			dataRow.createCell(2).setCellValue(position.getPositionType().toString());
+			dataRow.createCell(3).setCellValue(position.getVacancy().toString());
+			dataRow.createCell(4).setCellValue(position.getExperienceInYear().toString());
+			dataRow.createCell(5).setCellValue(position.getStatus());
+			dataRow.createCell(6).setCellValue(position.getRemote());
+			dataRow.createCell(7).setCellValue(position.getPositionOpenDate().toString());
+			dataRow.createCell(8).setCellValue(position.getPositionCloseDate().toString());
+			dataRow.createCell(9).setCellValue(position.getTechStack().toString());
+			
+			dataRowIndex++;
+
+		}
+
+		ServletOutputStream ops = responseExcel.getOutputStream();
+		workbook.write(ops);
+		workbook.close();
+		ops.close();
+	}
+
+
 }
