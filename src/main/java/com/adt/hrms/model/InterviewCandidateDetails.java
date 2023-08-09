@@ -10,11 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(catalog = "EmployeeDB", schema = "employee_schema", name = "CandidateDetails")
+@Builder
 public class InterviewCandidateDetails {
 
 	@Id
