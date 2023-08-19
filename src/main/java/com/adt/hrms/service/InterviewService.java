@@ -34,4 +34,7 @@ public interface InterviewService {
    //HRMS-92 ->END
 
 	public void listAllInterviewDetailsInExcel(HttpServletResponse responseExcel) throws IOException;
+	
+	public void listAllPositionDetailsInExcel(HttpServletResponse responseExcel) throws IOException;
+
 }

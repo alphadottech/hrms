@@ -13,8 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
+import lombok.Builder;
+
 @Entity
 @Table(catalog = "EmployeeDB", schema = "employee_schema", name = "PositionModel")
+@Builder
 public class PositionModel {
 
 	@Id

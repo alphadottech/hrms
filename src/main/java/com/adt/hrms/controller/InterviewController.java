@@ -2,6 +2,9 @@ package com.adt.hrms.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +30,6 @@ import com.adt.hrms.service.PositionService;
 import com.adt.hrms.ui.InterviewModelDTO;
 import com.adt.hrms.ui.PositionDateConverter;
 import com.adt.hrms.ui.PositionUIModel;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/interview")
@@ -109,7 +109,7 @@ public class InterviewController {
 		return new ResponseEntity<>(positionService.savePositionNew(pdc), HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+//	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@GetMapping("/getAllPositionNew")
 	public ResponseEntity<List<PositionDateConverter>> getAllPositionNew() {
 		LOGGER.info("Employeeservice:InterviewPosition:getAllPositionNew info level log message");
@@ -207,5 +207,38 @@ public class InterviewController {
 		interviewService.listAllInterviewDetailsInExcel(responseExcel);
 	}
 	//HRMS-93 END
+	
+	
+	//HRMS-96
+	//HRMS-110
+	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@GetMapping("/getPositionDetailsExcel")
+	public void getAllPositionDetailsInExcel(@NotNull HttpServletResponse responseExcel)  throws Exception{
+		LOGGER.info("Employeeservice:PositionDetails:getAllPositionDetailsInExcel info level log message");
+		responseExcel.setContentType("application/octet-strem");
+		String headerKey ="Content-Disposition";
+		String headerValue = "attachment;filename=PositionDetails.xls";
+		responseExcel.setHeader(headerKey,headerValue);
+		interviewService.listAllPositionDetailsInExcel(responseExcel);
+	}
+
+	//HRMS-96 END
+
+//	@PreAuthorize("('ROLE_ADMIN')")
+	@PutMapping("/updatePositionNew")
+	public ResponseEntity<String> updatePositionNew(@RequestBody PositionDateConverter pdc) {
+		LOGGER.info("Employeeservice:InterviewPosition:updatePosition info level log message");
+		return new ResponseEntity<>(positionService.updatePositionNew(pdc), HttpStatus.OK);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
