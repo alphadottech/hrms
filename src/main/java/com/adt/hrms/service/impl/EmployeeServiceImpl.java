@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.adt.hrms.model.Employee;
@@ -68,12 +69,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
+	@Transactional
 	public List<Employee> SearchByName(String name) {
 		List<Employee> emplist = employeeRepo.SearchByName(name);
 		return emplist;
 	}
 
 	@Override
+	@Transactional
 	public List<Employee> SearchByEmail(String email) {
 		List<Employee> emailemp = employeeRepo.SearchByEmail(email);
 		return emailemp;

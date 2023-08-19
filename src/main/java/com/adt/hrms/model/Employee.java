@@ -86,17 +86,17 @@ public class Employee {
 
 	// HRMS-82-Start
 	@Lob
-	@Column(name = "resume", length = 1000)
+	@Column(name = "resume", columnDefinition = "BLOB")
 	private byte[] resume;
 	// HRMS-82-End
 
 	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager START---
 	@Lob
-	@Column(name = "aadhar_card", length = 1000)
+	@Column(name = "aadhar_card", columnDefinition = "BLOB")
 	private byte[] aadharCard;
 
 	@Lob
-	@Column(name = "pan_card", length = 1000)
+	@Column(name = "pan_card", columnDefinition = "BLOB")
 	private byte[] panCard;
 	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager END---
 
