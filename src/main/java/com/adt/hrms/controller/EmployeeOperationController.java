@@ -63,7 +63,7 @@ public class EmployeeOperationController {
 	}
 	// JIRA NO. :- HRMS-106(Bug Resolved) END---
 
-	//@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
 	@PutMapping("/updateEmp")
 	public ResponseEntity<String> updateEmp(@RequestPart("resume") MultipartFile resume, @RequestPart String emp,
 			@RequestPart("aadhar") MultipartFile aadhar, @RequestPart("pan") MultipartFile pan) throws IOException {
