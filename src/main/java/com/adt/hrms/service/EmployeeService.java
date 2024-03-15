@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.adt.hrms.model.Employee;
 import com.adt.hrms.model.EmployeeStatus;
+import com.adt.hrms.request.EmployeeRequest;
 
 public interface EmployeeService {
 
@@ -22,7 +23,7 @@ public interface EmployeeService {
 
 	public String deleteEmpById(Integer empId);
 
-	public String updateEmp(Employee emp, MultipartFile resume, MultipartFile aadhar, MultipartFile pan)
+	public String updateEmp(EmployeeRequest empRequest, MultipartFile resume, MultipartFile aadhar, MultipartFile pan)
 			throws IOException;
 
 	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager START---

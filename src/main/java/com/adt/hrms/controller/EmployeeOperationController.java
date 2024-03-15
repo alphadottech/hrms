@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.adt.hrms.model.Employee;
 import com.adt.hrms.model.EmployeeStatus;
+import com.adt.hrms.request.EmployeeRequest;
 import com.adt.hrms.service.EmployeeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -64,12 +65,17 @@ public class EmployeeOperationController {
 
 	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
 	@PutMapping("/updateEmp")
-	public ResponseEntity<String> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp,
-			@RequestPart("image") MultipartFile aadhar, @RequestPart("image1") MultipartFile pan) throws IOException {
-		LOGGER.info("Employeeservice:employee:updateEmp info level log message");
-		ObjectMapper mapper = new ObjectMapper();
-		Employee e = mapper.readValue(emp, Employee.class);
-		return new ResponseEntity<>(employeeService.updateEmp(e, resume, aadhar, pan), HttpStatus.OK);
+	public ResponseEntity<String> updateEmp(@RequestPart("resume") MultipartFile resume, @RequestPart String emp,
+			@RequestPart("aadhar") MultipartFile aadhar, @RequestPart("pan") MultipartFile pan) throws IOException {
+		try {
+			LOGGER.info("Employeeservice:employee:updateEmp info level log message");
+			ObjectMapper mapper = new ObjectMapper();
+			EmployeeRequest empRequest = mapper.readValue(emp, EmployeeRequest.class);
+			return new ResponseEntity<>(employeeService.updateEmp(empRequest, resume, aadhar, pan), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 
 	// HRMS-82-Start
