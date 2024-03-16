@@ -129,13 +129,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (empRequest.getIsActive() != null)
 			opt.get().setIsActive(empRequest.getIsActive());
 		// HRMS-77-Start
-		if (resume != null)
+		if (resume != null && !resume.isEmpty())
 			opt.get().setResume(resume.getBytes());
 		// HRMS-77-Ends
 		// HRMS-78-Start
-		if (aadhar != null)
+		if (aadhar != null && !aadhar.isEmpty())
 			opt.get().setAadharCard(aadhar.getBytes());
-		if (pan != null)
+		if (pan != null && !pan.isEmpty())
 			opt.get().setPanCard(pan.getBytes());
 		// HRMS-78-End
 		return employeeRepo.save(opt.get()).getEmployeeId() + " Employee Updated Successfully";
