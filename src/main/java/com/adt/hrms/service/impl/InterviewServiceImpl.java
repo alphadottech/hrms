@@ -182,13 +182,13 @@ public class InterviewServiceImpl implements InterviewService {
 			intwEntity.setType(intwDTO.getType());
 			intwEntity.setWorkExInYears(intwDTO.getWorkExInYears());
 //			if (candidtateDetails.get() != null) {
-			if (!candidtateDetails.isEmpty()) {
+			if (candidtateDetails != null && !candidtateDetails.isEmpty()) {
 				intwEntity.setCandidate_id(candidtateDetails.get());
 				intwEntity.setCandidateName(candidtateDetails.get().getCandidateName());
 			}
-			if (posDetails.get() != null)
+			if (posDetails != null && !posDetails.isEmpty())
 				intwEntity.setPosition_id(posDetails.get());
-			if (techDetails.get() != null)
+			if (techDetails != null && !techDetails.isEmpty())
 				intwEntity.setTech_id(techDetails.get());
 
 			Interview savedRecord = interviewRepository.save(intwEntity);
