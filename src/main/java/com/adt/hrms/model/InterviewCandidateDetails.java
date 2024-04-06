@@ -10,11 +10,17 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(catalog = "EmployeeDB", schema = "employee_schema", name = "CandidateDetails")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class InterviewCandidateDetails {
 
 	@Id
@@ -52,7 +58,7 @@ public class InterviewCandidateDetails {
 
 	@Column(name = "notice_period")
 	private Integer noticePeriod;
-	
+
 	@Column(name = "dob")
 	private LocalDate dob;
 }

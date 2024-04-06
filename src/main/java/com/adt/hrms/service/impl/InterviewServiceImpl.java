@@ -2,9 +2,11 @@ package com.adt.hrms.service.impl;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -23,18 +25,18 @@ import com.adt.hrms.repository.PositionRepo;
 import com.adt.hrms.service.InterviewService;
 import com.adt.hrms.ui.InterviewModelDTO;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-
 @Service
 public class InterviewServiceImpl implements InterviewService {
 
 	@Autowired
 	private InterviewRepository interviewRepository;
+
 	@Autowired
 	private InterviewCandidateRepo interviewCandidateRepo;
+
 	@Autowired
 	private PositionRepo posRepo;
+
 	@Autowired
 	private AVTechnologyRepo techRepo;
 
@@ -107,11 +109,11 @@ public class InterviewServiceImpl implements InterviewService {
 			opt.get().setNotes(intwDTO.getNotes());
 			opt.get().setOfferAccepted(intwDTO.getOfferAccepted());
 			opt.get().setOfferReleased(intwDTO.getOfferReleased());
-			//HRMS-102 - start
+			// HRMS-102 - start
 			opt.get().setStatus(intwDTO.getStatus());
 //			opt.get().setScreeningRound(intwDTO.getScreeningRound());
 //			opt.get().setSelected(intwDTO.getSelected());
-			//HRMS-102 - end
+			// HRMS-102 - end
 			opt.get().setSource(intwDTO.getSource());
 			opt.get().setType(intwDTO.getType());
 			opt.get().setWorkExInYears(intwDTO.getWorkExInYears());
@@ -171,22 +173,22 @@ public class InterviewServiceImpl implements InterviewService {
 			intwEntity.setNotes(intwDTO.getNotes());
 			intwEntity.setOfferAccepted(intwDTO.getOfferAccepted());
 			intwEntity.setOfferReleased(intwDTO.getOfferReleased());
-			//HRMS-102 - start
+			// HRMS-102 - start
 			intwEntity.setStatus(intwDTO.getStatus());
 //			intwEntity.setScreeningRound(intwDTO.getScreeningRound());
 //			intwEntity.setSelected(intwDTO.getSelected());
-			//HRMS-102 - end
+			// HRMS-102 - end
 			intwEntity.setSource(intwDTO.getSource());
 			intwEntity.setType(intwDTO.getType());
 			intwEntity.setWorkExInYears(intwDTO.getWorkExInYears());
 //			if (candidtateDetails.get() != null) {
-			if (!candidtateDetails.isEmpty()) {
+			if (candidtateDetails != null && !candidtateDetails.isEmpty()) {
 				intwEntity.setCandidate_id(candidtateDetails.get());
 				intwEntity.setCandidateName(candidtateDetails.get().getCandidateName());
 			}
-			if (posDetails.get() != null)
+			if (posDetails != null && !posDetails.isEmpty())
 				intwEntity.setPosition_id(posDetails.get());
-			if (techDetails.get() != null)
+			if (techDetails != null && !techDetails.isEmpty())
 				intwEntity.setTech_id(techDetails.get());
 
 			Interview savedRecord = interviewRepository.save(intwEntity);
@@ -198,7 +200,7 @@ public class InterviewServiceImpl implements InterviewService {
 	}
 	// HRMS-66 END
 
-	//HRMS-92 -> START
+	// HRMS-92 -> START
 	@Override
 	public List<Interview> SearchByCandidateName(String candidateName) {
 		return interviewRepository.findByCandidateName(candidateName);
@@ -214,7 +216,7 @@ public class InterviewServiceImpl implements InterviewService {
 	public List<Interview> SearchByClientName(String clientName) {
 		return interviewRepository.findByClientName(clientName);
 	}
-	//HRMS-92 ->END
+	// HRMS-92 ->END
 
 	// HRMS-93
 	public void listAllInterviewDetailsInExcel(HttpServletResponse responseExcel) throws IOException {
@@ -222,7 +224,7 @@ public class InterviewServiceImpl implements InterviewService {
 
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		HSSFSheet sheet = workbook.createSheet("Interview Details");
-		HSSFRow row =  sheet.createRow(0);
+		HSSFRow row = sheet.createRow(0);
 
 		row.createCell(0).setCellValue("INTERVIEWID");
 		row.createCell(1).setCellValue("ROUNDS");
@@ -245,9 +247,9 @@ public class InterviewServiceImpl implements InterviewService {
 		row.createCell(18).setCellValue("CLIENT NAME");
 		row.createCell(19).setCellValue("DATE");
 
-		int dataRowIndex =1;
+		int dataRowIndex = 1;
 
-		for(Interview interview : list ){
+		for (Interview interview : list) {
 			HSSFRow dataRow = sheet.createRow(dataRowIndex);
 			dataRow.createCell(0).setCellValue(interview.getInterviewId());
 			dataRow.createCell(1).setCellValue(interview.getRounds());
@@ -263,7 +265,7 @@ public class InterviewServiceImpl implements InterviewService {
 			dataRow.createCell(11).setCellValue(interview.getCandidateName());
 			dataRow.createCell(12).setCellValue(interview.getSource());
 			dataRow.createCell(13).setCellValue(interview.getOfferAccepted());
-			//HRMS-102 - start
+			// HRMS-102 - start
 //			dataRow.createCell(14).setCellValue(interview.getScreeningRound());
 //			dataRow.createCell(15).setCellValue(interview.getSelected());
 			dataRow.createCell(14).setCellValue(interview.getOfferReleased());
@@ -271,7 +273,7 @@ public class InterviewServiceImpl implements InterviewService {
 			dataRow.createCell(16).setCellValue(interview.getClientName());
 			dataRow.createCell(17).setCellValue(interview.getStatus());
 			dataRow.createCell(18).setCellValue(interview.getDate().toString());
-			//HRMS-102 - end
+			// HRMS-102 - end
 			dataRowIndex++;
 
 		}
@@ -282,4 +284,48 @@ public class InterviewServiceImpl implements InterviewService {
 		ops.close();
 	}
 	// HRMS-93
+
+	public void listAllPositionDetailsInExcel(HttpServletResponse responseExcel) throws IOException {
+		List<PositionModel> list = posRepo.findAll();
+
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet sheet = workbook.createSheet("Position Details");
+		HSSFRow row = sheet.createRow(0);
+
+		row.createCell(0).setCellValue("POSITIONID");
+		row.createCell(1).setCellValue("POSITION_NAME");
+		row.createCell(2).setCellValue("POSITION_TYPE");
+		row.createCell(3).setCellValue("VACANCY");
+		row.createCell(4).setCellValue("WORK EXP IN YEARS");
+		row.createCell(5).setCellValue("STATUS");
+		row.createCell(6).setCellValue("REMOTE");
+		row.createCell(7).setCellValue("POSITION_OPEN_DATE");
+		row.createCell(8).setCellValue("POSITION_CLOSE_DATE");
+		row.createCell(9).setCellValue("TECH STACK");
+
+		int dataRowIndex = 1;
+
+		for (PositionModel position : list) {
+			HSSFRow dataRow = sheet.createRow(dataRowIndex);
+			dataRow.createCell(0).setCellValue(position.getPositionId());
+			dataRow.createCell(1).setCellValue(position.getPositionName());
+			dataRow.createCell(2).setCellValue(position.getPositionType().toString());
+			dataRow.createCell(3).setCellValue(position.getVacancy().toString());
+			dataRow.createCell(4).setCellValue(position.getExperienceInYear().toString());
+			dataRow.createCell(5).setCellValue(position.getStatus());
+			dataRow.createCell(6).setCellValue(position.getRemote());
+			dataRow.createCell(7).setCellValue(position.getPositionOpenDate().toString());
+			dataRow.createCell(8).setCellValue(position.getPositionCloseDate().toString());
+			dataRow.createCell(9).setCellValue(position.getTechStack().toString());
+
+			dataRowIndex++;
+
+		}
+
+		ServletOutputStream ops = responseExcel.getOutputStream();
+		workbook.write(ops);
+		workbook.close();
+		ops.close();
+	}
+
 }

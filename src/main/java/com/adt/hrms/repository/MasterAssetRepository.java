@@ -14,7 +14,7 @@ import com.adt.hrms.model.MasterAsset;
 public interface MasterAssetRepository extends JpaRepository<MasterAsset, Integer>{
 	
 	//JyotiPancholi - Jira no ->  HRMS-83(START)
-	@Query(value = "SELECT ma FROM MasterAsset ma WHERE ma.assetUser like %:query%")
+	@Query(value = "SELECT ma FROM MasterAsset ma WHERE lower(ma.assetUser) like lower(concat('%', :query,'%'))")
 	List<MasterAsset> findByAssetUser(@Param("query") String query);
 
 	@Query(value = "SELECT ma FROM MasterAsset ma WHERE ma.status like %:query%")

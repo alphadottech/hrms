@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.adt.hrms.model.Employee;
 import com.adt.hrms.model.EmployeeStatus;
+import com.adt.hrms.request.EmployeeRequest;
 import com.adt.hrms.service.EmployeeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -64,12 +66,18 @@ public class EmployeeOperationController {
 
 	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
 	@PutMapping("/updateEmp")
-	public ResponseEntity<String> updateEmp(@RequestPart("file") MultipartFile resume, @RequestPart String emp,
-			@RequestPart("image") MultipartFile aadhar, @RequestPart("image1") MultipartFile pan) throws IOException {
-		LOGGER.info("Employeeservice:employee:updateEmp info level log message");
-		ObjectMapper mapper = new ObjectMapper();
-		Employee e = mapper.readValue(emp, Employee.class);
-		return new ResponseEntity<>(employeeService.updateEmp(e, resume, aadhar, pan), HttpStatus.OK);
+	public ResponseEntity<String> updateEmp(@RequestPart(value = "resume", required = false) MultipartFile resume,
+			@RequestPart String emp, @RequestPart(value = "aadhar", required = false) MultipartFile aadhar,
+			@RequestPart(value = "pan", required = false) MultipartFile pan) throws IOException {
+		try {
+			LOGGER.info("Employeeservice:employee:updateEmp info level log message");
+			ObjectMapper mapper = new ObjectMapper();
+			EmployeeRequest empRequest = mapper.readValue(emp, EmployeeRequest.class);
+			return new ResponseEntity<>(employeeService.updateEmp(empRequest, resume, aadhar, pan), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 
 	// HRMS-82-Start

@@ -10,10 +10,10 @@ import com.adt.hrms.model.Employee;
 
 public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 
-	@Query(value = "FROM Employee e WHERE e.firstName LIKE %:query% OR e.lastName LIKE %:query%")
+	@Query(value = "FROM Employee e WHERE lower(e.firstName) like lower(concat('%', :query,'%')) OR lower(e.lastName) like lower(concat('%', :query,'%'))")
 	List<Employee> SearchByName(@Param("query") String name);
 
-	@Query(value = "FROM Employee e WHERE e.email LIKE %:query% ")
+	@Query("FROM Employee e WHERE lower(e.email) like lower(concat('%', :query,'%'))")
 	List<Employee> SearchByEmail(@Param("query") String email);
 
 }

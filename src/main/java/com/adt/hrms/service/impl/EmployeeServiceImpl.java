@@ -8,12 +8,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.adt.hrms.model.Employee;
 import com.adt.hrms.model.EmployeeStatus;
 import com.adt.hrms.repository.EmployeeRepo;
 import com.adt.hrms.repository.EmployeeStatusRepo;
+import com.adt.hrms.request.EmployeeRequest;
 import com.adt.hrms.service.EmployeeService;
 
 @Service
@@ -68,12 +70,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
+	@Transactional
 	public List<Employee> SearchByName(String name) {
 		List<Employee> emplist = employeeRepo.SearchByName(name);
 		return emplist;
 	}
 
 	@Override
+	@Transactional
 	public List<Employee> SearchByEmail(String email) {
 		List<Employee> emailemp = employeeRepo.SearchByEmail(email);
 		return emailemp;
@@ -89,34 +93,50 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public String updateEmp(Employee emp, MultipartFile resume, MultipartFile aadhar, MultipartFile pan)
+	public String updateEmp(EmployeeRequest empRequest, MultipartFile resume, MultipartFile aadhar, MultipartFile pan)
 			throws IOException {
-		Optional<Employee> opt = employeeRepo.findById(emp.getEmployeeId());
+		Optional<Employee> opt = employeeRepo.findById(empRequest.getEmployeeId());
 		if (!opt.isPresent())
-			return "Employee not found with id: " + emp.getEmployeeId();
-		else
-			opt.get().setAccountNumber(emp.getAccountNumber());
-		opt.get().setBankName(emp.getBankName());
-		opt.get().setDesignation(emp.getDesignation());
-		opt.get().setDob(emp.getDob());
-		opt.get().setFirstName(emp.getFirstName());
-		opt.get().setGender(emp.getGender());
-		opt.get().setIfscCode(emp.getIfscCode());
-		opt.get().setJoinDate(emp.getJoinDate());
-		opt.get().setLastName(emp.getLastName());
-		opt.get().setMaritalStatus(emp.getMaritalStatus());
-		opt.get().setMobileNo(emp.getMobileNo());
-		opt.get().setSalary(emp.getSalary());
-		// JIRA NO. :- HRMS-106(Bug Resolved) START---
-		opt.get().setUserName(emp.getUserName());
+			return "Employee not found with id: " + empRequest.getEmployeeId();
+		else if (empRequest.getAccountNumber() != null)
+			opt.get().setAccountNumber(empRequest.getAccountNumber());
+		if (empRequest.getBankName() != null)
+			opt.get().setBankName(empRequest.getBankName());
+		if (empRequest.getDesignation() != null)
+			opt.get().setDesignation(empRequest.getDesignation());
+		if (empRequest.getDob() != null)
+			opt.get().setDob(empRequest.getDob());
+		if (empRequest.getFirstName() != null)
+			opt.get().setFirstName(empRequest.getFirstName());
+		if (empRequest.getGender() != null)
+			opt.get().setGender(empRequest.getGender());
+		if (empRequest.getIfscCode() != null)
+			opt.get().setIfscCode(empRequest.getIfscCode());
+		if (empRequest.getJoinDate() != null)
+			opt.get().setJoinDate(empRequest.getJoinDate());
+		if (empRequest.getLastName() != null)
+			opt.get().setLastName(empRequest.getLastName());
+		if (empRequest.getMaritalStatus() != null)
+			opt.get().setMaritalStatus(empRequest.getMaritalStatus());
+		if (empRequest.getMobileNo() != null)
+			opt.get().setMobileNo(empRequest.getMobileNo());
+		if (empRequest.getSalary() != null)
+			opt.get().setSalary(empRequest.getSalary());
+		if (empRequest.getUserName() != null)
+			// JIRA NO. :- HRMS-106(Bug Resolved) START---
+			opt.get().setUserName(empRequest.getUserName());
 		// JIRA NO. :- HRMS-106(Bug Resolved) END---
-		opt.get().setIsActive(emp.getIsActive());
+		if (empRequest.getIsActive() != null)
+			opt.get().setIsActive(empRequest.getIsActive());
 		// HRMS-77-Start
-		opt.get().setResume(resume.getBytes());
+		if (resume != null && !resume.isEmpty())
+			opt.get().setResume(resume.getBytes());
 		// HRMS-77-Ends
 		// HRMS-78-Start
-		opt.get().setAadharCard(aadhar.getBytes());
-		opt.get().setPanCard(pan.getBytes());
+		if (aadhar != null && !aadhar.isEmpty())
+			opt.get().setAadharCard(aadhar.getBytes());
+		if (pan != null && !pan.isEmpty())
+			opt.get().setPanCard(pan.getBytes());
 		// HRMS-78-End
 		return employeeRepo.save(opt.get()).getEmployeeId() + " Employee Updated Successfully";
 	}

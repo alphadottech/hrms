@@ -4,8 +4,6 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
@@ -14,6 +12,8 @@ import javax.persistence.Table;
 
 import com.adt.hrms.ui.InterviewIdRound;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +22,8 @@ import lombok.NoArgsConstructor;
 @IdClass(InterviewIdRound.class)
 @Table(catalog = "EmployeeDB", schema = "employee_schema", name = "interview")
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Interview {
 
 	// PK

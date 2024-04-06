@@ -6,11 +6,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(catalog = "EmployeeDB", schema = "av_schema", name = "Technology")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AVTechnology {
 
 	@Id
