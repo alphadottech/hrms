@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.adt.hrms.model.Employee;
@@ -14,7 +15,7 @@ import com.adt.hrms.request.EmployeeRequest;
 public interface EmployeeService {
 
 	// JIRA NO. :- HRMS-106(Bug Resolved) START---
-	public List<Employee> getAllEmps();
+	public Page<Employee> getAllEmps(int page, int size);
 	// JIRA NO. :- HRMS-106(Bug Resolved) END---
 
 	public Employee getEmp(Integer empId);

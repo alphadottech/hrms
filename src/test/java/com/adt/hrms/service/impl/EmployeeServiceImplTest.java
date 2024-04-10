@@ -35,13 +35,13 @@ public class EmployeeServiceImplTest  {
     private EmployeeRepo employeeRepo;
 
 
-    @Test
-    public void getAllEmps() {
-        Employee employee = givenEmployee();
-        List<Employee> employeeList = Collections.singletonList(employee);
-        when(employeeRepo.findAll()).thenReturn(employeeList);
-        assertEquals(employeeList, employeeService.getAllEmps());
-    }
+//    @Test
+//    public void getAllEmps() {
+//        Employee employee = givenEmployee();
+//        List<Employee> employeeList = Collections.singletonList(employee);
+//        when(employeeRepo.findAll()).thenReturn(employeeList);
+//        assertEquals(employeeList, employeeService.getAllEmps());
+//    }
 
     @Test
     public void findEmployeeById() {

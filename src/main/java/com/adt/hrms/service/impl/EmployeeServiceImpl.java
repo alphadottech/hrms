@@ -7,6 +7,9 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,9 +32,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	// JIRA NO. :- HRMS-106(Bug Resolved) START---
 	@Override
-	public List<Employee> getAllEmps() {
-		List<Employee> list = employeeRepo.findAll();
-		return list;
+	public Page<Employee> getAllEmps(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return employeeRepo.findAll(pageable);
 	}
 	// JIRA NO. :- HRMS-106(Bug Resolved) END---
 
