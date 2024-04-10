@@ -57,7 +57,7 @@ public class EmployeeOperationController {
 	}
 
 	// JIRA NO. :- HRMS-106(Bug Resolved) START---
-//	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@GetMapping("/getAllEmp")
 	public ResponseEntity<Page<Employee>> getAllEmps(@RequestParam(value = "page", defaultValue = "0", required = false) int page,
 													 @RequestParam(value = "size", defaultValue = "100", required = false) int size) {
