@@ -9,6 +9,7 @@ import org.apache.logging.log4j.core.config.plugins.validation.constraints.Requi
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,9 +59,10 @@ public class EmployeeOperationController {
 	// JIRA NO. :- HRMS-106(Bug Resolved) START---
 	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@GetMapping("/getAllEmp")
-	public ResponseEntity<List<Employee>> getAllEmps() {
-		LOGGER.info("Employeeservice:employee:getAllEmps info level log message");
-		return new ResponseEntity<>(employeeService.getAllEmps(), HttpStatus.OK);
+	public ResponseEntity<Page<Employee>> getAllEmps(@RequestParam(value = "page", defaultValue = "0", required = false) int page,
+													 @RequestParam(value = "size", defaultValue = "100", required = false) int size) {
+		LOGGER.info("Employee-service:employee:getAllEmp info level log message");
+		return new ResponseEntity<>(employeeService.getAllEmps(page, size), HttpStatus.OK);
 	}
 	// JIRA NO. :- HRMS-106(Bug Resolved) END---
 
