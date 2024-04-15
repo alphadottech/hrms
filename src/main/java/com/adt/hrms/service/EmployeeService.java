@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.adt.hrms.request.EmployeeUpdateByAdminDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,21 +25,21 @@ public interface EmployeeService {
 
 	public String deleteEmpById(Integer empId);
 
-	public String updateEmp(EmployeeRequest empRequest, MultipartFile resume, MultipartFile aadhar, MultipartFile pan)
-			throws IOException;
+	public String updateEmp(EmployeeRequest empRequest);
 
 	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager START---
-	public byte[] downloadAadharCard(int id, HttpServletResponse resp) throws IOException;
-
-	public byte[] downloadPanCard(int id, HttpServletResponse resp) throws IOException;
-	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager END---
+//	public byte[] downloadAadharCard(int id, HttpServletResponse resp) throws IOException;
+//
+//	public byte[] downloadPanCard(int id, HttpServletResponse resp) throws IOException;
+//	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager END---
 
 	public EmployeeStatus getEmployeeById(Integer empId);
 
 	public Employee getEmployeeById(int empId);
 
-	public List<Employee> SearchByName(String name);
+	public Page<Employee> SearchByName(String name,int page,int size);
 
-	public List<Employee> SearchByEmail(String email);
+	public Page<Employee> SearchByEmail(String email,int page,int size);
 
+	public String updateEmpById(EmployeeUpdateByAdminDTO emp);
 }
