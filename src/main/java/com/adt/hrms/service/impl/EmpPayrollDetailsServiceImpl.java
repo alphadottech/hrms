@@ -87,7 +87,7 @@ public class EmpPayrollDetailsServiceImpl implements EmpPayrollDetailsService {
 
     @Override
     public EmpPayrollDetails getEmpPayrollDetails(Integer empId) {
-        Optional<EmpPayrollDetails> opt = empPayrollDetailsRepo.findById(empId);
+        Optional<EmpPayrollDetails> opt = empPayrollDetailsRepo.findByEmployeeId(empId);
         return opt.orElse(null);
     }
 }
