@@ -129,6 +129,19 @@ public class EmployeeOperationController {
 
     }
 
+    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @DeleteMapping("/deleteDocument/{empId}/{docTypeId}")
+    public ResponseEntity<String> deleteDocument(@PathVariable int empId, @PathVariable int docTypeId) throws IOException {
+        try {
+            LOGGER.info("EmployeeDocumentService:employee:addDocument info level log message");
+            return new ResponseEntity<>(employeeDocumentService.deleteDocument(empId,docTypeId), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+    }
+
     @PreAuthorize("@auth.allow('ROLE_ADMIN')")
     @PostMapping("/addDocumentType")
     public ResponseEntity<String> addDocumentType(@RequestBody DocumentType documentType) throws IOException {

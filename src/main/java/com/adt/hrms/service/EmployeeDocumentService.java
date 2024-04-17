@@ -15,4 +15,6 @@ public interface EmployeeDocumentService {
     String saveDocument(EmployeeDocumentDTO documentRequest, MultipartFile doc) throws IOException;
 
     Page<EmployeeDocument> getAllDocumentDetails(int page, int size);
+
+    String deleteDocument(int empId,int docTypeId);
 }
