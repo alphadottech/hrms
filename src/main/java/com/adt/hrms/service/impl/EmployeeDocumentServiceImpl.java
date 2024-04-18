@@ -16,7 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +39,6 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
         Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId(employeeId, documentTypeId);
 
         byte[] document = null;
-        String contentType;
 
         try {
             if (opt.isEmpty()) {
@@ -47,28 +47,9 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
             } else {
                 String headerKey = "Content-Disposition";
                 document = opt.get().getDocument();
-                try (InputStream inputStream = new ByteArrayInputStream(document)) {
-                    // Read the first few bytes to determine the file signature
-                    byte[] signatureBytes = new byte[4];
-                    int bytesRead = inputStream.read(signatureBytes);
-
-                    if (bytesRead >= 2 && signatureBytes[0] == (byte) 0xFF && signatureBytes[1] == (byte) 0xD8) {
-                        contentType = "image/jpeg";
-                    } else if (bytesRead >= 3 && signatureBytes[0] == (byte) 0x89 && signatureBytes[1] == (byte) 0x50 && signatureBytes[2] == (byte) 0x4E) {
-                        contentType = "image/png";
-                    } else if (bytesRead >= 4 && signatureBytes[0] == (byte) 0x25 && signatureBytes[1] == (byte) 0x50 && signatureBytes[2] == (byte) 0x44 && signatureBytes[3] == (byte) 0x46) {
-                        contentType = "application/pdf";
-                    } else {
-                        contentType = "application/octet-stream"; // Default if type cannot be determined
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-
                 String headerValue = null;
-                resp.setContentType(contentType);
-                headerValue = "attachment; filename=\"" + opt.get().getDocumentType() + "\"";
+                resp.setContentType("image/jpeg");
+                headerValue = "attachment;filename=" + opt.get().getDocumentType() + ".jpg";
                 System.out.println(" document Downloaded Successfully !!!");
                 resp.setHeader(headerKey, headerValue);
                 resp.flushBuffer();
@@ -78,7 +59,6 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
         }
         return document;
     }
-
 
 
     private static String getExtension(String fileName) {
