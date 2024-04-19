@@ -19,5 +19,5 @@ public interface EmployeeDocumentService {
 
     String deleteDocument(int empId,int docTypeId);
 
-    List<EmployeeDocument> getAllDocumentDetailsById(int empId);
+    List<EmployeeDocument> getAllDocumentDetailsEmpId(int empId);
 }
