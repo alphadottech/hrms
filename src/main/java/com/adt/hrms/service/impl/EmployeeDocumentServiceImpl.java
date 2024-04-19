@@ -159,7 +159,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     }
 
     @Override
-    public List<EmployeeDocument> getAllDocumentDetailsEmpId(int empId) {
+    public List<EmployeeDocument> getAllDocumentDetailsByEmpId(int empId) {
         List<EmployeeDocument> response = employeeDocumentRepo.findAllDocumentDetailsByEmpId(empId);
         return response;
     }

@@ -183,10 +183,10 @@ public class EmployeeOperationController {
         return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetails(page, size), HttpStatus.OK);
     }
 //    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
-    @GetMapping("/getAllDocumentDetailsEmpId/{empId}")
-    public ResponseEntity<List<EmployeeDocument>> getAllDocumentDetailsEmpId(@PathVariable int empId) {
+    @GetMapping("/getAllDocumentDetailsByEmpId/{empId}")
+    public ResponseEntity<List<EmployeeDocument>> getAllDocumentDetailsByEmpId(@PathVariable int empId) {
         LOGGER.info("EmployeeDocument:employee:getAllDocumentDetails info level log message");
-        return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetailsEmpId(empId), HttpStatus.OK);
+        return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetailsByEmpId(empId), HttpStatus.OK);
     }
 
     @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #emp.getEmpId()))")
