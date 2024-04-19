@@ -157,4 +157,10 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
             return e.getMessage();
         }
     }
+
+    @Override
+    public List<EmployeeDocument> getAllDocumentDetailsByEmpId(int empId) {
+        List<EmployeeDocument> response = employeeDocumentRepo.findAllDocumentDetailsByEmpId(empId);
+        return response;
+    }
 }
