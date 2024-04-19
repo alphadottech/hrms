@@ -1,150 +1,240 @@
 package com.adt.hrms.controller;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
+import com.adt.hrms.model.DocumentType;
+import com.adt.hrms.model.EmpPayrollDetails;
+import com.adt.hrms.model.Employee;
+import com.adt.hrms.model.EmployeeDocument;
+import com.adt.hrms.repository.EmployeeDocumentRepo;
+import com.adt.hrms.request.EmployeeDocumentDTO;
+import com.adt.hrms.request.EmployeeRequest;
+import com.adt.hrms.request.EmployeeUpdateByAdminDTO;
+import com.adt.hrms.service.DocumentTypeService;
+import com.adt.hrms.service.EmpPayrollDetailsService;
+import com.adt.hrms.service.EmployeeDocumentService;
+import com.adt.hrms.service.EmployeeService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.adt.hrms.model.Employee;
-import com.adt.hrms.model.EmployeeStatus;
-import com.adt.hrms.request.EmployeeRequest;
-import com.adt.hrms.service.EmployeeService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/employee")
 public class EmployeeOperationController {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
-	private EmployeeService employeeService;
+    @Autowired
+    private EmployeeService employeeService;
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-	@GetMapping("/getById/{empId}")
-	public ResponseEntity<Employee> getEmp(@PathVariable("empId") int empId) {
-		LOGGER.info("Employeeservice:employee:getEmp info level log message");
-		return new ResponseEntity<>(employeeService.getEmp(empId), HttpStatus.OK);
-	}
+    @Autowired
+    private EmployeeDocumentService employeeDocumentService;
 
-	@PostMapping("/addEmp")
-	public ResponseEntity<String> saveEmp(@RequestBody Employee emp) {
-		LOGGER.info("Employeeservice:employee:saveEmp info level log message");
-		return new ResponseEntity<>(employeeService.saveEmp(emp), HttpStatus.OK);
-	}
+    @Autowired
+    private DocumentTypeService documentTypeService;
 
-	// JIRA NO. :- HRMS-106(Bug Resolved) START---
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-	@GetMapping("/getAllEmp")
-	public ResponseEntity<List<Employee>> getAllEmps() {
-		LOGGER.info("Employeeservice:employee:getAllEmps info level log message");
-		return new ResponseEntity<>(employeeService.getAllEmps(), HttpStatus.OK);
-	}
-	// JIRA NO. :- HRMS-106(Bug Resolved) END---
+    @Autowired
+    private EmpPayrollDetailsService empPayrollDetailsService;
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
-	@PutMapping("/updateEmp")
-	public ResponseEntity<String> updateEmp(@RequestPart(value = "resume", required = false) MultipartFile resume,
-			@RequestPart String emp, @RequestPart(value = "aadhar", required = false) MultipartFile aadhar,
-			@RequestPart(value = "pan", required = false) MultipartFile pan) throws IOException {
-		try {
-			LOGGER.info("Employeeservice:employee:updateEmp info level log message");
-			ObjectMapper mapper = new ObjectMapper();
-			EmployeeRequest empRequest = mapper.readValue(emp, EmployeeRequest.class);
-			return new ResponseEntity<>(employeeService.updateEmp(empRequest, resume, aadhar, pan), HttpStatus.OK);
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-	}
+    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @GetMapping("/getById/{empId}")
+    public ResponseEntity<Employee> getPersonalDetailsById(@PathVariable("empId") int empId) {
+        LOGGER.info("Employeeservice:employee:getEmp info level log message");
+        return new ResponseEntity<>(employeeService.getEmp(empId), HttpStatus.OK);
+    }
 
-	// HRMS-82-Start
-	@GetMapping("/downloadResume/{employeeId}")
-	public ResponseEntity<byte[]> downloadResume(@PathVariable int employeeId) {
-		try {
-			Employee employee = employeeService.getEmployeeById(employeeId);
-			if (employee == null) {
-				return ResponseEntity.notFound().build();
-			}
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			headers.setContentDisposition(
-					ContentDisposition.parse("attachment; filename=\"" + employee.getFirstName() + "_Resume.pdf\""));
 
-			return new ResponseEntity<>(employee.getResume(), headers, HttpStatus.OK);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
-	}
-	// HRMS-82-End
+    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @GetMapping("/getAllEmp")
+    public ResponseEntity<Page<Employee>> getAllEmps(@RequestParam(value = "page", defaultValue = "0", required = false) int page,
+                                                     @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+        LOGGER.info("Employee-service:employee:getAllEmp info level log message");
+        return new ResponseEntity<>(employeeService.getAllEmps(page, size), HttpStatus.OK);
+    }
 
-	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager START---
-	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER')")
-	@GetMapping("downloadAadharCard/{id}")
-	public ResponseEntity<byte[]> downloadAadhar(@PathVariable int id, HttpServletResponse resp) throws IOException {
-		LOGGER.info("EmployeeService:EmployeeOperationController:downloadAadhar:AadharCard info level log message");
+    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @GetMapping("/searchByName")
+    public ResponseEntity<Page<Employee>> SearchByName(@RequestParam("query") String name, @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+                                                       @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+        LOGGER.info("Employeeservice:employee:SearchByName info level log message");
+        return ResponseEntity.ok(employeeService.SearchByName(name, page, size));
+    }
 
-		return ResponseEntity.ok(employeeService.downloadAadharCard(id, resp));
-	}
+    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @GetMapping("/searchByEmail")
+    public ResponseEntity<Page<Employee>> SearchByEmail(@RequestParam("query") String email, @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+                                                        @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+        LOGGER.info("Employeeservice:employee:SearchByEmail info level log message");
+        return ResponseEntity.ok(employeeService.SearchByEmail(email, page, size));
+    }
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER')")
-	@GetMapping("downloadPanCard/{id}")
-	public ResponseEntity<byte[]> downloadPan(@PathVariable int id, HttpServletResponse resp) throws IOException {
-		LOGGER.info("EmployeeService:EmployeeOperationController:downloadPan:PanCard info level log message");
 
-		return ResponseEntity.ok(employeeService.downloadPanCard(id, resp));
-	}
-	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager END---
+    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #emp.getEmployeeId()))")
+    @PutMapping("/updatePersonalDetailsById")
+    public ResponseEntity<String> updatePersonalDetailsById(@RequestBody EmployeeRequest emp) {
+        try {
+            LOGGER.info("Employeeservice:employee:updateEmp info level log message");
+            return new ResponseEntity<>(employeeService.updateEmp(emp), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-	@DeleteMapping("/delete/{empId}")
-	public ResponseEntity<String> deleteEmp(@PathVariable("empId") int empId) {
-		LOGGER.info("Employeeservice:employee:deleteEmp info level log message");
-		return new ResponseEntity<String>(employeeService.deleteEmpById(empId), HttpStatus.OK);
-	}
+    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PutMapping("/updateEmpById")
+    public ResponseEntity<String> updateEmpById(@RequestBody EmployeeUpdateByAdminDTO emp) {
+        try {
+            LOGGER.info("Employeeservice:employee:updateEmp info level log message");
+            return new ResponseEntity<>(employeeService.updateEmpById(emp), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-	@GetMapping("/findStatusById/{empId}")
-	public ResponseEntity<EmployeeStatus> findEmployeeByEmployeeId(@PathVariable("empId") Integer empId) {
-		LOGGER.info("Employeeservice:employee:findEmployeeByEmployeeId info level log message");
-		return new ResponseEntity<EmployeeStatus>(employeeService.getEmployeeById(empId), HttpStatus.OK);
+    @PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #employeeId))")
+    @GetMapping("/downloadDocument/{employeeId}/{documentTypeId}")
+    public ResponseEntity<byte[]> downloadDocument(@PathVariable int employeeId, @PathVariable int documentTypeId, HttpServletResponse resp) {
+        try {
+            return ResponseEntity.ok(employeeDocumentService.getEmployeeDocumentById(employeeId, documentTypeId, resp));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
-	}
+    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @PostMapping("/uploadDocument/{empId}/{docTypeId}")
+    public ResponseEntity<String> uploadDocument(@PathVariable int empId, @PathVariable int docTypeId, @RequestPart MultipartFile document) throws IOException {
+        try {
+            LOGGER.info("EmployeeDocumentService:employee:addDocument info level log message");
+            EmployeeDocumentDTO docRequest = new EmployeeDocumentDTO();
+            docRequest.setEmpId(empId);
+            docRequest.setDocTypeId(docTypeId);
+            return new ResponseEntity<>(employeeDocumentService.saveDocument(docRequest, document), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-	@GetMapping("/searchByName")
-	public ResponseEntity<List<Employee>> SearchByName(@RequestParam("query") String name) {
-		LOGGER.info("Employeeservice:employee:SearchByName info level log message");
-		return ResponseEntity.ok(employeeService.SearchByName(name));
-	}
+    }
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-	@GetMapping("/searchByEmail")
-	public ResponseEntity<List<Employee>> SearchByEmail(@RequestParam("query") String email) {
-		LOGGER.info("Employeeservice:employee:SearchByEmail info level log message");
-		return ResponseEntity.ok(employeeService.SearchByEmail(email));
-	}
+    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @DeleteMapping("/deleteDocument/{empId}/{docTypeId}")
+    public ResponseEntity<String> deleteDocument(@PathVariable int empId, @PathVariable int docTypeId) throws IOException {
+        try {
+            LOGGER.info("EmployeeDocumentService:employee:addDocument info level log message");
+            return new ResponseEntity<>(employeeDocumentService.deleteDocument(empId,docTypeId), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+    }
+
+    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PostMapping("/addDocumentType")
+    public ResponseEntity<String> addDocumentType(@RequestBody DocumentType documentType) throws IOException {
+        LOGGER.info("EmployeeDocumentService:employee:addDocumentType info level log message");
+        return new ResponseEntity<>(documentTypeService.saveDocumentType(documentType), HttpStatus.OK);
+    }
+
+    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @DeleteMapping("/deleteDocumentType/{docTypeId}")
+    public ResponseEntity<String> deleteDocumentType(@PathVariable("docTypeId") int docTypeId) {
+        LOGGER.info("DocumentTypeService:DocumentType:deleteDocumentType info level log message");
+        return new ResponseEntity<String>(documentTypeService.deleteDocTypeById(docTypeId), HttpStatus.OK);
+    }
+
+    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PutMapping("/updateDocumentTypeById")
+    public ResponseEntity<String> updateDocumentTypeById(@RequestBody DocumentType documentType) {
+        try {
+            LOGGER.info("DocumentTypeService:Document:updateDocumentType info level log message");
+            return new ResponseEntity<>(documentTypeService.updateDocumentType(documentType), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PreAuthorize("@auth.allow('ROLE_USER')")
+    @GetMapping("/getDocumentTypes")
+    public ResponseEntity<List<DocumentType>> getDocumentTypes() {
+        LOGGER.info("EmployeeDocument:employee:getDocumentTypes info level log message");
+        return new ResponseEntity<List<DocumentType>>(documentTypeService.getDocumentTypes(), HttpStatus.OK);
+    }
+
+    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @GetMapping("/getAllDocumentDetails")
+    public ResponseEntity<Page<EmployeeDocument>> getAllDocumentDetails(@RequestParam(value = "page", defaultValue = "0", required = false) int page,
+                                                                        @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+        LOGGER.info("EmployeeDocument:employee:getAllDocumentDetails info level log message");
+        return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetails(page, size), HttpStatus.OK);
+    }
+
+
+    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #emp.getEmpId()))")
+    @PostMapping("/updatePayrollByUser")
+    public ResponseEntity<String> updateEmpPayrollDetailsByUser(@RequestBody EmpPayrollDetails emp) {
+        LOGGER.info("Employee-service:employee:updateEmpPayrollDetails info level log message");
+        return ResponseEntity.ok(empPayrollDetailsService.updateEmpPayrollDetailsByUser(emp));
+    }
+
+    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PostMapping("/updatePayrollByAdmin")
+    public ResponseEntity<String> updateEmpPayrollByAdmin(@RequestBody EmpPayrollDetails emp) {
+        LOGGER.info("Employee-service:employee:updateEmpPayroll info level log message");
+        return ResponseEntity.ok(empPayrollDetailsService.updateEmpPayroll(emp));
+    }
+
+    @PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @GetMapping("/getEmpPayrollById/{empId}")
+    public ResponseEntity<EmpPayrollDetails> getEmpPayrollDetails(@PathVariable("empId") Integer empId) {
+        LOGGER.info("Employee-service:employee:getEmpPayrollDetails info level log message");
+        return ResponseEntity.ok(empPayrollDetailsService.getEmpPayrollDetails(empId));
+    }
+
+    //	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER')")
+//	@GetMapping("downloadAadharCard/{id}")
+//	public ResponseEntity<byte[]> downloadAadhar(@PathVariable int id, HttpServletResponse resp) throws IOException {
+//		LOGGER.info("EmployeeService:EmployeeOperationController:downloadAadhar:AadharCard info level log message");
+//
+//		return ResponseEntity.ok(employeeService.downloadAadharCard(id, resp));
+//	}
+
+//	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER')")
+//	@GetMapping("downloadPanCard/{id}")
+//	public ResponseEntity<byte[]> downloadPan(@PathVariable int id, HttpServletResponse resp) throws IOException {
+//		LOGGER.info("EmployeeService:EmployeeOperationController:downloadPan:PanCard info level log message");
+//
+//		return ResponseEntity.ok(employeeService.downloadPanCard(id, resp));
+//	}
+    // JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager END---
+
+//	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+//	@DeleteMapping("/delete/{empId}")
+//	public ResponseEntity<String> deleteEmp(@PathVariable("empId") int empId) {
+//		LOGGER.info("Employeeservice:employee:deleteEmp info level log message");
+//		return new ResponseEntity<String>(employeeService.deleteEmpById(empId), HttpStatus.OK);
+//	}
+
+//	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+//	@GetMapping("/findStatusById/{empId}")
+//	public ResponseEntity<EmployeeStatus> findEmployeeStatusByEmployeeId(@PathVariable("empId") Integer empId) {
+//		LOGGER.info("Employeeservice:employee:findEmployeeByEmployeeId info level log message");
+//		return new ResponseEntity<EmployeeStatus>(employeeService.getEmployeeById(empId), HttpStatus.OK);
+//	}
+
 
 }

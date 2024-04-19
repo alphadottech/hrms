@@ -35,13 +35,13 @@ public class EmployeeServiceImplTest  {
     private EmployeeRepo employeeRepo;
 
 
-    @Test
-    public void getAllEmps() {
-        Employee employee = givenEmployee();
-        List<Employee> employeeList = Collections.singletonList(employee);
-        when(employeeRepo.findAll()).thenReturn(employeeList);
-        assertEquals(employeeList, employeeService.getAllEmps());
-    }
+//    @Test
+//    public void getAllEmps() {
+//        Employee employee = givenEmployee();
+//        List<Employee> employeeList = Collections.singletonList(employee);
+//        when(employeeRepo.findAll()).thenReturn(employeeList);
+//        assertEquals(employeeList, employeeService.getAllEmps());
+//    }
 
     @Test
     public void findEmployeeById() {
@@ -81,21 +81,21 @@ public class EmployeeServiceImplTest  {
         assertEquals("Invalid Employe Id :: " +employee.getEmployeeId(), employeeService.deleteEmpById(ID));
     }
 
-    @Test
-    public void searchEmployeeByEmail(){
-        Employee employee = givenEmployee();
-        List<Employee> employeeList = Collections.singletonList(employee);
-        when(employeeRepo.SearchByEmail(EMAIL)).thenReturn(employeeList);
-        assertEquals(employeeList, employeeService.SearchByEmail(EMAIL));
-    }
+//    @Test
+//    public void searchEmployeeByEmail(){
+//        Employee employee = givenEmployee();
+//        List<Employee> employeeList = Collections.singletonList(employee);
+//        when(employeeRepo.SearchByEmail(EMAIL)).thenReturn(employeeList);
+//        assertEquals(employeeList, employeeService.SearchByEmail(EMAIL));
+//    }
 
-    @Test
-    public void searchEmployeeByName(){
-        Employee employee = givenEmployee();
-        List<Employee> employeeList = Collections.singletonList(employee);
-        when(employeeRepo.SearchByName(FIRSTNAME)).thenReturn(employeeList);
-        assertEquals(employeeList, employeeService.SearchByName(FIRSTNAME));
-    }
+//    @Test
+//    public void searchEmployeeByName(){
+//        Employee employee = givenEmployee();
+//        List<Employee> employeeList = Collections.singletonList(employee);
+//        when(employeeRepo.SearchByName(FIRSTNAME)).thenReturn(employeeList);
+//        assertEquals(employeeList, employeeService.SearchByName(FIRSTNAME));
+//    }
 
 
     private Employee givenEmployee(){

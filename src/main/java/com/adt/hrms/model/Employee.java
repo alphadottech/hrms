@@ -1,15 +1,9 @@
 package com.adt.hrms.model;
 
 import java.time.Instant;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Proxy;
@@ -36,8 +30,6 @@ public class Employee {
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean isActive;
 
-	@Column(name = "designation")
-	private String designation;
 
 	@Column(name = "DOB")
 	private String dob;
@@ -55,8 +47,6 @@ public class Employee {
 	@Column(name = "IS_EMAIL_VERIFIED", nullable = false)
 	private Boolean isEmailVerified;
 
-	@Column(name = "JoiningDate")
-	private String joinDate;
 
 	@Column(name = "LAST_NAME")
 	private String lastName;
@@ -67,37 +57,7 @@ public class Employee {
 	@Column(name = "MobileNo")
 	private Long mobileNo;
 
-	@Column(name = "salary")
-	private Double salary;
-
-	// JIRA NO. :- HRMS-106(Bug Resolved) START---
 	@Column(name = "username")
 	private String userName;
-	// JIRA NO. :- HRMS-106(Bug Resolved) END---
-
-	@Column(name = "bank_name")
-	private String bankName;
-
-	@Column(name = "account_number")
-	private String accountNumber;
-
-	@Column(name = "ifsc_code")
-	private String ifscCode;
-
-	// HRMS-82-Start
-	@Lob
-	@Column(name = "resume", columnDefinition = "BLOB")
-	private byte[] resume;
-	// HRMS-82-End
-
-	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager START---
-	@Lob
-	@Column(name = "aadhar_card", columnDefinition = "BLOB")
-	private byte[] aadharCard;
-
-	@Lob
-	@Column(name = "pan_card", columnDefinition = "BLOB")
-	private byte[] panCard;
-	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager END---
 
 }
