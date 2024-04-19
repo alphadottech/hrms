@@ -135,4 +135,26 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 
         return response;
     }
+
+    @Override
+    public String deleteDocument(int empId,int docTypeId) {
+        try {
+            Optional<Employee> employee = employeeRepo.findById(empId);
+            if (employee.isPresent()) {
+                Optional<DocumentType> documentType = documentTypeRepo.findById(docTypeId);
+                if (documentType.isPresent()) {
+                    Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId(empId, docTypeId);
+                    if (opt.isPresent()) {
+                        employeeDocumentRepo.deleteById(opt.get().getId());
+                        return "Document Deleted Successfully";
+                    } else
+                        return "Document is Not Present";
+                } else
+                    return "Invalid Document Type";
+            } else
+                return "No Employee is Present With current Id";
+        } catch (NullPointerException e) {
+            return e.getMessage();
+        }
+    }
 }
