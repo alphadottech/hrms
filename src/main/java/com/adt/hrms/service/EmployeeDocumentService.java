@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 public interface EmployeeDocumentService {
 
@@ -17,4 +18,6 @@ public interface EmployeeDocumentService {
     Page<EmployeeDocument> getAllDocumentDetails(int page, int size);
 
     String deleteDocument(int empId,int docTypeId);
+
+    List<EmployeeDocument> getAllDocumentDetailsByEmpId(int empId);
 }
