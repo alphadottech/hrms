@@ -1,12 +1,5 @@
 package com.adt.hrms.request;
 
-import java.time.Instant;
-
-import javax.persistence.Column;
-
-import org.hibernate.annotations.NaturalId;
-import org.springframework.data.annotation.LastModifiedDate;
-
 import lombok.Data;
 
 @Data

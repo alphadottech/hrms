@@ -6,7 +6,7 @@ import java.util.List;
 import com.adt.hrms.model.Interview;
 import com.adt.hrms.ui.InterviewModelDTO;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface InterviewService {
 
