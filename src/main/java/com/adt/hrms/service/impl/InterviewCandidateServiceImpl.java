@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import javax.persistence.EntityNotFoundException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,8 @@ import com.adt.hrms.model.InterviewCandidateDetails;
 import com.adt.hrms.repository.InterviewCandidateRepo;
 import com.adt.hrms.service.InterviewCandidateService;
 import com.adt.hrms.util.MobileNumberValidation;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class InterviewCandidateServiceImpl implements InterviewCandidateService {

@@ -1,8 +1,14 @@
 package com.adt.hrms.util.errorHandlingUtilities;
 
-import com.adt.hrms.util.errorResponseUtilities.ApiError;
-import com.adt.hrms.util.errorResponseUtilities.ErrorResponse;
-import com.adt.hrms.util.errorResponseUtilities.FieldErrors;
+import java.nio.file.AccessDeniedException;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.core.Ordered;
@@ -19,14 +25,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.ConstraintViolationException;
-import java.nio.file.AccessDeniedException;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import com.adt.hrms.util.errorResponseUtilities.ApiError;
+import com.adt.hrms.util.errorResponseUtilities.ErrorResponse;
+import com.adt.hrms.util.errorResponseUtilities.FieldErrors;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -44,7 +47,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@Override
+	
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String error = "Malformed JSON request";
@@ -81,7 +84,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(errorResponse, errors.getStatus());
 	}
 
-	@Override
+
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		Map<String, String> errors = new HashMap<>();
