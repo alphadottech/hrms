@@ -2,9 +2,9 @@ package com.adt.hrms.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import com.adt.hrms.model.Holiday;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface HolidayService {
 	
