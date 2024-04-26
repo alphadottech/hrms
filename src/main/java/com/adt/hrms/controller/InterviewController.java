@@ -110,7 +110,7 @@ public class InterviewController {
 		return new ResponseEntity<>(positionService.savePositionNew(pdc), HttpStatus.OK);
 	}
 
-//	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 	@GetMapping("/getAllPositionNew")
 	public ResponseEntity<List<PositionDateConverter>> getAllPositionNew() {
 		LOGGER.info("Employeeservice:InterviewPosition:getAllPositionNew info level log message");
