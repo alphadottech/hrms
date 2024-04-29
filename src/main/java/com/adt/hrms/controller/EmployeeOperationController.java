@@ -1,31 +1,7 @@
 package com.adt.hrms.controller;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.adt.hrms.model.DocumentType;
-import com.adt.hrms.model.EmpPayrollDetails;
-import com.adt.hrms.model.Employee;
-import com.adt.hrms.model.EmployeeDocument;
+import com.adt.hrms.model.*;
+import com.adt.hrms.repository.EmployeeDocumentRepo;
 import com.adt.hrms.request.EmployeeDocumentDTO;
 import com.adt.hrms.request.EmployeeRequest;
 import com.adt.hrms.request.EmployeeUpdateByAdminDTO;
@@ -33,8 +9,28 @@ import com.adt.hrms.service.DocumentTypeService;
 import com.adt.hrms.service.EmpPayrollDetailsService;
 import com.adt.hrms.service.EmployeeDocumentService;
 import com.adt.hrms.service.EmployeeService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.services.drive.Drive;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/employee")
@@ -53,6 +49,7 @@ public class EmployeeOperationController {
 
     @Autowired
     private EmpPayrollDetailsService empPayrollDetailsService;
+
 
     @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
     @GetMapping("/getById/{empId}")
@@ -134,20 +131,75 @@ public class EmployeeOperationController {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
     }
 
-    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
-    @DeleteMapping("/deleteDocument/{empId}/{docTypeId}")
-    public ResponseEntity<String> deleteDocument(@PathVariable int empId, @PathVariable int docTypeId) throws IOException {
-        try {
-            LOGGER.info("EmployeeDocumentService:employee:addDocument info level log message");
-            return new ResponseEntity<>(employeeDocumentService.deleteDocument(empId,docTypeId), HttpStatus.OK);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    @GetMapping("downloadFile/{fileId}")
+    public void downloadFile(@PathVariable("fileId") String fileId, HttpServletResponse response) throws GeneralSecurityException, IOException {
+        employeeDocumentService.downloadFileFromDrive(fileId, response);
+    }
+
+    @PostMapping("/uploadToGoogleDrive")
+    public Object handleFileUpload(@RequestParam("file") MultipartFile file,
+                                   @RequestParam("folderName") String subFolderName) throws IOException, GeneralSecurityException {
+        if (file.isEmpty()) {
+            return "File is empty";
+        }
+        if(subFolderName.isEmpty()) {
+            return "Folder name is empty";
+        }
+        //check for empty folderName
+        String folderName = subFolderName;
+
+        HashMap<String, Drive> map = employeeDocumentService.createFolder(folderName);
+
+        Map.Entry<String, Drive> entry = map.entrySet().iterator().next();
+        String folder = entry.getKey();
+        Drive drive = entry.getValue();
+        File tempFile = File.createTempFile("temp", null); // change to --file.getOriginalFilename()
+        file.transferTo(tempFile);
+        String mimeType = getMimeType(Objects.requireNonNull(file.getOriginalFilename()));
+        Res res = employeeDocumentService.uploadFileToDrive(tempFile, mimeType, folder, file.getOriginalFilename(), drive);
+        System.out.println("res = " + res);
+        return res;
+    }
+
+    private String getMimeType(String fileName) {
+
+        String extension = "";
+
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex > 0) {
+            extension = fileName.substring(lastDotIndex + 1);
         }
 
+        switch (extension.toLowerCase()) {
+            case "pdf":
+                return "application/pdf";
+            case "doc":
+            case "docx":
+                return "application/msword";
+            case "xls":
+            case "xlsx":
+                return "application/vnd.ms-excel";
+            case "ppt":
+            case "pptx":
+                return "application/vnd.ms-powerpoint";
+            case "txt":
+                return "text/plain";
+            case "png":
+                return "image/png";
+            case "jpg":
+            case "jpeg":
+                return "image/jpeg";
+            case "gif":
+                return "image/gif";
+            case "mp3":
+                return "audio/mp3";
+            case "mp4":
+                return "video/mp4";
+            default:
+                return "application/octet-stream";
+        }
     }
 
     @PreAuthorize("@auth.allow('ROLE_ADMIN')")
@@ -190,12 +242,7 @@ public class EmployeeOperationController {
         LOGGER.info("EmployeeDocument:employee:getAllDocumentDetails info level log message");
         return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetails(page, size), HttpStatus.OK);
     }
-//    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
-    @GetMapping("/getAllDocumentDetailsByEmpId/{empId}")
-    public ResponseEntity<List<EmployeeDocument>> getAllDocumentDetailsByEmpId(@PathVariable int empId) {
-        LOGGER.info("EmployeeDocument:employee:getAllDocumentDetails info level log message");
-        return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetailsByEmpId(empId), HttpStatus.OK);
-    }
+
 
     @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #emp.getEmpId()))")
     @PostMapping("/updatePayrollByUser")

@@ -1,18 +1,17 @@
 package com.adt.hrms.service;
 
-import java.io.IOException;
-import java.util.List;
-
 import com.adt.hrms.model.EmployeeDocument;
+import com.adt.hrms.model.Res;
 import com.adt.hrms.request.EmployeeDocumentDTO;
-import java.io.IOException;
+import com.google.api.services.drive.Drive;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.adt.hrms.model.EmployeeDocument;
-import com.adt.hrms.request.EmployeeDocumentDTO;
-
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.HashMap;
 
 public interface EmployeeDocumentService {
 
@@ -22,7 +21,12 @@ public interface EmployeeDocumentService {
 
     Page<EmployeeDocument> getAllDocumentDetails(int page, int size);
 
-    String deleteDocument(int empId,int docTypeId);
+    void downloadFileFromDrive(String fileId, HttpServletResponse response) throws IOException, GeneralSecurityException;
 
-    List<EmployeeDocument> getAllDocumentDetailsByEmpId(int empId);
+    Res uploadFileToDrive(File file, String mimeType, String folderId, String originalFilename, Drive drive);
+
+//    String createFolderInDrive(String folderName, Drive service) throws IOException;
+
+        HashMap<String, Drive> createFolder(String folderName) throws GeneralSecurityException, IOException;
+//    void createFolder(String folderName) throws GeneralSecurityException, IOException;
 }
