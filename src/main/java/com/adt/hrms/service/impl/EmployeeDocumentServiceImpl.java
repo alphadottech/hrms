@@ -14,12 +14,20 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.FileContent;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.json.JsonFactory;
-
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.FileList;
-import com.google.api.services.drive.model.Permission;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.http.entity.ContentType;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
+import org.apache.tika.sax.BodyContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +37,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.SAXException;
+//import org.apache.tika.parser.Parse;
 
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
@@ -47,6 +53,8 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     @Value("${organization.folder.name}")
     private String parentFolderName;
 
+    @Value("${allowed.extension.types}")
+    private String allowedExtensions;
     @Value("${spring.profiles.active}")
     private String activeProfile;
 
@@ -60,7 +68,6 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     private EmployeeRepo employeeRepo;
     @Autowired
     private DocumentTypeRepo documentTypeRepo;
-    private static final List<String> ALLOWED_EXTENSIONS = List.of("pdf", "jpg", "png");
     private static final long MAX_FILE_SIZE = 1024 * 1024 * 5;
 
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
@@ -86,11 +93,59 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     }
 
     @Override
+    public String saveDocument(EmployeeDocumentDTO employeeDocumentDTO, MultipartFile doc) throws IOException, TikaException, SAXException {
+        if (doc.isEmpty()) {
+            return "No file selected.";
+        }
+
+        String fileName = doc.getOriginalFilename();
+
+        Parser parser = new AutoDetectParser();
+        Metadata metadata = new Metadata();
+        BodyContentHandler handler = new BodyContentHandler();
+        ParseContext context = new ParseContext();
+        parser.parse(doc.getInputStream(), handler, metadata, context);
+        String contentType = metadata.get(Metadata.CONTENT_TYPE);
+        String extension = FilenameUtils.getExtension(fileName);
+        String[] allowedExt = allowedExtensions.split(",");
+
+        Set<String> ALLOWED_EXTENSIONS = new HashSet<>(Arrays.asList(allowedExt));
+
+        if (!ALLOWED_EXTENSIONS.contains(extension.toLowerCase())) {
+            return "Invalid file extension. Only " + ALLOWED_EXTENSIONS + " allowed.";
+        }
+
+        if (doc.getSize() > MAX_FILE_SIZE) {
+            return "File size exceeds limit. Maximum allowed size is 5MB.";
+        }
+
+        byte[] fileBytes = doc.getBytes();
+        Optional<Employee> employee = employeeRepo.findById(employeeDocumentDTO.getEmpId());
+        Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId(employeeDocumentDTO.getEmpId(), employeeDocumentDTO.getDocTypeId());
+        Optional<DocumentType> documentType = documentTypeRepo.findById(employeeDocumentDTO.getDocTypeId());
+        if (opt.isEmpty()) {
+            if (employee.isPresent()) {
+                if (documentType.isPresent()) {
+                    EmployeeDocument employeeDocument = new EmployeeDocument();
+                    employeeDocument.setDocument(fileBytes);
+                    employeeDocument.setEmpId(employeeDocumentDTO.getEmpId());
+                    employeeDocument.setDocTypeId(employeeDocumentDTO.getDocTypeId());
+                    employeeDocumentRepo.save(employeeDocument);
+                    return "Document type saved successfully";
+                } else
+                    return "Document type with this id doesn't exist";
+            } else
+                return "Employee with this id doesn't exist";
+        } else
+            return "Document Already Present";
+    }
+
+    @Override
     public byte[] getEmployeeDocumentById(int employeeId, int documentTypeId, HttpServletResponse resp) {
         Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId(employeeId, documentTypeId);
 
-
         byte[] document = null;
+        String contentType;
 
         try {
             if (opt.isEmpty()) {
@@ -99,9 +154,33 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
             } else {
                 String headerKey = "Content-Disposition";
                 document = opt.get().getDocument();
+                try (InputStream inputStream = new ByteArrayInputStream(document)) {
+                    // Read the first few bytes to determine the file signature
+                    byte[] signatureBytes = new byte[4];
+                    int bytesRead = inputStream.read(signatureBytes);
+
+                    if (bytesRead >= 2 && signatureBytes[0] == (byte) 0xFF && signatureBytes[1] == (byte) 0xD8) {
+                        contentType = "image/jpeg";
+                    } else if (bytesRead >= 3 && signatureBytes[0] == (byte) 0x89 && signatureBytes[1] == (byte) 0x50 && signatureBytes[2] == (byte) 0x4E) {
+                        contentType = "image/png";
+                    } else if (bytesRead >= 4 && signatureBytes[0] == (byte) 0x25 && signatureBytes[1] == (byte) 0x50 && signatureBytes[2] == (byte) 0x44 && signatureBytes[3] == (byte) 0x46) {
+                        contentType = "application/pdf";
+                    } else if (bytesRead >= 4 && signatureBytes[0] == (byte) 0x44 && signatureBytes[1] == (byte) 0x4F && signatureBytes[2] == (byte) 0x43 && signatureBytes[3] == (byte) 0x00) {
+                        contentType = "application/msword"; // doc
+                    } else if (bytesRead >= 4 && signatureBytes[0] == (byte) 0x74 && signatureBytes[1] == (byte) 0x65 && signatureBytes[2] == (byte) 0x78 && signatureBytes[3] == (byte) 0x74) {
+                        contentType = "text/plain"; // txt
+                    } else if (bytesRead >= 8 && signatureBytes[0] == (byte) 0x50 && signatureBytes[1] == (byte) 0x4B && signatureBytes[2] == (byte) 0x03 && signatureBytes[3] == (byte) 0x04) {
+                        contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"; // docx
+                    } else {
+                        contentType = "application/octet-stream";
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
                 String headerValue = null;
-                resp.setContentType("image/jpeg");
-                headerValue = "attachment;filename=" + opt.get().getDocumentType() + ".jpg";
+                resp.setContentType(contentType);
+                headerValue = "attachment; filename=\"" + opt.get().getDocumentType() + "\"";
                 System.out.println(" document Downloaded Successfully !!!");
                 resp.setHeader(headerKey, headerValue);
                 resp.flushBuffer();
@@ -121,43 +200,6 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
         return "";
     }
 
-
-    @Override
-    public String saveDocument(EmployeeDocumentDTO employeeDocumentDTO, MultipartFile doc) throws IOException {
-        if (doc.isEmpty()) {
-            return "No file selected.";
-        }
-        String fileName = doc.getOriginalFilename();
-        String extension = getExtension(fileName);
-
-        if (!ALLOWED_EXTENSIONS.contains(extension.toLowerCase())) {
-            return "Invalid file extension. Only " + ALLOWED_EXTENSIONS + " allowed.";
-        }
-
-        if (doc.getSize() > MAX_FILE_SIZE) {
-            return "File size exceeds limit. Maximum allowed size is 5MB.";
-        }
-//        String filePath = "uploads/" + fileName;
-//
-//        doc.transferTo(new File(filePath));
-        byte[] fileBytes = doc.getBytes();
-        Optional<Employee> employee = employeeRepo.findById(employeeDocumentDTO.getEmpId());
-        Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId(employeeDocumentDTO.getEmpId(), employeeDocumentDTO.getDocTypeId());
-        Optional<DocumentType> documentType = documentTypeRepo.findById(employeeDocumentDTO.getDocTypeId());
-        if (opt.isEmpty()) {
-            if (employee.isPresent()) {
-                if (documentType.isPresent()) {
-                    EmployeeDocument employeeDocument = new EmployeeDocument();
-                    employeeDocument.setDocument(fileBytes);
-                    employeeDocument.setEmpId(employeeDocumentDTO.getEmpId());
-                    employeeDocument.setDocTypeId(employeeDocumentDTO.getDocTypeId());
-                    employeeDocumentRepo.save(employeeDocument);
-                    return "Document type saved successfully";
-                } else return "Document type with this id doesn't exist";
-            } else return "Employee with this id doesn't exist";
-        } else return "Document Already Present";
-
-    }
 
     @Override
     public Page<EmployeeDocument> getAllDocumentDetails(int page, int size) {
@@ -219,6 +261,34 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 
         result.put(folderName, service);
         return result;
+    }
+
+    @Override
+    public List<EmployeeDocument> getAllDocumentDetailsByEmpId(int empId) {
+        List<EmployeeDocument> response = employeeDocumentRepo.findAllDocumentDetailsByEmpId(empId);
+        return response;
+    }
+
+    @Override
+    public String deleteDocument(int empId, int docTypeId) {
+        try {
+            Optional<Employee> employee = employeeRepo.findById(empId);
+            if (employee.isPresent()) {
+                Optional<DocumentType> documentType = documentTypeRepo.findById(docTypeId);
+                if (documentType.isPresent()) {
+                    Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId(empId, docTypeId);
+                    if (opt.isPresent()) {
+                        employeeDocumentRepo.deleteById(opt.get().getId());
+                        return "Document Deleted Successfully";
+                    } else
+                        return "Document is Not Present";
+                } else
+                    return "Invalid Document Type";
+            } else
+                return "No Employee is Present With current Id";
+        } catch (NullPointerException e) {
+            return e.getMessage();
+        }
     }
 
     private String createOrCheckSubfolder(String folderName, String parentFolderId, Drive service) throws IOException {
@@ -284,7 +354,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
         String productionFileUrl = null;
         try {
             if (activeProfile.equalsIgnoreCase("sit")) {
-//            String employeeSitFolderId = createOrCheckSubfolder(folderName,parentFolderName, drive);
+                employeeSitFolderId = createOrCheckSubfolder(folderName, parentFolderName, drive);
 //                 employeeSitFolderId = createOrCheckSubfolder(folderName, "sit", drive);
 //                if (employeeSitFolderId != null) {
 //                    createEmployeeFolder("sit", folderName, drive);

@@ -133,9 +133,23 @@ public class EmployeeOperationController {
         }
     }
 
+
     @GetMapping("downloadFile/{fileId}")
     public void downloadFile(@PathVariable("fileId") String fileId, HttpServletResponse response) throws GeneralSecurityException, IOException {
         employeeDocumentService.downloadFileFromDrive(fileId, response);
+    }
+
+    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @DeleteMapping("/deleteDocument/{empId}/{docTypeId}")
+    public ResponseEntity<String> deleteDocument(@PathVariable int empId, @PathVariable int docTypeId) throws IOException {
+        try {
+            LOGGER.info("EmployeeDocumentService:employee:addDocument info level log message");
+            return new ResponseEntity<>(employeeDocumentService.deleteDocument(empId,docTypeId), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 
     @PostMapping("/uploadToGoogleDrive")
@@ -241,6 +255,13 @@ public class EmployeeOperationController {
                                                                         @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
         LOGGER.info("EmployeeDocument:employee:getAllDocumentDetails info level log message");
         return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetails(page, size), HttpStatus.OK);
+    }
+
+    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @GetMapping("/getAllDocumentDetailsByEmpId/{empId}")
+    public ResponseEntity<List<EmployeeDocument>> getAllDocumentDetailsByEmpId(@PathVariable int empId) {
+        LOGGER.info("EmployeeDocument:employee:getAllDocumentDetails info level log message");
+        return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetailsByEmpId(empId), HttpStatus.OK);
     }
 
 
