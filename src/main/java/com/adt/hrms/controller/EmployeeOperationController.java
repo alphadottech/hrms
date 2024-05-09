@@ -101,7 +101,7 @@ public class EmployeeOperationController {
         }
     }
 
-//    @PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #employeeId))")
+    @PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #employeeId))")
     @GetMapping("/downloadDocument/{employeeId}/{documentTypeId}")
     public ResponseEntity<String> downloadDocument(@PathVariable int employeeId, @PathVariable int documentTypeId, HttpServletResponse resp) {
         try {
@@ -111,7 +111,7 @@ public class EmployeeOperationController {
         }
     }
 
-//    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
     @PostMapping("/uploadDocument/{empId}/{docTypeId}")
     public ResponseEntity<String> uploadDocument(@PathVariable int empId, @PathVariable int docTypeId, @RequestPart MultipartFile document) throws IOException {
         try {
@@ -127,7 +127,7 @@ public class EmployeeOperationController {
     }
 
 
-//    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
     @DeleteMapping("/deleteDocument/{empId}/{docTypeId}")
     public ResponseEntity<String> deleteDocument(@PathVariable int empId, @PathVariable int docTypeId) throws IOException {
         try {
