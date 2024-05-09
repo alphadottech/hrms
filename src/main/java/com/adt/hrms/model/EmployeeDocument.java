@@ -22,9 +22,6 @@ public class EmployeeDocument {
     @SequenceGenerator(name = "employee_document_seq", allocationSize = 1, schema = "employee_schema")
     private int id;
 
-    @Column(name = "document", columnDefinition = "bytea")
-    private byte[] document;
-
     @ManyToOne
     @JoinColumn(name = "empId", referencedColumnName = "EMPLOYEE_ID", nullable = false, insertable = false, updatable = false)
     private Employee employee;
@@ -35,6 +32,11 @@ public class EmployeeDocument {
     private DocumentType documentType;
     private int docTypeId;
 
+    @OneToOne
+    @JoinColumn(name = "driveDetailsId",referencedColumnName = "drive_id", nullable = false, insertable = false, updatable = false)
+    private DriveDetails driveDetails;
+    private int driveDetailsId;
 
-
+    @Column(name = "fileId")
+    private String fileId;
 }
