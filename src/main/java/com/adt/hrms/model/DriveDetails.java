@@ -30,7 +30,7 @@ public class DriveDetails {
     @Column(name = "status")
     private boolean status;
 
-    @Lob
+
     @Column(name = "config")
     private String config;
 }
