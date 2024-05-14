@@ -1,8 +1,6 @@
 package com.adt.hrms.service.impl;
 
-import com.adt.hrms.model.DocumentType;
-import com.adt.hrms.model.Employee;
-import com.adt.hrms.model.EmployeeDocument;
+import com.adt.hrms.model.*;
 import com.adt.hrms.repository.DocumentTypeRepo;
 import com.adt.hrms.repository.EmployeeDocumentRepo;
 import com.adt.hrms.repository.EmployeeRepo;
@@ -40,6 +38,7 @@ import org.xml.sax.SAXException;
 //import org.apache.tika.parser.Parse;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
@@ -55,8 +54,8 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     @Value("${spring.profiles.active}")
     private String activeProfile;
 
-    @Value("${google.credential.path}")
-    private static String serviceAccountKeyPath;
+//    @Value("${google.credential.path}")
+//    private static String serviceAccountKeyPath;
 
 
     private static final Logger log = LoggerFactory.getLogger(EmployeeDocumentServiceImpl.class);
@@ -72,21 +71,25 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 
     private static final long MAX_FILE_SIZE = 1024 * 1024 * 5;
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private final String SERVICE_ACCOUNT_KEY_PATH = getResourcePath();
+//    private final String SERVICE_ACCOUNT_KEY_PATH = getResourcePath();
 
     private final String folderMimeType = "application/vnd.google-apps.folder";
+    @Autowired
+    private DriveDetailsRepository driveDetailsRepository;
 
-    public String getResourcePath() {
-        ClassLoader classLoader = getClass().getClassLoader();
-        String filePath = classLoader.getResource("cred.json").getFile();
-        System.out.println("File Path: " + filePath);
-        return filePath;
-    }
+//    public String getResourcePath() {
+//        ClassLoader classLoader = getClass().getClassLoader();
+//        String filePath = classLoader.getResource("cred.json").getFile();
+//        System.out.println("File Path: " + filePath);
+//        return filePath;
+//    }
 
-    private Drive createDriveService() throws GeneralSecurityException, IOException {
+    private Drive createDriveService(String serviceAccountKeyJson) throws GeneralSecurityException, IOException {
+
+        InputStream keyStream = new ByteArrayInputStream(serviceAccountKeyJson.getBytes(StandardCharsets.UTF_8));
 
         GoogleCredential credential = GoogleCredential
-                .fromStream(new FileInputStream(SERVICE_ACCOUNT_KEY_PATH))
+                .fromStream(keyStream)
                 .createScoped(Collections.singleton(DriveScopes.DRIVE));
         return new Drive.Builder(GoogleNetHttpTransport
                 .newTrustedTransport(), JSON_FACTORY, credential)
@@ -102,42 +105,46 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 
         Optional<Employee> employee = employeeRepo.findById(employeeDocumentDTO.getEmpId());
         Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId(employeeDocumentDTO.getEmpId(), employeeDocumentDTO.getDocTypeId());
+        Optional<DriveDetails> driveDetails=driveDetailsRepository.findByStatus(true);
         Optional<DocumentType> documentType = documentTypeRepo.findById(employeeDocumentDTO.getDocTypeId());
         if (opt.isEmpty()) {
             if (employee.isPresent()) {
                 if (documentType.isPresent()) {
+                    if(driveDetails.isPresent()) {
+                        String fileName = document.getOriginalFilename();
+                        List<String> extensions = List.of("pdf", "jpg", "png", "jpeg");
+                        Parser parser = new AutoDetectParser();
+                        Metadata metadata = new Metadata();
+                        BodyContentHandler handler = new BodyContentHandler();
+                        ParseContext context = new ParseContext();
+                        parser.parse(document.getInputStream(), handler, metadata, context);
+                        String mimeType = metadata.get(Metadata.CONTENT_TYPE);
+                        String extension = FilenameUtils.getExtension(fileName);
+                        if (!extensions.contains(extension.toLowerCase())) {
+                            return "Invalid file extension. Only " + extensions + " allowed.";
+                        }
+                        if (document.getSize() > MAX_FILE_SIZE) {
+                            return "File size exceeds limit. Maximum allowed size is 5MB.";
+                        }
 
-                    String fileName = document.getOriginalFilename();
-                    List<String> extensions = List.of("pdf", "jpg", "png", "jpeg");
-                    Parser parser = new AutoDetectParser();
-                    Metadata metadata = new Metadata();
-                    BodyContentHandler handler = new BodyContentHandler();
-                    ParseContext context = new ParseContext();
-                    parser.parse(document.getInputStream(), handler, metadata, context);
-                    String mimeType = metadata.get(Metadata.CONTENT_TYPE);
-                    String extension = FilenameUtils.getExtension(fileName);
-                    if (!extensions.contains(extension.toLowerCase())) {
-                        return "Invalid file extension. Only " + extensions + " allowed.";
-                    }
-                    if (document.getSize() > MAX_FILE_SIZE) {
-                        return "File size exceeds limit. Maximum allowed size is 5MB.";
-                    }
-                    Drive driveService = createDriveService();
-                    List<String> list = createFolder(String.valueOf(employeeDocumentDTO.getEmpId()), driveService);
-                    String empFolderId = list.get(0);
-                    File tempFile = File.createTempFile("temp", null);
-                    document.transferTo(tempFile);
-                    String fileId = uploadFileToDrive(tempFile, mimeType, empFolderId, document.getOriginalFilename(), driveService);
+                        Drive driveService = createDriveService(driveDetails.get().getConfig());
+                        List<String> list = createFolder(String.valueOf(employeeDocumentDTO.getEmpId()), driveService);
+                        String empFolderId = list.get(0);
+                        File tempFile = File.createTempFile("temp", null);
+                        document.transferTo(tempFile);
+                        String fileId = uploadFileToDrive(tempFile, mimeType, empFolderId, document.getOriginalFilename(), driveService);
 
-                    if (fileId != null) {
-                        EmployeeDocument employeeDocument = new EmployeeDocument();
-                        employeeDocument.setEmpId(employeeDocumentDTO.getEmpId());
-                        employeeDocument.setDocTypeId(employeeDocumentDTO.getDocTypeId());
-                        employeeDocument.setDriveDetailsId(1);
-                        employeeDocument.setFileId(fileId);
-                        employeeDocumentRepo.save(employeeDocument);
-                        return "Document  saved successfully";
-                    }
+                        if (fileId != null) {
+                            EmployeeDocument employeeDocument = new EmployeeDocument();
+                            employeeDocument.setEmpId(employeeDocumentDTO.getEmpId());
+                            employeeDocument.setDocTypeId(employeeDocumentDTO.getDocTypeId());
+                            employeeDocument.setDriveDetailsId(driveDetails.get().getId());
+                            employeeDocument.setFileId(fileId);
+                            employeeDocumentRepo.save(employeeDocument);
+                            return "Document  saved successfully";
+                        }
+                    }else
+                        return "Document configuration not present";
                 } else
                     return "Document type with this id doesn't exist";
             } else
@@ -150,13 +157,14 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     @Override
     public String getEmployeeDocumentById(int employeeId, int documentTypeId, HttpServletResponse response) {
         Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId(employeeId, documentTypeId);
+        Optional<DriveDetails> driveDetails=driveDetailsRepository.findByStatus(true);
 
         try {
             if (opt.isEmpty()) {
                 System.out.println("Document Not Available !!!");
                 return "Document Not Available !!!";
-            } else {
-                Drive driveService = createDriveService();
+            } else if(driveDetails.isPresent()){
+                Drive driveService = createDriveService(driveDetails.get().getConfig());
                 OutputStream outputStream = response.getOutputStream();
                 com.google.api.services.drive.model.File file = driveService.files().get(opt.get().getFileId()).execute();
                 String mimeType = file.getMimeType();
@@ -175,6 +183,9 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
                 response.setHeader(headerKey, headerValue);
                 response.flushBuffer();
                 return "Document Downloaded Successfully !!!";
+            }
+            else {
+                return "Drive configuration not present !!!";
             }
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
@@ -205,8 +216,9 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
                 Optional<DocumentType> documentType = documentTypeRepo.findById(docTypeId);
                 if (documentType.isPresent()) {
                     Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId(empId, docTypeId);
-                    if (opt.isPresent()) {
-                        Drive driveService = createDriveService();
+                    Optional<DriveDetails> driveDetails=driveDetailsRepository.findByStatus(true);
+                    if (opt.isPresent()&&driveDetails.isPresent()) {
+                        Drive driveService = createDriveService(opt.get().getDriveDetails().getConfig());
                         driveService.files().delete(opt.get().getFileId()).execute();
                         employeeDocumentRepo.deleteById(opt.get().getId());
                         return "Document Deleted Successfully";
