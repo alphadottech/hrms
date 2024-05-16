@@ -1,9 +1,14 @@
 package com.adt.hrms.model;
 
-import lombok.Data;
 import org.hibernate.annotations.Proxy;
 
-import javax.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(catalog = "hrms_sit", schema = "av_schema", name = "DocumentType")

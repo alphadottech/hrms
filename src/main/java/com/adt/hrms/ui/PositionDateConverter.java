@@ -2,7 +2,7 @@ package com.adt.hrms.ui;
 
 import java.util.List;
 
-import javax.persistence.Id;
+import jakarta.persistence.Id;
 
 public class PositionDateConverter {
 

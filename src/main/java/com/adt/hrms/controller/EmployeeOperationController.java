@@ -4,7 +4,6 @@ import com.adt.hrms.model.DocumentType;
 import com.adt.hrms.model.EmpPayrollDetails;
 import com.adt.hrms.model.Employee;
 import com.adt.hrms.model.EmployeeDocument;
-import com.adt.hrms.repository.EmployeeDocumentRepo;
 import com.adt.hrms.request.EmployeeDocumentDTO;
 import com.adt.hrms.request.EmployeeRequest;
 import com.adt.hrms.request.EmployeeUpdateByAdminDTO;
@@ -12,19 +11,17 @@ import com.adt.hrms.service.DocumentTypeService;
 import com.adt.hrms.service.EmpPayrollDetailsService;
 import com.adt.hrms.service.EmployeeDocumentService;
 import com.adt.hrms.service.EmployeeService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -45,6 +42,7 @@ public class EmployeeOperationController {
 
     @Autowired
     private EmpPayrollDetailsService empPayrollDetailsService;
+
 
     @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
     @GetMapping("/getById/{empId}")
@@ -105,7 +103,7 @@ public class EmployeeOperationController {
 
     @PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #employeeId))")
     @GetMapping("/downloadDocument/{employeeId}/{documentTypeId}")
-    public ResponseEntity<byte[]> downloadDocument(@PathVariable int employeeId, @PathVariable int documentTypeId, HttpServletResponse resp) {
+    public ResponseEntity<String> downloadDocument(@PathVariable int employeeId, @PathVariable int documentTypeId, HttpServletResponse resp) {
         try {
             return ResponseEntity.ok(employeeDocumentService.getEmployeeDocumentById(employeeId, documentTypeId, resp));
         } catch (Exception e) {
@@ -122,6 +120,19 @@ public class EmployeeOperationController {
             docRequest.setEmpId(empId);
             docRequest.setDocTypeId(docTypeId);
             return new ResponseEntity<>(employeeDocumentService.saveDocument(docRequest, document), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @DeleteMapping("/deleteDocument/{empId}/{docTypeId}")
+    public ResponseEntity<String> deleteDocument(@PathVariable int empId, @PathVariable int docTypeId) throws IOException {
+        try {
+            LOGGER.info("EmployeeDocumentService:employee:addDocument info level log message");
+            return new ResponseEntity<>(employeeDocumentService.deleteDocument(empId,docTypeId), HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -170,6 +181,13 @@ public class EmployeeOperationController {
         return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetails(page, size), HttpStatus.OK);
     }
 
+    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @GetMapping("/getAllDocumentDetailsByEmpId/{empId}")
+    public ResponseEntity<List<EmployeeDocument>> getAllDocumentDetailsByEmpId(@PathVariable int empId) {
+        LOGGER.info("EmployeeDocument:employee:getAllDocumentDetails info level log message");
+        return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetailsByEmpId(empId), HttpStatus.OK);
+    }
+
 
     @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #emp.getEmpId()))")
     @PostMapping("/updatePayrollByUser")
@@ -191,30 +209,6 @@ public class EmployeeOperationController {
         LOGGER.info("Employee-service:employee:getEmpPayrollDetails info level log message");
         return ResponseEntity.ok(empPayrollDetailsService.getEmpPayrollDetails(empId));
     }
-
-    //	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER')")
-//	@GetMapping("downloadAadharCard/{id}")
-//	public ResponseEntity<byte[]> downloadAadhar(@PathVariable int id, HttpServletResponse resp) throws IOException {
-//		LOGGER.info("EmployeeService:EmployeeOperationController:downloadAadhar:AadharCard info level log message");
-//
-//		return ResponseEntity.ok(employeeService.downloadAadharCard(id, resp));
-//	}
-
-//	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER')")
-//	@GetMapping("downloadPanCard/{id}")
-//	public ResponseEntity<byte[]> downloadPan(@PathVariable int id, HttpServletResponse resp) throws IOException {
-//		LOGGER.info("EmployeeService:EmployeeOperationController:downloadPan:PanCard info level log message");
-//
-//		return ResponseEntity.ok(employeeService.downloadPanCard(id, resp));
-//	}
-    // JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager END---
-
-//	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-//	@DeleteMapping("/delete/{empId}")
-//	public ResponseEntity<String> deleteEmp(@PathVariable("empId") int empId) {
-//		LOGGER.info("Employeeservice:employee:deleteEmp info level log message");
-//		return new ResponseEntity<String>(employeeService.deleteEmpById(empId), HttpStatus.OK);
-//	}
 
 //	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
 //	@GetMapping("/findStatusById/{empId}")
