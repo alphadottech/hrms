@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "silken-binder-421312",
+  "private_key_id": "76c5b445232f04c7dc1e220359e75c03cefbd932",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDmIfUqpRNUvkK9\nqXZHjxCi4bLMGTrcicJunMgE85VcyTIFS3CL8tMDTs7rQAvwwp3RHJTijC8Vnkcw\nADAvxdA83JjWNGxE2WAiK1q/yrsGkZamuC619IsjijLIMAmuzD01RP7VCEEvni76\n1sV2eZcB2l5Q3lUsr6oyrqP4Caav2qvt+6CSDKI30XhePk47O5LEa1zgb3eXaJUK\n3/eJ/yItsbEfU7vGODAOTdymCqK1LrvS8gwaqWCo0a662sLa6ZyzKF5StyZZBb7m\nAIWRhgK7dafJRJEM4vkwu+EsK4E8mWOfRAf7ppZt4kl7ewZo1UZa3No45kG4/sil\ndpuruGanAgMBAAECggEAGIV2HAZSkifjG6t9ahrmlmcp3TveUkEu4bNnUA5rvrhv\nfIdGevBeUflpQew6pCZQmPIMiTvlCSQq3gSpyHAHBB0rVJO/FPJRSdgdx4GWE8Pv\n7gbXxKqbKCfMc8PunDIGCZw28m3P6FTYw6tJMhpln/HBNVO4zACnHYG6AK7NPz/V\nbPdhsRvANrtzU6ui+gPH1OWn1FgiZeS4KVn4wHVXVbkwL+lG0+x7c7tM388uR+jA\nxA4GaZonVn58EwZ9xCgwx3m9QrgDbrtUv+9CNyxaRQFEqF/zlN2sK7ZZjyZ0P9nX\n4TM3zi8LsHf2DZeSbakgiPFL36fYKf+imH2VNM9o0QKBgQD50DSb6MtVDtYAf+pr\n04jFQkbOUHblJmRSefIXGMMAYeQSD6drPh9OnT1Tp6/f8hMrv+s2iQH/eiYFLg28\n83m3rFv8gSOL0nACMKHj9B4zw619s47VYKRcFjd8Ifx7TgZQ2DFB5ulR8p/ikuzA\nZGw0VFwwgzI/6p/2crtPUFl/8QKBgQDr1PqBxLo5NKcAnEMn95oylaVrU5A8b+Nb\nJM8gtYpfA+dcEXuj5PA97pu6SmP+5h3Hx41h2rt3FLv6u3dToqDt3h4mFVmghdYA\nh/waaSN+1ENzYvKYgTDYvzD3Qaxwdalj/T8bcks/peOTNzduq5gtSp29n7F78XxE\netWhhvRoFwKBgClGKSsJT28CQIFcoRKnpJVS2fgEe2Bo83JdC46dXLqXceM6CuNB\nJFMMz7Eep4RMrrYvw2EDSf035Ug9z69EWvvp0ljpzUGwxyjVeCn9j2/mCKgYHqVK\njl1Ynlo4E0scHRcGYT0ONcaAW8JHnC49aVNMDN9HDepZjYxecGwuTltBAoGBAITl\nAMGN3a8M56slY4arNd6Zi50eeuJD3ufmpz30b2Q5q++q/nSON39+7YyeDRmADXoe\nDqL9ArUJHyEc8RJVS8CfcXfegiI+KSkleEBdzR3UeaoVMUYVTzRlES/Ud1rsQydQ\nd3Z9AsB8N/EmpXsdAWVMbfWEfxysKW3hlm8uwJ3DAoGASPqY9WS3paWYTT7obpZg\nbWfeZwA/+9Sl2gWq6XhB5yCgb1P2E/ZK2UicHH2DzovbtuNlQdF0CzTujM1l9ozO\ncKhAtBwedu+fl1troMg3BgncCeUI+bvbnYHTeHzP+1+GTsdmFow0mHpr8Ov+G8Hl\n+ExUTQt4gfLSO1Hu2MlncW4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "google-drive-upload@silken-binder-421312.iam.gserviceaccount.com",
+  "client_id": "113934749797527413542",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/google-drive-upload%40silken-binder-421312.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

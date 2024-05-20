@@ -16,13 +16,13 @@ public interface EmployeeDocumentRepo  extends JpaRepository<EmployeeDocument,In
     @Query(value = "SELECT * FROM employee_schema.employee_document where emp_id = ?1 and doc_type_id= ?2", nativeQuery = true)
     Optional<EmployeeDocument> findDocumentByDocTypeIdAndEmployeeId(int employeeId, int documentTypeId);
 
-    @Query(value = "SELECT id, doc_type_id, emp_id,null as document FROM employee_schema.employee_document",
+    @Query(value = "SELECT * FROM employee_schema.employee_document",
             countQuery = "SELECT count(*) FROM employee_schema.employee_document",
             nativeQuery = true)
     Page<EmployeeDocument> findAllDocumentDetails(Pageable pageable);
     @Query(value = "SELECT * FROM employee_schema.employee_document where doc_type_id= ?1", nativeQuery = true)
     Optional<EmployeeDocument> findByDocTypeId(int docTypeId);
 
-    @Query(value = "SELECT id, doc_type_id, emp_id,null as document FROM employee_schema.employee_document where emp_id= ?1",nativeQuery = true)
+    @Query(value = "SELECT * FROM employee_schema.employee_document where emp_id= ?1",nativeQuery = true)
     List<EmployeeDocument> findAllDocumentDetailsByEmpId(int empId);
 }
