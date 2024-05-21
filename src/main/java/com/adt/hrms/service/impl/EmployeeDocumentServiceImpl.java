@@ -63,7 +63,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 
     @Value("${allowed.extension.types}")
     private String allowedExtensions;
-    @Value("${spring.profiles.active}")
+    @Value("${drive.parent.folder}")
     private String activeProfile;
 
 //    @Value("${google.credential.path}")
