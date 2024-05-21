@@ -27,14 +27,7 @@ public class PositionServiceImpl implements PositionService {
 	@Autowired
 	private PositionRepo positionRepo;
 
-	@Override
-	public String savePosition(PositionModel pm) {
-		Optional<PositionModel> opt = positionRepo.findById(pm.getPositionId());
-		if (opt.isPresent())
-			return "Position with Id " + pm.getPositionId() + " is alredy avalable Pls Insert new ID....";
-		return positionRepo.save(pm).getPositionId() + "Position is Saved";
-
-	}
+	
 
 	@Override
 	public List<PositionModel> getAllPosition() {
@@ -51,10 +44,6 @@ public class PositionServiceImpl implements PositionService {
 			return null;
 	}
 
-	@Override
-	public String updatePosition(PositionModel pm) {
-		return positionRepo.save(pm).getPositionId() + "Position Updated Successfully";
-	}
 
 	@Override
 	public List<PositionUIModel> getAllUIPosition() {

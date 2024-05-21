@@ -32,7 +32,7 @@ public class ProjectEngagementController {
 	@Autowired
 	public ProjectEngagementService projectEngagementService;
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SAVE_NEW_PROJECT_ENGAGEMENT_DETAILS')")
 	@PostMapping("/saveProjectEngagement")
 	public ResponseEntity<String> saveProjectEngagementDetail(@RequestBody ProjectEngagement projectEngagement,
 			HttpServletRequest request) {
@@ -41,7 +41,7 @@ public class ProjectEngagementController {
 				HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('GET_ALL_PROJECT_ENGAGEMENT_DETAILS')")
 	@GetMapping("/allProjectEngagement")
 	public ResponseEntity<List<ProjectEngagement>> allProjectEngagement(HttpServletRequest request) {
 		LOGGER.info("API Call From IP: " + request.getRemoteHost());
@@ -49,7 +49,7 @@ public class ProjectEngagementController {
 				HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('UPDATE_PROJECT_ENGAGEMENT_DETAILS_BY_PROJECT_ID')")
 	@PutMapping("/updateProjectEngagement/{projectId}")
 	public ResponseEntity<String> updateProjectDetail(@PathVariable("projectId") String projectId,
 			@RequestBody ProjectEngagement projectEngagement, HttpServletRequest request) {
@@ -58,7 +58,7 @@ public class ProjectEngagementController {
 				HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('GET_PROJECT_ENGAGEMENT_DETAILS_BY_PROJECT_ID')")
 	@GetMapping("/ProjectEngagementDetailById/{projectId}")
 	public ResponseEntity<ProjectEngagement> getProjectDetailById(@PathVariable("projectId") String projectId,
 			HttpServletRequest request) throws NoSuchFieldException {
@@ -67,7 +67,7 @@ public class ProjectEngagementController {
 				HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('DELETE_PROJECT_ENGAGEMENT_DETAILS_BY_PROJECT_ID')")
 	@DeleteMapping("/DeleteProjectEngagement/{projectId}")
 	public ResponseEntity<String> deleteProjectDetailById(@PathVariable("projectId") String projectId,
 			HttpServletRequest request) throws NoSuchFieldException {
@@ -76,7 +76,7 @@ public class ProjectEngagementController {
 	}
 
 	// JIRA no. :- HRMS-90 START---
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SEARCH_PROJECT_ENGAGEMENT_DETAILS_BY_EMPLOYEE_NAME')")
 	@GetMapping("/SearchByEngagedEmployee")
 	public ResponseEntity<List<ProjectEngagement>> searchByEngagedEmployee(@RequestParam("query") String empName,
 			HttpServletRequest request) {
@@ -86,7 +86,7 @@ public class ProjectEngagementController {
 				HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SEARCH_PROJECT_ENGAGEMENT_DETAILS_BY_PROJECT_NAME')")
 	@GetMapping("/SearchByProjectName")
 	public ResponseEntity<List<ProjectEngagement>> searchByProjectName(@RequestParam("query") String projectName,
 			HttpServletRequest request) {
@@ -95,7 +95,7 @@ public class ProjectEngagementController {
 				HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SEARCH_PROJECT_ENGAGEMENT_DETAILS_BY_PROJECT_DATE')")
 	@GetMapping("/SearchProjectsByDate")
 	public ResponseEntity<List<ProjectEngagement>> searchProjectsByDate(@RequestParam("startDate") String startDate,
 			@RequestParam("endDate") String endDate, HttpServletRequest request) {

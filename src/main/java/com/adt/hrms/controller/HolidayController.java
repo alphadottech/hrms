@@ -31,7 +31,7 @@ public class HolidayController {
 	@Autowired
 	private HolidayService holidayService;
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SAVE_HOLIDAY_DATA')")
 	@PostMapping("/saveHolidayDate")
 	public ResponseEntity<String> addHolidayDate(@RequestParam("holidayName") String holidayName, @RequestParam("date") String date){
 		LOGGER.info("EmployeeService:HolidayController:addHolidayDate");
@@ -44,9 +44,8 @@ public class HolidayController {
 
 		else return ResponseEntity.ok(savedHolidayStatus);
 	}
-
+	@PreAuthorize("@auth.allow('GET_HOLIDAY_DATA')")
 	@GetMapping("/getHolidayCalendar")
-	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER')")
 	public ResponseEntity<List<Holiday>> getHolidayCalendar(){
 		LOGGER.info("EmployeeService:HolidayController:getHolidayCalendar");
 		List<Holiday> listOfHolidays = holidayService.getAllHolidays();
@@ -57,7 +56,7 @@ public class HolidayController {
 		return ResponseEntity.ok(listOfHolidays);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER')")
+	@PreAuthorize("@auth.allow('DOWNLOAD_HOLIDAY_CALENDAR')")
 	@GetMapping("/downloadHolidayCalendar")
 	public ResponseEntity<String> downloadHolidayCalendar(HttpServletResponse resp){
 		LOGGER.info("EmployeeService:HolidayController:downloadHolidayCalendar");
@@ -73,7 +72,7 @@ public class HolidayController {
 
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('UPDATE_HOLIDAY_DATA_BY_HOLIDAY_ID')")
 	@PutMapping("/updateHolidayCalendar/{id}")
 	public ResponseEntity<String> updateHolidayCalendar(@PathVariable(value = "id") Integer hId, @RequestParam(value = "holidayName") String holidayName, @RequestParam(value = "date") String date){
 		LOGGER.info("EmployeeService:HolidayController:updateHolidayCalendar");
@@ -84,7 +83,7 @@ public class HolidayController {
 		return ResponseEntity.ok(status);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('DELETE_HOLIDAYS_DATA_BY_HOLIDAY_ID')")
 	@DeleteMapping("/deleteHolidayById/{id}")
 	public ResponseEntity<String> deleteHoliday(@PathVariable("id") Integer id){
 		LOGGER.info("EmployeeService:HolidayController:deleteHoliday");
@@ -96,7 +95,7 @@ public class HolidayController {
 		return new ResponseEntity<String>(status, HttpStatus.NO_CONTENT);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('GET_HOLIDAY_DATA_BY_ID')")
 	@GetMapping("/getHolidayByID/{id}")
 	public ResponseEntity<Holiday> getHolidayById(@PathVariable("id") Integer hId){
 		LOGGER.info("EmployeeService:HolidayController:getHolidayById");
