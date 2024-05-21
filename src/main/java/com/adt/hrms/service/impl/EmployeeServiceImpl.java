@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.adt.hrms.model.Employee;
-import com.adt.hrms.model.EmployeeStatus;
 import com.adt.hrms.repository.EmployeeRepo;
-import com.adt.hrms.repository.EmployeeStatusRepo;
 import com.adt.hrms.request.EmployeeRequest;
 import com.adt.hrms.request.EmployeeUpdateByAdminDTO;
 import com.adt.hrms.service.EmployeeService;
@@ -23,9 +21,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepo employeeRepo;
 
-    @Autowired
-    private EmployeeStatusRepo employeeStatusRepo;
-
+ 
     // JIRA NO. :- HRMS-106(Bug Resolved) START---
     @Override
     public Page<Employee> getAllEmps(int page, int size) {
@@ -51,13 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         } else return "Invalid Employe Id :: " + empId;
     }
 
-    @Override
-    public EmployeeStatus getEmployeeById(Integer empId) {
-
-        Optional<EmployeeStatus> opt = employeeStatusRepo.findById(empId);
-        if (opt.isPresent()) return opt.get();
-        else return null;
-    }
+  
 
     @Override
     public Employee getEmployeeById(int empId) {

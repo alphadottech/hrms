@@ -47,42 +47,23 @@ public class InterviewController {
 	@Autowired
 	private AVTechnologyService avTechnologyService;
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-	@PostMapping("/addPosition")
-	public ResponseEntity<String> savePosition(@RequestBody PositionModel pm) {
-		LOGGER.info("Employeeservice:InterviewPosition:savePosition info level log message");
-		return new ResponseEntity<>(positionService.savePosition(pm), HttpStatus.OK);
-	}
-
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	
+	@PreAuthorize("@auth.allow('GET_ALL_INTERVIEW_POSITION_DETAILS')")
 	@GetMapping("/getAllPosition")
 	public ResponseEntity<List<PositionUIModel>> getAllPosition() {
 		LOGGER.info("Employeeservice:InterviewPosition:getAllPosition info level log message");
 		return new ResponseEntity<>(positionService.getAllUIPosition(), HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('GET_INTERVIEW_POSITION_DETAILS_BY_ID')")
 	@GetMapping("/getByPositionId/{id}")
 	public ResponseEntity<PositionModel> getByPositionId(@PathVariable("id") Integer id) {
 		LOGGER.info("Employeeservice:InterviewPosition:getByPositionId info level log message");
 		return new ResponseEntity<PositionModel>(positionService.getPosition(id), HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-	@PutMapping("/updatePosition")
-	public ResponseEntity<String> updatePosition(@RequestBody PositionModel pm) {
-		LOGGER.info("Employeeservice:InterviewPosition:updatePosition info level log message");
-		return new ResponseEntity<>(positionService.updatePosition(pm), HttpStatus.OK);
-	}
 
-//	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-//	@PostMapping("/saveInterviewDetails")
-//	public ResponseEntity<String> saveInterviewDetails(@RequestBody Interview interviewRequest) {
-//		LOGGER.info("Employeeservice:Interview:saveInterviewDetails info level log message");
-//		return new ResponseEntity<>(interviewService.saveInterview(interviewRequest), HttpStatus.OK);
-//	}
-
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('GET_ALL_INTERVIEW_DETAILS')")
 	@GetMapping("/getAllInterviewDetails")
 	public ResponseEntity<List<Interview>> getAllInterviewDetails() {
 		LOGGER.info("Employeeservice:InterviewDetails:getAllInterviewDetails info level log message");
@@ -96,28 +77,22 @@ public class InterviewController {
 		return new ResponseEntity<>(interviewService.updateToInterviewDetails(interviewRequest), HttpStatus.OK);
 	}
 
-//	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-//	@GetMapping("/findByDetailsByEmployeeId/{empId}")
-//	public ResponseEntity<Interview> findEmployeeIPByEmployeeId(@PathVariable("empId") Integer empId) {
-//		LOGGER.info("Employeeservice:Interview:findEmployeeIPByEmployeeId info level log message");
-//		return new ResponseEntity<Interview>(interviewService.getInterviewDetailsById(empId), HttpStatus.OK);
-//	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SAVE_NEW_INTERVIEW_POSITION')")
 	@PostMapping("/savePosition")
 	public ResponseEntity<String> savePositionNew(@RequestBody PositionDateConverter pdc) {
 		LOGGER.info("Employeeservice:InterviewPosition:savePositionNew info level log message");
 		return new ResponseEntity<>(positionService.savePositionNew(pdc), HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('GET_ALL_INTERVIEW_POSITION_DETAILS')")
 	@GetMapping("/getAllPositionNew")
 	public ResponseEntity<List<PositionDateConverter>> getAllPositionNew() {
 		LOGGER.info("Employeeservice:InterviewPosition:getAllPositionNew info level log message");
 		return new ResponseEntity<>(positionService.getAllPositionNew(), HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('GET_INTERVIEW_DETAILS_BY_ID_AND_ROUND')")
 	@GetMapping("/getInterviewDetailByIdAndRound")
 	public ResponseEntity<Interview> getInterviewDetailByIDAndRound(@RequestParam("interviewId") int interviewId,
 			@RequestParam("round") int round) {
@@ -128,7 +103,7 @@ public class InterviewController {
 		return ResponseEntity.ok(interview);
 	}
 	//HRMS-66 START Added new method
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('UPDATE_INTERVIEW_DETAILS_BY_ID_AND_ROUND')")
 	@PutMapping("/updateInterviewByIdAndRound")
 	public ResponseEntity<String> updateInterviewDetailByInterviewIDAndRound(@RequestBody InterviewModelDTO intwDTO) {
 
@@ -159,7 +134,7 @@ public class InterviewController {
 	}
 
 	//HRMS-66 START Added new method
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SAVE_NEW_INTERVIEW')")
 	@PostMapping("/saveInterviewNew")
 	public ResponseEntity<String> saveInterviewNew(@RequestBody InterviewModelDTO intwDto) {
 		LOGGER.info("EmployeeService:InterviewController:saveInterviewNew info level log message");
@@ -172,21 +147,21 @@ public class InterviewController {
 	//HRMS-66 END
 
 //	HRMS-92 ---- search by candidate_name,source and client name----------------
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SEARCH_INTERVIEW_BY_CANDIDATE_NAME')")
 	@GetMapping("/SearchByCandidateName")
 	public ResponseEntity<List<Interview>> SearchByCandidateName(@RequestParam("search") String candidateName ) {
 		LOGGER.info("EmployeeService:interview:SearchByCandidateName info level log message");
 		return ResponseEntity.ok(interviewService.SearchByCandidateName(candidateName));
 	}
 	
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SEARCH_INTERVIEWE_BY_SOURCE')")
 	@GetMapping("/SearchBySource")
 	public ResponseEntity<List<Interview>> SearchBySource(@RequestParam("search") String source ) {
 		LOGGER.info("EmployeeService:interview:SearchBySource info level log message");
 		return ResponseEntity.ok(interviewService.SearchBySource(source));
 	}
 	
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SEARCH_INTERVIEW_BY_CLIENT_NAME')")
 	@GetMapping("/SearchByClientName")
 	public ResponseEntity<List<Interview>> SearchByClientName(@RequestParam("search") String clientName ) {
 		LOGGER.info("EmployeeService:interview:SearchByClientName info level log message");
@@ -197,7 +172,7 @@ public class InterviewController {
 
 
 	//HRMS-93
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('EXPORT_INTERVIEW_DETAILS_IN_EXCEL')")
 	@GetMapping("/getInterviewDetailsExcel")
 	public void getAllInterviewDetailsInExcel(@NotNull HttpServletResponse responseExcel)  throws Exception{
 		LOGGER.info("Employeeservice:InterviewDetails:getAllInterviewDetailsInExcel info level log message");
@@ -212,7 +187,7 @@ public class InterviewController {
 	
 	//HRMS-96
 	//HRMS-110
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('EXPORT_INTERVIEW_POSITION_DETAILS_IN_EXCEL')")
 	@GetMapping("/getPositionDetailsExcel")
 	public void getAllPositionDetailsInExcel(@NotNull HttpServletResponse responseExcel)  throws Exception{
 		LOGGER.info("Employeeservice:PositionDetails:getAllPositionDetailsInExcel info level log message");
@@ -225,7 +200,7 @@ public class InterviewController {
 
 	//HRMS-96 END
 
-//	@PreAuthorize("('ROLE_ADMIN')")
+	@PreAuthorize("('UPDATE_INTERVIEW_POSITION_BY_ID')")
 	@PutMapping("/updatePositionNew")
 	public ResponseEntity<String> updatePositionNew(@RequestBody PositionDateConverter pdc) {
 		LOGGER.info("Employeeservice:InterviewPosition:updatePosition info level log message");

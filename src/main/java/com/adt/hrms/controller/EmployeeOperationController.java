@@ -44,7 +44,7 @@ public class EmployeeOperationController {
     private EmpPayrollDetailsService empPayrollDetailsService;
 
 
-    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('GET_EMPLOYEE_PERSONAL_DETAILS_BY_ID',T(java.util.Map).of('currentUser', #empId))")
     @GetMapping("/getById/{empId}")
     public ResponseEntity<Employee> getPersonalDetailsById(@PathVariable("empId") int empId) {
         LOGGER.info("Employeeservice:employee:getEmp info level log message");
@@ -52,7 +52,7 @@ public class EmployeeOperationController {
     }
 
 
-    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PreAuthorize("@auth.allow('GET_ALL_EMPLOYEE_PERSONAL_DETAILS')")
     @GetMapping("/getAllEmp")
     public ResponseEntity<Page<Employee>> getAllEmps(@RequestParam(value = "page", defaultValue = "0", required = false) int page,
                                                      @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
@@ -60,7 +60,7 @@ public class EmployeeOperationController {
         return new ResponseEntity<>(employeeService.getAllEmps(page, size), HttpStatus.OK);
     }
 
-    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PreAuthorize("@auth.allow('SEARCH_EMPLOYEE_BY_NAME')")
     @GetMapping("/searchByName")
     public ResponseEntity<Page<Employee>> SearchByName(@RequestParam("query") String name, @RequestParam(value = "page", defaultValue = "0", required = false) int page,
                                                        @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
@@ -68,7 +68,7 @@ public class EmployeeOperationController {
         return ResponseEntity.ok(employeeService.SearchByName(name, page, size));
     }
 
-    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PreAuthorize("@auth.allow('SEARCH_EMPLOYEE_BY_EMAIL')")
     @GetMapping("/searchByEmail")
     public ResponseEntity<Page<Employee>> SearchByEmail(@RequestParam("query") String email, @RequestParam(value = "page", defaultValue = "0", required = false) int page,
                                                         @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
@@ -77,7 +77,7 @@ public class EmployeeOperationController {
     }
 
 
-    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #emp.getEmployeeId()))")
+    @PreAuthorize("@auth.allow('UPDATE_EMPLOYEE_PERSONAL_DETAILS_BY_ID',T(java.util.Map).of('currentUser', #emp.getEmployeeId()))")
     @PutMapping("/updatePersonalDetailsById")
     public ResponseEntity<String> updatePersonalDetailsById(@RequestBody EmployeeRequest emp) {
         try {
@@ -89,7 +89,7 @@ public class EmployeeOperationController {
         }
     }
 
-    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PreAuthorize("@auth.allow('UPDATE_EMPLOYEE_DETAILS_BY_ADMIN')")
     @PutMapping("/updateEmpById")
     public ResponseEntity<String> updateEmpById(@RequestBody EmployeeUpdateByAdminDTO emp) {
         try {
@@ -101,7 +101,7 @@ public class EmployeeOperationController {
         }
     }
 
-    @PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #employeeId))")
+    @PreAuthorize("@auth.allow('DOWNLOAD_DOCUMENT_BY_EMPLOYE_ID_AND_DOC_TYPE_ID') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #employeeId))")
     @GetMapping("/downloadDocument/{employeeId}/{documentTypeId}")
     public ResponseEntity<String> downloadDocument(@PathVariable int employeeId, @PathVariable int documentTypeId, HttpServletResponse resp) {
         try {
@@ -111,7 +111,7 @@ public class EmployeeOperationController {
         }
     }
 
-    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('UPLOAD_EMPLOYEE_DOCUMENT_BY_DOCUMENT_TYPE_ID',T(java.util.Map).of('currentUser', #empId))")
     @PostMapping("/uploadDocument/{empId}/{docTypeId}")
     public ResponseEntity<String> uploadDocument(@PathVariable int empId, @PathVariable int docTypeId, @RequestPart MultipartFile document) throws IOException {
         try {
@@ -127,7 +127,7 @@ public class EmployeeOperationController {
     }
 
 
-    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('DELETE_DOCUMENT_BY_EMPLOYEE_ID_AND_DOCUMENT_TYPE_ID',T(java.util.Map).of('currentUser', #empId))")
     @DeleteMapping("/deleteDocument/{empId}/{docTypeId}")
     public ResponseEntity<String> deleteDocument(@PathVariable int empId, @PathVariable int docTypeId) throws IOException {
         try {
@@ -140,21 +140,21 @@ public class EmployeeOperationController {
 
     }
 
-    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PreAuthorize("@auth.allow('SAVE_DOCUMENT_TYPE_TO_DB')")
     @PostMapping("/addDocumentType")
     public ResponseEntity<String> addDocumentType(@RequestBody DocumentType documentType) throws IOException {
         LOGGER.info("EmployeeDocumentService:employee:addDocumentType info level log message");
         return new ResponseEntity<>(documentTypeService.saveDocumentType(documentType), HttpStatus.OK);
     }
 
-    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PreAuthorize("@auth.allow('DELETE_DOCUMENT_TYPE_FROM_DB')")
     @DeleteMapping("/deleteDocumentType/{docTypeId}")
     public ResponseEntity<String> deleteDocumentType(@PathVariable("docTypeId") int docTypeId) {
         LOGGER.info("DocumentTypeService:DocumentType:deleteDocumentType info level log message");
         return new ResponseEntity<String>(documentTypeService.deleteDocTypeById(docTypeId), HttpStatus.OK);
     }
 
-    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PreAuthorize("@auth.allow('UPDATE_DOCUMENT_TYPE')")
     @PutMapping("/updateDocumentTypeById")
     public ResponseEntity<String> updateDocumentTypeById(@RequestBody DocumentType documentType) {
         try {
@@ -166,14 +166,14 @@ public class EmployeeOperationController {
         }
     }
 
-    @PreAuthorize("@auth.allow('ROLE_USER')")
+    @PreAuthorize("@auth.allow('GET_ALL_DOCUMENT_TYPES')")
     @GetMapping("/getDocumentTypes")
     public ResponseEntity<List<DocumentType>> getDocumentTypes() {
         LOGGER.info("EmployeeDocument:employee:getDocumentTypes info level log message");
         return new ResponseEntity<List<DocumentType>>(documentTypeService.getDocumentTypes(), HttpStatus.OK);
     }
 
-    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PreAuthorize("@auth.allow('GET_ALL_EMPLOYEE_DOCUMENT_DETAILS')")
     @GetMapping("/getAllDocumentDetails")
     public ResponseEntity<Page<EmployeeDocument>> getAllDocumentDetails(@RequestParam(value = "page", defaultValue = "0", required = false) int page,
                                                                         @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
@@ -181,7 +181,7 @@ public class EmployeeOperationController {
         return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetails(page, size), HttpStatus.OK);
     }
 
-    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('GET_ALL_DOCUMENT_DETAILS_BY_EMP_ID',T(java.util.Map).of('currentUser', #empId))")
     @GetMapping("/getAllDocumentDetailsByEmpId/{empId}")
     public ResponseEntity<List<EmployeeDocument>> getAllDocumentDetailsByEmpId(@PathVariable int empId) {
         LOGGER.info("EmployeeDocument:employee:getAllDocumentDetails info level log message");
@@ -189,33 +189,26 @@ public class EmployeeOperationController {
     }
 
 
-    @PreAuthorize("@auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #emp.getEmpId()))")
+    @PreAuthorize("@auth.allow('UPDATE_PAYROLL_DETAILS_BY_USER',T(java.util.Map).of('currentUser', #emp.getEmpId()))")
     @PostMapping("/updatePayrollByUser")
     public ResponseEntity<String> updateEmpPayrollDetailsByUser(@RequestBody EmpPayrollDetails emp) {
         LOGGER.info("Employee-service:employee:updateEmpPayrollDetails info level log message");
         return ResponseEntity.ok(empPayrollDetailsService.updateEmpPayrollDetailsByUser(emp));
     }
 
-    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PreAuthorize("@auth.allow('UPDATE_PAYROLL_DETAILS_BY_ADMIN')")
     @PostMapping("/updatePayrollByAdmin")
     public ResponseEntity<String> updateEmpPayrollByAdmin(@RequestBody EmpPayrollDetails emp) {
         LOGGER.info("Employee-service:employee:updateEmpPayroll info level log message");
         return ResponseEntity.ok(empPayrollDetailsService.updateEmpPayroll(emp));
     }
 
-    @PreAuthorize("@auth.allow('ROLE_ADMIN') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('GET_EMPLOYEE_PAYROLL_DETAILS_BY_EMPLOYEE_ID') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
     @GetMapping("/getEmpPayrollById/{empId}")
     public ResponseEntity<EmpPayrollDetails> getEmpPayrollDetails(@PathVariable("empId") Integer empId) {
         LOGGER.info("Employee-service:employee:getEmpPayrollDetails info level log message");
         return ResponseEntity.ok(empPayrollDetailsService.getEmpPayrollDetails(empId));
     }
-
-//	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
-//	@GetMapping("/findStatusById/{empId}")
-//	public ResponseEntity<EmployeeStatus> findEmployeeStatusByEmployeeId(@PathVariable("empId") Integer empId) {
-//		LOGGER.info("Employeeservice:employee:findEmployeeByEmployeeId info level log message");
-//		return new ResponseEntity<EmployeeStatus>(employeeService.getEmployeeById(empId), HttpStatus.OK);
-//	}
 
 
 }

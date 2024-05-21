@@ -3,7 +3,6 @@ package com.adt.hrms.service;
 import org.springframework.data.domain.Page;
 
 import com.adt.hrms.model.Employee;
-import com.adt.hrms.model.EmployeeStatus;
 import com.adt.hrms.request.EmployeeRequest;
 import com.adt.hrms.request.EmployeeUpdateByAdminDTO;
 
@@ -27,7 +26,6 @@ public interface EmployeeService {
 //	public byte[] downloadPanCard(int id, HttpServletResponse resp) throws IOException;
 //	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager END---
 
-	public EmployeeStatus getEmployeeById(Integer empId);
 
 	public Employee getEmployeeById(int empId);
 

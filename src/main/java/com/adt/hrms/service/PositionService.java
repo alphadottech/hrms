@@ -13,10 +13,6 @@ public interface PositionService {
 
 	public PositionModel getPosition(Integer id);
 
-	public String savePosition(PositionModel pm);
-
-	public String updatePosition(PositionModel pm);
-
 	public List<PositionUIModel> getAllUIPosition();
 
 	public String savePositionNew(PositionDateConverter pdc);
