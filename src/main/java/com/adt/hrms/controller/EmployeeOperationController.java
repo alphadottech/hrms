@@ -101,7 +101,7 @@ public class EmployeeOperationController {
         }
     }
 
-    @PreAuthorize("@auth.allow('DOWNLOAD_DOCUMENT_BY_EMPLOYE_ID_AND_DOC_TYPE_ID') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #employeeId))")
+    @PreAuthorize("@auth.allow('DOWNLOAD_DOCUMENT_BY_EMPLOYE_ID_AND_DOC_TYPE_ID',T(java.util.Map).of('currentUser', #employeeId))")
     @GetMapping("/downloadDocument/{employeeId}/{documentTypeId}")
     public ResponseEntity<String> downloadDocument(@PathVariable int employeeId, @PathVariable int documentTypeId, HttpServletResponse resp) {
         try {
