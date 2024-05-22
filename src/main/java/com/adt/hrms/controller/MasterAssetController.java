@@ -31,7 +31,7 @@ public class MasterAssetController {
 	@Autowired
 	private MasterAssetService service;
 	
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SAVE_NEW_MASTERAS_SET')")
 	@PostMapping("/insertAssets")
 	public ResponseEntity<String> insertAsset(@RequestBody MasterAsset asset) {
 		LOGGER.info("MasterAssetService:masterAsset:saveMasterAsset info level log message");
@@ -44,7 +44,7 @@ public class MasterAssetController {
 		return new ResponseEntity<String>(result,HttpStatus.OK);
 	}
 	
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('GET_MASTER_ASSET_DETAILS_BY_ID')")
 	@GetMapping("/GetAssetById/{id}")
 	public ResponseEntity<MasterAsset> GetAssetById(@PathVariable Integer id){
 		LOGGER.info("MasterAssetService:masterAsset:TakeAssetById info level log message");
@@ -52,21 +52,21 @@ public class MasterAssetController {
 }
 	
 	//JyotiPancholi - Jira no ->  HRMS-83(START)
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SEARCH_MASTER_ASSET_DETAILS_BY_USER')")
 	@GetMapping("/searchByAssetUser")
 	public ResponseEntity<List<MasterAsset>> SearchAssetUser(@RequestParam("query") String query) {
 		LOGGER.info("MasterAssetService:masterAsset:SearchByAssetUser info level log message");
 		return ResponseEntity.ok(service.SearchByAssetUser(query));
 	}
 	
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SEARCH_MASTER_ASSET_BY_STATUS')")
 	@GetMapping("/searchByStatus")
 	public ResponseEntity<List<MasterAsset>> SearchByStatus(@RequestParam("query") String query) {
 		LOGGER.info("MasterAssetService:masterAsset:SearchByStatus info level log message");
 		return ResponseEntity.ok(service.SearchByStatus(query));
 	}
 	
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SEARCH_MASTER_ASSET_BY_ASSET_TYPE')")
 	@GetMapping("/searchByAssetType")
 	public ResponseEntity<List<MasterAsset>> SearchByAssetType(@RequestParam("query") String query) {
 		LOGGER.info("MasterAssetService:masterAsset:SearchByAssetType info level log message");
@@ -75,7 +75,7 @@ public class MasterAssetController {
 	//JyotiPancholi - Jira no ->  HRMS-83(END)
 	
 	//RitikaBhawsar - Jira no ->  HRMS-63(START)
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('UPDATE_MASTER_ASSET_BY_ASSET_ID')")
 	@PutMapping("/updateMasterAssetbyid")
 	public ResponseEntity<String> updateMasterAssetbyid( @RequestBody MasterAsset asset) 
 	{
@@ -85,7 +85,7 @@ public class MasterAssetController {
 		return new ResponseEntity<String>(service.updateMasterAssetById(asset), HttpStatus.OK);
 	}
 	
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('GET_ALL_MASTER_ASSET_DETAILS')")
 	@GetMapping("/getAllMasterAsset")
 	public ResponseEntity<List<MasterAsset>> findAllAssets()
 	{

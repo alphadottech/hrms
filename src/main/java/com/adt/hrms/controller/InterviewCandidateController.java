@@ -31,7 +31,7 @@ public class InterviewCandidateController {
 	@Autowired
 	InterviewCandidateService interviewCandidateService;
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('SAVE_INTERVIEW_CANDIDATE_DETAILS')")
 	@PostMapping("saveInterviewCandidate")
 	public ResponseEntity<String> saveInterviewCandidate(
 			@RequestBody InterviewCandidateDetails interviewCandidateDetails, HttpServletRequest request) {
@@ -40,7 +40,7 @@ public class InterviewCandidateController {
 				HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('GET_ALL_INTERVIEW_CANDIDATE_DETAILS')")
 	@GetMapping("/allInterviewCandidate")
 	public ResponseEntity<List<InterviewCandidateDetails>> getAllInterviewCandidate(HttpServletRequest request) {
 		LOGGER.info("API Call From IP: " + request.getRemoteHost());
@@ -48,7 +48,7 @@ public class InterviewCandidateController {
 				interviewCandidateService.getAllInterviewCandidateDetail(), HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('UPDATE_INTERVIEW_CANDIDATE_DETAILS_BY_ID')")
 	@PutMapping("/updateInterviewCandidate/{candidateId}")
 	public ResponseEntity<String> updateInterviewCandidate(@PathVariable("candidateId") int candidateId,
 			@RequestBody InterviewCandidateDetails interviewCandidateDetails, HttpServletRequest request) {
@@ -58,7 +58,7 @@ public class InterviewCandidateController {
 				HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('GET_INTERVIEW_CANDIDATE_DETAILS_BY_ID')")
 	@GetMapping("/interviewCandidateById/{candidateId}")
 	public ResponseEntity<InterviewCandidateDetails> getInterviewCandidateById(
 			@PathVariable("candidateId") int candidateId, HttpServletRequest request) throws NoSuchFieldException {
@@ -67,7 +67,7 @@ public class InterviewCandidateController {
 				interviewCandidateService.getInterviewCandidateById(candidateId), HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('ROLE_ADMIN')")
+	@PreAuthorize("@auth.allow('DELETE_INTERVIEW_CANDIDATE_BY_ID')")
 	@DeleteMapping("/interviewCandidateById/{candidateId}")
 	public ResponseEntity<String> deleteInterviewCandidateById(@PathVariable("candidateId") int candidateId,
 			HttpServletRequest request) throws NoSuchFieldException {

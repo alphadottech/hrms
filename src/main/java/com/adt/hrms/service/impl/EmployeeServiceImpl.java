@@ -6,13 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.adt.hrms.model.Employee;
-import com.adt.hrms.model.EmployeeStatus;
 import com.adt.hrms.repository.EmployeeRepo;
-import com.adt.hrms.repository.EmployeeStatusRepo;
 import com.adt.hrms.request.EmployeeRequest;
 import com.adt.hrms.request.EmployeeUpdateByAdminDTO;
 import com.adt.hrms.service.EmployeeService;
@@ -23,9 +22,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepo employeeRepo;
 
-    @Autowired
-    private EmployeeStatusRepo employeeStatusRepo;
-
+ 
     // JIRA NO. :- HRMS-106(Bug Resolved) START---
     @Override
     public Page<Employee> getAllEmps(int page, int size) {
@@ -51,13 +48,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         } else return "Invalid Employe Id :: " + empId;
     }
 
-    @Override
-    public EmployeeStatus getEmployeeById(Integer empId) {
-
-        Optional<EmployeeStatus> opt = employeeStatusRepo.findById(empId);
-        if (opt.isPresent()) return opt.get();
-        else return null;
-    }
+  
 
     @Override
     public Employee getEmployeeById(int empId) {
@@ -195,4 +186,70 @@ public class EmployeeServiceImpl implements EmployeeService {
 //		return pan;
 //	}
 //	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager END---
+@Override
+public Page<Employee> searchEmployees(String firstName, String lastName, String email, Long mobileNo, String firstLetter, int page, int size) {
+    if (email == "") {
+        throw new IllegalArgumentException("Invalid email value");
+    } else if (email != null && !isValidEmail(email)) {
+        throw new IllegalArgumentException("Invalid email format");
+
+    }
+    if (firstName != null && !firstName.isEmpty() && containsDigit(firstName)) {
+        throw new IllegalArgumentException("First name cannot contain digits or numbers");
+    } else if (firstName == "") {
+        throw new IllegalArgumentException("First name cannot be empty");
+    }
+    if (lastName != null && !lastName.isEmpty() && containsDigit(lastName)) {
+        throw new IllegalArgumentException("Last name cannot contain digits or numbers");
+    } else if (lastName == "") {
+        throw new IllegalArgumentException("Last name cannot be empty");
+    }
+    if (mobileNo != null) {
+        if (String.valueOf(mobileNo).length() < 10) {
+            throw new IllegalArgumentException("Mobile number must not be less than 10 digits");
+        } else if (String.valueOf(mobileNo).length() > 10) {
+            throw new IllegalArgumentException("Mobile number must not be greater than 10 digits");
+        }
+    } else if (mobileNo == null && firstName == null && lastName == null && firstLetter == null && email == null) {
+        throw new IllegalArgumentException("Mobile number must not be null");
+    }
+    Pageable pageable = PageRequest.of(page, size);
+    Specification<Employee> spec = Specification.where(null);
+
+
+    if (firstName != null && !firstName.isEmpty()) {
+        spec = spec.or((root, query, cb) -> cb.like(cb.lower(root.get("firstName")), firstName.toLowerCase() + "%"));
+    }
+    if (lastName != null && !lastName.isEmpty()) {
+        spec = spec.or((root, query, cb) -> cb.like(cb.lower(root.get("lastName")), lastName.toLowerCase() + "%"));
+    }
+    if (email != null && !email.isEmpty()) {
+        spec = spec.or((root, query, cb) -> cb.equal(root.get("email"), email));
+    }
+    if (mobileNo != null) {
+        spec = spec.or((root, query, cb) -> cb.equal(root.get("mobileNo"), mobileNo));
+    }
+
+    // Add criteria for searching by first letter of first name
+    if (firstLetter != null && !firstLetter.isEmpty()) {
+        spec = spec.or((root, query, cb) -> cb.like(cb.lower(root.get("firstName")), firstLetter.toLowerCase() + "%"));
+    }
+
+    return employeeRepo.findAll(spec, pageable);
+}
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email.matches(emailRegex);
+    }
+
+    private boolean containsDigit(String str) {
+        for (char c : str.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return true;
+
+            }
+        }
+        return false;
+    }
 }

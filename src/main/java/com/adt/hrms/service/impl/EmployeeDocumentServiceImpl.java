@@ -1,23 +1,17 @@
 package com.adt.hrms.service.impl;
 
-import com.adt.hrms.model.*;
-import com.adt.hrms.repository.DocumentTypeRepo;
-import com.adt.hrms.repository.EmployeeDocumentRepo;
-import com.adt.hrms.repository.EmployeeRepo;
-import com.adt.hrms.repository.EmployeeStatusRepo;
-import com.adt.hrms.request.EmployeeDocumentDTO;
-import com.adt.hrms.service.EmployeeDocumentService;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.FileContent;
-import com.google.api.client.http.HttpResponse;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveScopes;
-import com.google.api.services.drive.model.FileList;
-import com.google.api.services.drive.model.Permission;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -37,10 +31,28 @@ import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 //import org.apache.tika.parser.Parse;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
-import java.util.*;
+import com.adt.hrms.model.DocumentType;
+import com.adt.hrms.model.DriveDetails;
+import com.adt.hrms.model.DriveDetailsRepository;
+import com.adt.hrms.model.Employee;
+import com.adt.hrms.model.EmployeeDocument;
+import com.adt.hrms.repository.DocumentTypeRepo;
+import com.adt.hrms.repository.EmployeeDocumentRepo;
+import com.adt.hrms.repository.EmployeeRepo;
+import com.adt.hrms.request.EmployeeDocumentDTO;
+import com.adt.hrms.service.EmployeeDocumentService;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.FileContent;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.drive.model.FileList;
+import com.google.api.services.drive.model.Permission;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 
 @Service
@@ -51,7 +63,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 
     @Value("${allowed.extension.types}")
     private String allowedExtensions;
-    @Value("${spring.profiles.active}")
+    @Value("${drive.parent.folder}")
     private String activeProfile;
 
 //    @Value("${google.credential.path}")
@@ -65,9 +77,6 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     private EmployeeRepo employeeRepo;
     @Autowired
     private DocumentTypeRepo documentTypeRepo;
-
-    @Autowired
-    private EmployeeStatusRepo employeeStatusRepo;
 
     private static final long MAX_FILE_SIZE = 1024 * 1024 * 5;
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();

@@ -27,14 +27,7 @@ public class PositionServiceImpl implements PositionService {
 	@Autowired
 	private PositionRepo positionRepo;
 
-	@Override
-	public String savePosition(PositionModel pm) {
-		Optional<PositionModel> opt = positionRepo.findById(pm.getPositionId());
-		if (opt.isPresent())
-			return "Position with Id " + pm.getPositionId() + " is alredy avalable Pls Insert new ID....";
-		return positionRepo.save(pm).getPositionId() + "Position is Saved";
-
-	}
+	
 
 	@Override
 	public List<PositionModel> getAllPosition() {
@@ -51,10 +44,6 @@ public class PositionServiceImpl implements PositionService {
 			return null;
 	}
 
-	@Override
-	public String updatePosition(PositionModel pm) {
-		return positionRepo.save(pm).getPositionId() + "Position Updated Successfully";
-	}
 
 	@Override
 	public List<PositionUIModel> getAllUIPosition() {
@@ -139,6 +128,7 @@ public class PositionServiceImpl implements PositionService {
 	public List<PositionDateConverter> getAllPositionNew() {
 		List<PositionModel> pmlist = getAllPosition();
 		List<PositionDateConverter> pdclist = new ArrayList<PositionDateConverter>();
+		
 
 		for (int i = 0; i < pmlist.size(); i++) {
 			PositionModel pm = pmlist.get(i);
@@ -152,13 +142,17 @@ public class PositionServiceImpl implements PositionService {
 			obj.setPositionType(pm.getPositionType());
 			obj.setVacancy(pm.getVacancy());
 
-			LocalDate date1 = pm.getPositionOpenDate().toLocalDate();
-			String positionopenstr = date1.toString();
-			obj.setPositionopendate(positionopenstr);
+			LocalDate positionOpenDate = null;
+            if (pm.getPositionOpenDate() != null) {
+                positionOpenDate = pm.getPositionOpenDate().toLocalDate();
+            }
+            obj.setPositionopendate(positionOpenDate != null ? positionOpenDate.toString() : "null");
 
-			LocalDate date2 = pm.getPositionCloseDate().toLocalDate();
-			String positionclosestr = date2.toString();
-			obj.setPositionclosedate(positionclosestr);
+            LocalDate positionCloseDate = null;
+            if (pm.getPositionCloseDate() != null) {
+                positionCloseDate = pm.getPositionCloseDate().toLocalDate();
+            }
+            obj.setPositionclosedate(positionCloseDate != null ? positionCloseDate.toString() : "null");
 
 			pdclist.add(obj);
 		}
