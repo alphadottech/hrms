@@ -101,7 +101,7 @@ public class EmployeeOperationController {
         }
     }
 
-    @PreAuthorize("@auth.allow('DOWNLOAD_DOCUMENT_BY_EMPLOYE_ID_AND_DOC_TYPE_ID',T(java.util.Map).of('currentUser', #employeeId))")
+    @PreAuthorize("@auth.allow('DOWNLOAD_DOCUMENT_BY_EMPLOYE_ID_AND_DOC_TYPE_ID')")
     @GetMapping("/downloadDocument/{employeeId}/{documentTypeId}")
     public ResponseEntity<String> downloadDocument(@PathVariable int employeeId, @PathVariable int documentTypeId, HttpServletResponse resp) {
         try {
@@ -111,7 +111,7 @@ public class EmployeeOperationController {
         }
     }
 
-    @PreAuthorize("@auth.allow('UPLOAD_EMPLOYEE_DOCUMENT_BY_DOCUMENT_TYPE_ID',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('UPLOAD_EMPLOYEE_DOCUMENT_BY_DOCUMENT_TYPE_ID')")
     @PostMapping("/uploadDocument/{empId}/{docTypeId}")
     public ResponseEntity<String> uploadDocument(@PathVariable int empId, @PathVariable int docTypeId, @RequestPart MultipartFile document) throws IOException {
         try {
@@ -127,7 +127,7 @@ public class EmployeeOperationController {
     }
 
 
-    @PreAuthorize("@auth.allow('DELETE_DOCUMENT_BY_EMPLOYEE_ID_AND_DOCUMENT_TYPE_ID',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('DELETE_DOCUMENT_BY_EMPLOYEE_ID_AND_DOCUMENT_TYPE_ID')")
     @DeleteMapping("/deleteDocument/{empId}/{docTypeId}")
     public ResponseEntity<String> deleteDocument(@PathVariable int empId, @PathVariable int docTypeId) throws IOException {
         try {
@@ -181,7 +181,7 @@ public class EmployeeOperationController {
         return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetails(page, size), HttpStatus.OK);
     }
 
-    @PreAuthorize("@auth.allow('GET_ALL_DOCUMENT_DETAILS_BY_EMP_ID',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('GET_ALL_DOCUMENT_DETAILS_BY_EMP_ID')")
     @GetMapping("/getAllDocumentDetailsByEmpId/{empId}")
     public ResponseEntity<List<EmployeeDocument>> getAllDocumentDetailsByEmpId(@PathVariable int empId) {
         LOGGER.info("EmployeeDocument:employee:getAllDocumentDetails info level log message");
