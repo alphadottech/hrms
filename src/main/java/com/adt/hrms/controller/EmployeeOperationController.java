@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/employee")
 public class EmployeeOperationController {
@@ -209,6 +209,23 @@ public class EmployeeOperationController {
         LOGGER.info("Employee-service:employee:getEmpPayrollDetails info level log message");
         return ResponseEntity.ok(empPayrollDetailsService.getEmpPayrollDetails(empId));
     }
+
+    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @GetMapping("/searchEmployees")
+    public ResponseEntity<Page<Employee>> searchEmployees(
+            @RequestParam(value = "firstName", required = false) String firstName,
+            @RequestParam(value = "lastName", required = false) String lastName,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "mobileNo", required = false) Long mobileNo,
+            @RequestParam(value = "firstLetter", required = false) String firstLetter,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        LOGGER.info("EmployeeService: Searching for employees");
+        Page<Employee> searchResult = employeeService.searchEmployees(firstName,lastName,email,mobileNo, firstLetter,page, size);
+        return ResponseEntity.ok(searchResult);
+    }
+
+
 
 
 }
