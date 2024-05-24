@@ -210,7 +210,7 @@ public class EmployeeOperationController {
         return ResponseEntity.ok(empPayrollDetailsService.getEmpPayrollDetails(empId));
     }
 
-    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PreAuthorize("@auth.allow('SEARCH_EMPLOYEE_BY_CRITERIA')")
     @GetMapping("/searchEmployees")
     public ResponseEntity<Page<Employee>> searchEmployees(
             @RequestParam(value = "firstName", required = false) String firstName,
