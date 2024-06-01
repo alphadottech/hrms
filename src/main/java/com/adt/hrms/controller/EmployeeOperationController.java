@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/employee")
@@ -101,7 +102,7 @@ public class EmployeeOperationController {
         }
     }
 
-    @PreAuthorize("@auth.allow('DOWNLOAD_DOCUMENT_BY_EMPLOYE_ID_AND_DOC_TYPE_ID')")
+    @PreAuthorize("@auth.allow('DOWNLOAD_DOCUMENT_BY_EMPLOYEE_ID_AND_DOC_TYPE_ID')")
     @GetMapping("/downloadDocument/{employeeId}/{documentTypeId}")
     public ResponseEntity<String> downloadDocument(@PathVariable int employeeId, @PathVariable int documentTypeId, HttpServletResponse resp) {
         try {
@@ -132,7 +133,7 @@ public class EmployeeOperationController {
     public ResponseEntity<String> deleteDocument(@PathVariable int empId, @PathVariable int docTypeId) throws IOException {
         try {
             LOGGER.info("EmployeeDocumentService:employee:addDocument info level log message");
-            return new ResponseEntity<>(employeeDocumentService.deleteDocument(empId,docTypeId), HttpStatus.OK);
+            return new ResponseEntity<>(employeeDocumentService.deleteDocument(empId, docTypeId), HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -221,11 +222,9 @@ public class EmployeeOperationController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
         LOGGER.info("EmployeeService: Searching for employees");
-        Page<Employee> searchResult = employeeService.searchEmployees(firstName,lastName,email,mobileNo, firstLetter,page, size);
+        Page<Employee> searchResult = employeeService.searchEmployees(firstName, lastName, email, mobileNo, firstLetter, page, size);
         return ResponseEntity.ok(searchResult);
     }
-
-
 
 
 }

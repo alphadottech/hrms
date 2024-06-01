@@ -1,15 +1,8 @@
 package com.adt.hrms.model;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.Proxy;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import lombok.Data;
 
 
@@ -20,7 +13,8 @@ import lombok.Data;
 public class EmpPayrollDetails {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "emp_payroll_details_seq")
+    @SequenceGenerator(name = "emp_payroll_details_seq", allocationSize = 1, schema = "payroll_schema")
     private Integer id;
 
     @Column(name = "salary")
