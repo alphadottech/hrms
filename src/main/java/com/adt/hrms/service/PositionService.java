@@ -19,8 +19,6 @@ public interface PositionService {
 
 	public List<PositionDateConverter> getAllPositionNew();
 
-//	public String updatePositionNew(Integer uiid, PositionDateConverter pdc);
-
 	public String deletePositionNew(Integer positionId);
 	
 	public String updatePositionNew(PositionDateConverter pdc);

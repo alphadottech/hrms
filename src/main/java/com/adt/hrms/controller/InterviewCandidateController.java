@@ -14,58 +14,59 @@ import com.adt.hrms.model.InterviewCandidateDetails;
 import com.adt.hrms.service.InterviewCandidateService;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/interviewCandidate")
 public class InterviewCandidateController {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
-	InterviewCandidateService interviewCandidateService;
+    @Autowired
+    InterviewCandidateService interviewCandidateService;
 
-	@PreAuthorize("@auth.allow('SAVE_INTERVIEW_CANDIDATE_DETAILS')")
-	@PostMapping("saveInterviewCandidate")
-	public ResponseEntity<String> saveInterviewCandidate(
-			@RequestBody InterviewCandidateDetails interviewCandidateDetails, HttpServletRequest request) {
-		LOGGER.info("API Call From IP: " + request.getRemoteHost());
-		return new ResponseEntity<>(interviewCandidateService.saveInterviewCandidateDetail(interviewCandidateDetails),
-				HttpStatus.OK);
-	}
+    @PreAuthorize("@auth.allow('SAVE_INTERVIEW_CANDIDATE_DETAILS')")
+    @PostMapping("saveInterviewCandidate")
+    public ResponseEntity<String> saveInterviewCandidate(
+            @RequestBody InterviewCandidateDetails interviewCandidateDetails, HttpServletRequest request) {
+        LOGGER.info("API Call From IP: " + request.getRemoteHost());
+        return new ResponseEntity<>(interviewCandidateService.saveInterviewCandidateDetail(interviewCandidateDetails),
+                HttpStatus.OK);
+    }
 
-	@PreAuthorize("@auth.allow('GET_ALL_INTERVIEW_CANDIDATE_DETAILS')")
-	@GetMapping("/allInterviewCandidate")
-	public ResponseEntity<List<InterviewCandidateDetails>> getAllInterviewCandidate(HttpServletRequest request) {
-		LOGGER.info("API Call From IP: " + request.getRemoteHost());
-		return new ResponseEntity<List<InterviewCandidateDetails>>(
-				interviewCandidateService.getAllInterviewCandidateDetail(), HttpStatus.OK);
-	}
+    @PreAuthorize("@auth.allow('GET_ALL_INTERVIEW_CANDIDATE_DETAILS')")
+    @GetMapping("/allInterviewCandidate")
+    public ResponseEntity<List<InterviewCandidateDetails>> getAllInterviewCandidate(HttpServletRequest request) {
+        LOGGER.info("API Call From IP: " + request.getRemoteHost());
+        return new ResponseEntity<List<InterviewCandidateDetails>>(
+                interviewCandidateService.getAllInterviewCandidateDetail(), HttpStatus.OK);
+    }
 
-	@PreAuthorize("@auth.allow('UPDATE_INTERVIEW_CANDIDATE_DETAILS_BY_ID')")
-	@PutMapping("/updateInterviewCandidate/{candidateId}")
-	public ResponseEntity<String> updateInterviewCandidate(@PathVariable("candidateId") int candidateId,
-			@RequestBody InterviewCandidateDetails interviewCandidateDetails, HttpServletRequest request) {
-		LOGGER.info("API Call From IP: " + request.getRemoteHost());
-		return new ResponseEntity<>(
-				interviewCandidateService.updateInterviewCandidateDetail(candidateId, interviewCandidateDetails),
-				HttpStatus.OK);
-	}
+    @PreAuthorize("@auth.allow('UPDATE_INTERVIEW_CANDIDATE_DETAILS_BY_ID')")
+    @PutMapping("/updateInterviewCandidate/{candidateId}")
+    public ResponseEntity<String> updateInterviewCandidate(@PathVariable("candidateId") int candidateId,
+                                                           @RequestBody InterviewCandidateDetails interviewCandidateDetails, HttpServletRequest request) {
+        LOGGER.info("API Call From IP: " + request.getRemoteHost());
+        return new ResponseEntity<>(
+                interviewCandidateService.updateInterviewCandidateDetail(candidateId, interviewCandidateDetails),
+                HttpStatus.OK);
+    }
 
-	@PreAuthorize("@auth.allow('GET_INTERVIEW_CANDIDATE_DETAILS_BY_ID')")
-	@GetMapping("/interviewCandidateById/{candidateId}")
-	public ResponseEntity<InterviewCandidateDetails> getInterviewCandidateById(
-			@PathVariable("candidateId") int candidateId, HttpServletRequest request) throws NoSuchFieldException {
-		LOGGER.info("API Call From IP: " + request.getRemoteHost());
-		return new ResponseEntity<InterviewCandidateDetails>(
-				interviewCandidateService.getInterviewCandidateById(candidateId), HttpStatus.OK);
-	}
+    @PreAuthorize("@auth.allow('GET_INTERVIEW_CANDIDATE_DETAILS_BY_ID')")
+    @GetMapping("/interviewCandidateById/{candidateId}")
+    public ResponseEntity<InterviewCandidateDetails> getInterviewCandidateById(
+            @PathVariable("candidateId") int candidateId, HttpServletRequest request) throws NoSuchFieldException {
+        LOGGER.info("API Call From IP: " + request.getRemoteHost());
+        return new ResponseEntity<InterviewCandidateDetails>(
+                interviewCandidateService.getInterviewCandidateById(candidateId), HttpStatus.OK);
+    }
 
-	@PreAuthorize("@auth.allow('DELETE_INTERVIEW_CANDIDATE_BY_ID')")
-	@DeleteMapping("/interviewCandidateById/{candidateId}")
-	public ResponseEntity<String> deleteInterviewCandidateById(@PathVariable("candidateId") int candidateId,
-			HttpServletRequest request) throws NoSuchFieldException {
-		LOGGER.info("API Call From IP: " + request.getRemoteHost());
-		return new ResponseEntity<String>(interviewCandidateService.deleteInterviewCandidateById(candidateId),
-				HttpStatus.OK);
-	}
+    @PreAuthorize("@auth.allow('DELETE_INTERVIEW_CANDIDATE_BY_ID')")
+    @DeleteMapping("/interviewCandidateById/{candidateId}")
+    public ResponseEntity<String> deleteInterviewCandidateById(@PathVariable("candidateId") int candidateId,
+                                                               HttpServletRequest request) throws NoSuchFieldException {
+        LOGGER.info("API Call From IP: " + request.getRemoteHost());
+        return new ResponseEntity<String>(interviewCandidateService.deleteInterviewCandidateById(candidateId),
+                HttpStatus.OK);
+    }
 }
