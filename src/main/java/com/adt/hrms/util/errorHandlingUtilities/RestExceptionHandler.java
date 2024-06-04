@@ -29,6 +29,7 @@ import com.adt.hrms.util.errorResponseUtilities.ApiError;
 import com.adt.hrms.util.errorResponseUtilities.ErrorResponse;
 import com.adt.hrms.util.errorResponseUtilities.FieldErrors;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.persistence.EntityNotFoundException;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -129,4 +130,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 				errors.getTimestamp());
 		return new ResponseEntity<>(errorResponse, errors.getStatus());
 	}
+	
+	 @ExceptionHandler(ExpiredJwtException.class)
+		public ResponseEntity<Object> handleAccessDeniedException(ExpiredJwtException ex) {
+			String message = ex.getMessage();
+			ApiError errors = new ApiError(HttpStatus.UNAUTHORIZED, message, ex);
+			ErrorResponse errorResponse = new ErrorResponse(errors.getStatus().value(), "Your session has expired. Please log in again.",
+					errors.getTimestamp());
+			return new ResponseEntity<>(errorResponse, errors.getStatus());
+		}
 }
