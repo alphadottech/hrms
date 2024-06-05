@@ -187,8 +187,7 @@ public class InterviewController {
         interviewService.listAllPositionDetailsInExcel(responseExcel);
     }
 
-
-    @PreAuthorize("('UPDATE_INTERVIEW_POSITION_BY_ID')")
+    @PreAuthorize("@auth.allow('UPDATE_INTERVIEW_POSITION_BY_ID')")
     @PutMapping("/updatePositionNew")
     public ResponseEntity<String> updatePositionNew(@RequestBody PositionDateConverter pdc) {
         LOGGER.info("Employeeservice:InterviewPosition:updatePosition info level log message");
