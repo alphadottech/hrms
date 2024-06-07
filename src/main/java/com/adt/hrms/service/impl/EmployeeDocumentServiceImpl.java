@@ -316,6 +316,17 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
             return Arrays.asList(allowedExtensions.split(","));
         }
     }
+
+    @Override
+    public int getDocumentTypeId(String documentTypeName) {
+        Optional<DocumentType> opt = documentTypeRepo.findByDocumentType(documentTypeName);
+        if (opt.isPresent()) {
+            return opt.get().getId();
+        } else {
+            throw new NoSuchElementException("Document type not found: " + documentTypeName);
+        }
+    }
+
 }
 
 

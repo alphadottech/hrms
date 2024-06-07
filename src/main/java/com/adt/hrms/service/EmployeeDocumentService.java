@@ -30,4 +30,6 @@ public interface EmployeeDocumentService {
     List<EmployeeDocument> getAllDocumentDetailsByEmpId(int empId);
 
     String deleteDocument(int empId, int docTypeId);
+
+    int getDocumentTypeId(String documentTypeName);
 }

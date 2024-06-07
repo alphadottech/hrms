@@ -229,8 +229,9 @@ public class EmployeeOperationController {
     @PreAuthorize("@auth.allow('GET_PROFILE_PICTURE_BY_EMPLOYEE_ID',T(java.util.Map).of('currentUser', #employeeId))")
     @GetMapping("/profilePicture/{employeeId}")
     public ResponseEntity<String> getUserProfilePicture(@PathVariable("employeeId") int employeeId, HttpServletResponse resp) {
+        int docTypeId = employeeDocumentService.getDocumentTypeId("User Profile Picture");
         try {
-            return ResponseEntity.ok(employeeDocumentService.getEmployeeDocumentById(employeeId, 24, resp));
+            return ResponseEntity.ok(employeeDocumentService.getEmployeeDocumentById(employeeId, docTypeId, resp));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
