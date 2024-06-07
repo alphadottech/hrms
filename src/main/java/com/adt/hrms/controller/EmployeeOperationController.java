@@ -45,7 +45,7 @@ public class EmployeeOperationController {
     private EmpPayrollDetailsService empPayrollDetailsService;
 
 
-    @PreAuthorize("@auth.allow('GET_EMPLOYEE_PERSONAL_DETAILS_BY_ID',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('GET_EMPLOYEE_PERSONAL_DETAILS_BY_ID')")
     @GetMapping("/getById/{empId}")
     public ResponseEntity<Employee> getPersonalDetailsById(@PathVariable("empId") int empId) {
         LOGGER.info("Employeeservice:employee:getEmp info level log message");
