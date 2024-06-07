@@ -7,10 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tika.exception.TikaException;
@@ -29,7 +26,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
-//import org.apache.tika.parser.Parse;
 
 import com.adt.hrms.model.DocumentType;
 import com.adt.hrms.model.DriveDetails;
@@ -66,10 +62,6 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     @Value("${drive.parent.folder}")
     private String activeProfile;
 
-//    @Value("${google.credential.path}")
-//    private static String serviceAccountKeyPath;
-
-
     private static final Logger log = LoggerFactory.getLogger(EmployeeDocumentServiceImpl.class);
     @Autowired
     private EmployeeDocumentRepo employeeDocumentRepo;
@@ -85,13 +77,6 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     private final String folderMimeType = "application/vnd.google-apps.folder";
     @Autowired
     private DriveDetailsRepository driveDetailsRepository;
-
-//    public String getResourcePath() {
-//        ClassLoader classLoader = getClass().getClassLoader();
-//        String filePath = classLoader.getResource("cred.json").getFile();
-//        System.out.println("File Path: " + filePath);
-//        return filePath;
-//    }
 
     private Drive createDriveService(String serviceAccountKeyJson) throws GeneralSecurityException, IOException {
 
@@ -121,7 +106,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
                 if (documentType.isPresent()) {
                     if(driveDetails.isPresent()) {
                         String fileName = document.getOriginalFilename();
-                        List<String> extensions = List.of("pdf", "jpg", "png", "jpeg");
+                        List<String> extensions = getAllowedExtensions(employeeDocumentDTO.getDocTypeId());
                         Parser parser = new AutoDetectParser();
                         Metadata metadata = new Metadata();
                         BodyContentHandler handler = new BodyContentHandler();
@@ -150,7 +135,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
                             employeeDocument.setDriveDetailsId(driveDetails.get().getId());
                             employeeDocument.setFileId(fileId);
                             employeeDocumentRepo.save(employeeDocument);
-                            return "Document  saved successfully";
+                            return "Document saved successfully";
                         }
                     }else
                         return "Document configuration not present";
@@ -162,6 +147,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
             return "Document Already Present";
         return null;
     }
+
 
     @Override
     public String getEmployeeDocumentById(int employeeId, int documentTypeId, HttpServletResponse response) {
@@ -285,7 +271,6 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     @Override
     public String uploadFileToDrive(File file, String mimeType, String empFolderId, String originalFilename, Drive drive) {
         String fileId = null;
-//        String fileUrl = "https://drive.google.com/uc?export=view&id=";
         com.google.api.services.drive.model.File fileMetadata = null;
         FileContent mediaContent = null;
         Permission userPermission = new Permission().setType("user").setRole("reader").setEmailAddress("alphadottechnologies@gmail.com");
@@ -321,6 +306,15 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
             folderId = files.get(0).getId();
         }
         return folderId;
+    }
+
+    private List<String> getAllowedExtensions(int docTypeId) {
+        String extensions = documentTypeRepo.findAllowedExtensionsByDocTypeId(docTypeId);
+        if (extensions != null && !extensions.isEmpty()){
+            return Arrays.asList(extensions.split(","));
+        } else {
+            return Arrays.asList(allowedExtensions.split(","));
+        }
     }
 }
 
