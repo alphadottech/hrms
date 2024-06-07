@@ -22,4 +22,7 @@ public class DocumentType {
 
     @Column(name="document_type")
     private String documentType;
+
+    @Column(name = "allowed_extension")
+    private String allowedExtensions;
 }

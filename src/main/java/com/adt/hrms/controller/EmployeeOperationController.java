@@ -122,8 +122,8 @@ public class EmployeeOperationController {
             docRequest.setDocTypeId(docTypeId);
             return new ResponseEntity<>(employeeDocumentService.saveDocument(docRequest, document), HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            LOGGER.error("Error uploading document: " + e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading document: " + e.getMessage());
         }
     }
 
@@ -224,6 +224,17 @@ public class EmployeeOperationController {
         LOGGER.info("EmployeeService: Searching for employees");
         Page<Employee> searchResult = employeeService.searchEmployees(firstName, lastName, email, mobileNo, firstLetter, page, size);
         return ResponseEntity.ok(searchResult);
+    }
+
+    @PreAuthorize("@auth.allow('GET_PROFILE_PICTURE_BY_EMPLOYEE_ID',T(java.util.Map).of('currentUser', #employeeId))")
+    @GetMapping("/profilePicture/{employeeId}")
+    public ResponseEntity<String> getUserProfilePicture(@PathVariable("employeeId") int employeeId, HttpServletResponse resp) {
+        int docTypeId = employeeDocumentService.getDocumentTypeId("User Profile Picture");
+        try {
+            return ResponseEntity.ok(employeeDocumentService.getEmployeeDocumentById(employeeId, docTypeId, resp));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
