@@ -21,11 +21,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeRepo employeeRepo;
+    private static final int MAX_PAGE_SIZE = 50;
+    private static final int DEFAULT_PAGE_SIZE = 10;
+
+
 
  
     // JIRA NO. :- HRMS-106(Bug Resolved) START---
     @Override
     public Page<Employee> getAllEmps(int page, int size) {
+    	if (size <= 0 || size > MAX_PAGE_SIZE) {
+            size = DEFAULT_PAGE_SIZE;
+        }
         Pageable pageable = PageRequest.of(page, size);
         return employeeRepo.findAll(pageable);
     }

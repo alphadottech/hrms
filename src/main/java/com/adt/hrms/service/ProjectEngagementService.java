@@ -16,12 +16,10 @@ public interface ProjectEngagementService {
 
 	String deleteProjectDetailById(String projectId);
 
-	// JIRA no. :- HRMS-90 START---
 	public List<ProjectEngagement> SearchByEngagedEmployee(String empName);
 
 	public List<ProjectEngagement> SearchByProjectName(String projectName);
 
 	public List<ProjectEngagement> SearchProjectsByDate(String startDate, String endDate);
-	// JIRA no. :- HRMS-90 END---
 
 }

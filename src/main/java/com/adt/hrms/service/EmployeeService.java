@@ -8,9 +8,7 @@ import com.adt.hrms.request.EmployeeUpdateByAdminDTO;
 
 public interface EmployeeService {
 
-	// JIRA NO. :- HRMS-106(Bug Resolved) START---
 	public Page<Employee> getAllEmps(int page, int size);
-	// JIRA NO. :- HRMS-106(Bug Resolved) END---
 
 	public Employee getEmp(Integer empId);
 
@@ -19,13 +17,6 @@ public interface EmployeeService {
 	public String deleteEmpById(Integer empId);
 
 	public String updateEmp(EmployeeRequest empRequest);
-
-	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager START---
-//	public byte[] downloadAadharCard(int id, HttpServletResponse resp) throws IOException;
-//
-//	public byte[] downloadPanCard(int id, HttpServletResponse resp) throws IOException;
-//	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager END---
-
 
 	public Employee getEmployeeById(int empId);
 

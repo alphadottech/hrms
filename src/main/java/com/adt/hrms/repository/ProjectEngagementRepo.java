@@ -10,16 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProjectEngagementRepo extends JpaRepository<ProjectEngagement, Integer> {
+public interface ProjectEngagementRepo extends JpaRepository<ProjectEngagement, String> {
 
-	List<ProjectEngagement> findProjectEngagementByProjectName(String projectName);
-
-	@Query(value = "select count(status) FROM ProjectEngagement")
-	Integer findCount();
+	List<ProjectEngagement> findProjectEngagementByProjectId(String projectId);
+	boolean existsById(String projectId);
 
 	Optional<ProjectEngagement> findByProjectId(String projectId);
 
-	// JIRA no. :- HRMS-90 START---
 	@Query(value = "FROM ProjectEngagement pe WHERE pe.engagedEmployee LIKE %:query% ")
 	List<ProjectEngagement> SearchByEngagedEmployee(@Param("query") String empName);
 
@@ -28,5 +25,4 @@ public interface ProjectEngagementRepo extends JpaRepository<ProjectEngagement, 
 
 	@Query(value = "FROM ProjectEngagement pe WHERE pe.startDate LIKE %:startDate% AND pe.endDate LIKE %:endDate%")
 	List<ProjectEngagement> findByProjectDate(String startDate, String endDate);
-	// JIRA no. :- HRMS-90 END---
 }

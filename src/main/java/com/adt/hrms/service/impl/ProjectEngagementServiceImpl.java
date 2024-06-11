@@ -26,15 +26,26 @@ public class ProjectEngagementServiceImpl implements ProjectEngagementService {
 	@Autowired
 	private MessageSource messageSource;
 
+	private final Object lock = new Object();
+
 	@Override
 	public String saveProjectEngagementDetail(ProjectEngagement projectEngagement) {
 		List<ProjectEngagement> opt = projectEngagementRepo
-				.findProjectEngagementByProjectName(projectEngagement.getProjectName());
+				.findProjectEngagementByProjectId(projectEngagement.getProjectId());
 
-		if (opt.size() > 0)
+		if (opt.size() > 0) {
 			return "Project With Id: " + opt.get(0).getProjectId() + " is Already Present";
+		}
+		String projectId;
 
-		String projectId = "PROJ0" + (projectEngagementRepo.findCount() + 1);
+		synchronized (lock) {
+			long count = projectEngagementRepo.count();
+			projectId = "PROJ0" + (count + 1);
+			while (projectEngagementRepo.existsById(projectId)) {
+				count++;
+				projectId = "PROJ0" + (count + 1);
+			}
+		}
 		projectEngagement.setProjectId(projectId);
 
 		return "Project With Id:: " + projectEngagementRepo.save(projectEngagement).getProjectId()
@@ -55,7 +66,6 @@ public class ProjectEngagementServiceImpl implements ProjectEngagementService {
 			return "Project With Id: " + projectId + " is Not Present";
 
 		projectDetails.get().setProjectName(projectEngagement.getProjectName());
-		projectDetails.get().setProjectId(projectEngagement.getProjectId());
 		projectDetails.get().setProjectDescription(projectEngagement.getProjectDescription());
 		projectDetails.get().setEngagedEmployee(projectEngagement.getEngagedEmployee());
 		projectDetails.get().setStartDate(projectEngagement.getStartDate());
@@ -81,14 +91,12 @@ public class ProjectEngagementServiceImpl implements ProjectEngagementService {
 	public String deleteProjectDetailById(String projectId) {
 		if (projectEngagementRepo.findByProjectId(projectId).isPresent()) {
 			Optional<ProjectEngagement> projectDetails = projectEngagementRepo.findByProjectId(projectId);
-			projectDetails.get().setStatus(false);
-			projectEngagementRepo.save(projectDetails.get());
-			return "Project With Id: " + projectId + " is  Inactive Successfully";
+			projectEngagementRepo.deleteById(projectId);
+			return "Project With Id: " + projectId + " is  deleted Successfully";
 		}
 		return "Project With Id: " + projectId + " is Not Present";
 	}
 
-	// JIRA no. :- HRMS-90 START---
 	@Override
 	public List<ProjectEngagement> SearchByEngagedEmployee(String empName) {
 		List<ProjectEngagement> emplist = projectEngagementRepo.SearchByEngagedEmployee(empName);
@@ -105,6 +113,5 @@ public class ProjectEngagementServiceImpl implements ProjectEngagementService {
 	public List<ProjectEngagement> SearchProjectsByDate(String startDate, String endDate) {
 		return projectEngagementRepo.findByProjectDate(startDate, endDate);
 	}
-	// JIRA no. :- HRMS-90 END---
-
+	
 }

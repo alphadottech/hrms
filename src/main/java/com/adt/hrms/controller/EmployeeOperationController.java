@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/employee")
 public class EmployeeOperationController {
@@ -44,7 +45,7 @@ public class EmployeeOperationController {
     private EmpPayrollDetailsService empPayrollDetailsService;
 
 
-    @PreAuthorize("@auth.allow('GET_EMPLOYEE_PERSONAL_DETAILS_BY_ID',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('GET_EMPLOYEE_PERSONAL_DETAILS_BY_ID')")
     @GetMapping("/getById/{empId}")
     public ResponseEntity<Employee> getPersonalDetailsById(@PathVariable("empId") int empId) {
         LOGGER.info("Employeeservice:employee:getEmp info level log message");
@@ -101,7 +102,7 @@ public class EmployeeOperationController {
         }
     }
 
-    @PreAuthorize("@auth.allow('DOWNLOAD_DOCUMENT_BY_EMPLOYE_ID_AND_DOC_TYPE_ID',T(java.util.Map).of('currentUser', #employeeId))")
+    @PreAuthorize("@auth.allow('DOWNLOAD_DOCUMENT_BY_EMPLOYEE_ID_AND_DOC_TYPE_ID')")
     @GetMapping("/downloadDocument/{employeeId}/{documentTypeId}")
     public ResponseEntity<String> downloadDocument(@PathVariable int employeeId, @PathVariable int documentTypeId, HttpServletResponse resp) {
         try {
@@ -111,7 +112,7 @@ public class EmployeeOperationController {
         }
     }
 
-    @PreAuthorize("@auth.allow('UPLOAD_EMPLOYEE_DOCUMENT_BY_DOCUMENT_TYPE_ID',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('UPLOAD_EMPLOYEE_DOCUMENT_BY_DOCUMENT_TYPE_ID')")
     @PostMapping("/uploadDocument/{empId}/{docTypeId}")
     public ResponseEntity<String> uploadDocument(@PathVariable int empId, @PathVariable int docTypeId, @RequestPart MultipartFile document) throws IOException {
         try {
@@ -121,18 +122,18 @@ public class EmployeeOperationController {
             docRequest.setDocTypeId(docTypeId);
             return new ResponseEntity<>(employeeDocumentService.saveDocument(docRequest, document), HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            LOGGER.error("Error uploading document: " + e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading document: " + e.getMessage());
         }
     }
 
 
-    @PreAuthorize("@auth.allow('DELETE_DOCUMENT_BY_EMPLOYEE_ID_AND_DOCUMENT_TYPE_ID',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('DELETE_DOCUMENT_BY_EMPLOYEE_ID_AND_DOCUMENT_TYPE_ID')")
     @DeleteMapping("/deleteDocument/{empId}/{docTypeId}")
     public ResponseEntity<String> deleteDocument(@PathVariable int empId, @PathVariable int docTypeId) throws IOException {
         try {
             LOGGER.info("EmployeeDocumentService:employee:addDocument info level log message");
-            return new ResponseEntity<>(employeeDocumentService.deleteDocument(empId,docTypeId), HttpStatus.OK);
+            return new ResponseEntity<>(employeeDocumentService.deleteDocument(empId, docTypeId), HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -181,7 +182,7 @@ public class EmployeeOperationController {
         return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetails(page, size), HttpStatus.OK);
     }
 
-    @PreAuthorize("@auth.allow('GET_ALL_DOCUMENT_DETAILS_BY_EMP_ID',T(java.util.Map).of('currentUser', #empId))")
+    @PreAuthorize("@auth.allow('GET_ALL_DOCUMENT_DETAILS_BY_EMP_ID')")
     @GetMapping("/getAllDocumentDetailsByEmpId/{empId}")
     public ResponseEntity<List<EmployeeDocument>> getAllDocumentDetailsByEmpId(@PathVariable int empId) {
         LOGGER.info("EmployeeDocument:employee:getAllDocumentDetails info level log message");
@@ -210,7 +211,7 @@ public class EmployeeOperationController {
         return ResponseEntity.ok(empPayrollDetailsService.getEmpPayrollDetails(empId));
     }
 
-    @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @PreAuthorize("@auth.allow('SEARCH_EMPLOYEE_BY_CRITERIA')")
     @GetMapping("/searchEmployees")
     public ResponseEntity<Page<Employee>> searchEmployees(
             @RequestParam(value = "firstName", required = false) String firstName,
@@ -221,11 +222,20 @@ public class EmployeeOperationController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
         LOGGER.info("EmployeeService: Searching for employees");
-        Page<Employee> searchResult = employeeService.searchEmployees(firstName,lastName,email,mobileNo, firstLetter,page, size);
+        Page<Employee> searchResult = employeeService.searchEmployees(firstName, lastName, email, mobileNo, firstLetter, page, size);
         return ResponseEntity.ok(searchResult);
     }
 
-
+    @PreAuthorize("@auth.allow('GET_PROFILE_PICTURE_BY_EMPLOYEE_ID',T(java.util.Map).of('currentUser', #employeeId))")
+    @GetMapping("/profilePicture/{employeeId}")
+    public ResponseEntity<String> getUserProfilePicture(@PathVariable("employeeId") int employeeId, HttpServletResponse resp) {
+        int docTypeId = employeeDocumentService.getDocumentTypeId("User Profile Picture");
+        try {
+            return ResponseEntity.ok(employeeDocumentService.getEmployeeDocumentById(employeeId, docTypeId, resp));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 
 }
