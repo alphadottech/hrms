@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
+import com.itextpdf.kernel.geom.PageSize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -98,134 +99,93 @@ public class HolidayServiceImpl implements HolidayService {
 	@Override
 	public String downloadHolidayCalendar(HttpServletResponse resp) {
 
-		//*** Getting list of holidays ***
 		List<Holiday> listOfHolidays = holidayRepo.findAll();
-
-		//*** Set the header key and header value ***
-		String headerKey ="Content-Disposition";
+		String headerKey = "Content-Disposition";
 		String headerValue = "attachment;filename=";
-
 		String fileName = "Holiday_Calendar_";
 		String fullFileName = "";
 
-		if(listOfHolidays.size() <= 0) return "Holiday Calendar is unavailable";
+		if (listOfHolidays.size() <= 0) return "Holiday Calendar is unavailable";
 
-		else {
+		Holiday firstRecord = holidayRepo.getFirstHolidayRecord();
+		int year = firstRecord.getDate().getYear();
 
-			//*** Get the year in the Database ***
-			Holiday firstRecord = holidayRepo.getFirstHolidayRecord();
+		fullFileName = fileName + year + ".pdf";
+		headerValue += fullFileName;
 
-			int year = firstRecord.getDate().getYear();
+		ServletOutputStream outputStreamObj = null;
+		Document document = null;
 
-			//*** Dynamically adjusting File name of holiday with the current year in DB ***
-			fullFileName = fileName + year +".pdf";
+		try {
+			outputStreamObj = resp.getOutputStream();
+			resp.setContentType("application/pdf; charset=utf-8");
+			resp.setHeader(headerKey, headerValue);
 
-			headerValue += fullFileName;
+			PdfWriter pdfWriter = new PdfWriter(outputStreamObj);
+			PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+			pdfDocument.setDefaultPageSize(PageSize.A4);
 
-			ServletOutputStream outputStreamObj = null;
-			Document document = null;
+			document = new Document(pdfDocument);
 
+			// Create the table
+			float colWidth[] = {60, 250, 110, 90};
+			Table table = new Table(colWidth);
 
-			//** Writing into the PDF file **
+			table.addHeaderCell(new Cell().add("S.No"));
+			table.addHeaderCell(new Cell().add("Holiday")).setTextAlignment(TextAlignment.CENTER);
+			table.addHeaderCell(new Cell().add("Date")).setTextAlignment(TextAlignment.CENTER);
+			table.addHeaderCell(new Cell().add("Day")).setTextAlignment(TextAlignment.CENTER);
+
+			int count = 0;
+			for (Holiday holiday : listOfHolidays) {
+				table.addCell(new Cell().add(String.valueOf(++count)));
+				table.addCell(new Cell().add(holiday.getHolidayName())).setTextAlignment(TextAlignment.CENTER);
+
+				LocalDate localDate = holiday.getDate();
+				int date = localDate.getDayOfMonth();
+				String month = localDate.getMonth().name();
+				table.addCell(new Cell().add(date + " " + month + " " + year)).setTextAlignment(TextAlignment.CENTER);
+
+				table.addCell(new Cell().add(holiday.getDay())).setTextAlignment(TextAlignment.CENTER);
+			}
+
+			// Get the image from DB
+			byte[] imageFromDB = imgRepo.getImageData();
+			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageFromDB);
+			BufferedImage bufferedImage = ImageIO.read(byteArrayInputStream);
+
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			ImageIO.write(bufferedImage, "JPEG", outputStream);
+			byte[] convertedImageData = outputStream.toByteArray();
+
+			ImageData imgData = ImageDataFactory.create(convertedImageData);
+			Image headerImg = new Image(imgData);
+			headerImg.setRelativePosition(160, -70, 40, 0);
+
+			document.add(headerImg);
+			document.add(table);
+
+			outputStreamObj.flush();
+
+			return "File has been downloaded successfully";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "File not downloaded";
+		} finally {
+			if (document != null) {
+				document.close();
+			}
 			try {
-
-				/* If we want to download the file in other systems, we need to use the HttpServletResponse obj
-				 * and get the output stream of it and pass it in PdfWriter obj.
-				 * 
-				 *  Moreover, we need to give the filename in header and set the content type as "application/pdf"
-				 *  and set the header by giving:-  String headerKey ="Content-Disposition";
-				                                            String headerValue = "attachment;filename=AnyFileName";
-				 */
-
-				//*** Get the ServletOutputStream obj ***
-				outputStreamObj = resp.getOutputStream();
-
-				//*** Set the content type of the response ***
-				resp.setContentType("application/pdf; charset=utf-8");
-				//*** Set the header ***
-				resp.setHeader(headerKey, headerValue);
-
-				//** Pass the ServletOutputStream obj ***
-				PdfWriter pdfWr = new PdfWriter(outputStreamObj);
-
-				float colWidth[] = { 60, 250, 110, 90 };
-				Table table = new Table(colWidth);
-				table.addCell(new Cell().add("S.No"));
-				table.addCell(new Cell().add("Holiday")).setTextAlignment(TextAlignment.CENTER);
-				table.addCell(new Cell().add("Date")).setPaddingLeft(300f);
-				table.addCell(new Cell().add("Day")).setPaddingLeft(300f);
-
-				int count = 0;
-
-				for(int i=0; i<listOfHolidays.size(); i++) {
-
-					//** Adjust the serial number in PDF ***
-					table.addCell(new Cell().add(""+ ++count));
-
-					//*** Set Holiday name in PDF ***
-					table.addCell(new Cell().add(listOfHolidays.get(i).getHolidayName())).setTextAlignment(TextAlignment.CENTER);
-
-					//*** Customize the date and then set the data in PDF ***
-					LocalDate localDate = listOfHolidays.get(i).getDate();
-					int date = localDate.getDayOfMonth();
-					String month = listOfHolidays.get(i).getMonth();
-					table.addCell(new Cell().add(date+" "+month+" "+year)).setPaddingLeft(300f);
-
-					//*** Set the day of week in PDF ***
-					table.addCell(new Cell().add(listOfHolidays.get(i).getDay())).setPaddingLeft(300f);
+				if (outputStreamObj != null) {
+					outputStreamObj.close();
 				}
-
-				table.setRelativePosition(0, -60, 0, 0); //left top right bottom
-
-				//*** Getting the image from DB ***
-				byte[] imageFromDB = imgRepo.getImageData();
-
-				// Create a BufferedImage from the image data
-				ByteArrayInputStream byteArr = new ByteArrayInputStream(imageFromDB);
-				BufferedImage bufferedImg = ImageIO.read(byteArr);
-
-				// Convert the BufferedImage to the desired format (say JPEG)
-				ByteArrayOutputStream outputStream = new ByteArrayOutputStream(255);
-				ImageIO.write(bufferedImg, "JPEG", outputStream);
-				byte[] convertedImageData = outputStream.toByteArray();
-
-				//** Now create the image ***
-				ImageData imgData = ImageDataFactory.createJpeg(convertedImageData);
-				Image headerImg = new Image(imgData);
-				//				headerImg.setHorizontalAlignment(HorizontalAlignment.CENTER);
-				headerImg.setRelativePosition(160, -70, 40, 0); //left top right bottom
-
-				PdfDocument pdfDocument = new PdfDocument(pdfWr);
-				pdfDocument.setDefaultPageSize(com.itextpdf.kernel.geom.PageSize.A4);
-
-				document = new Document(pdfDocument);
-				//document.setMargins(20, 30, 20, 40); //top, right, bottom, left
-
-				document.add(headerImg);
-				document.add(table);
-
-				//*** Flush the output stream ***
-				outputStreamObj.flush();
-
-				return "File has been downloaded successfully";
-
-			}catch(Exception e) {
+			} catch (IOException e) {
 				e.printStackTrace();
-				return "File not downloaded";
-			}finally {
-
-				if(document != null)
-					document.close();
-
-				try {
-					if(outputStreamObj != null)
-						outputStreamObj.close();
-				}catch(IOException e) {
-					e.printStackTrace();
-				}
 			}
 		}
 	}
+
 
 	@Override
 	public String updateHolidayCalendar(Integer hId, String holidayName, String date) {
