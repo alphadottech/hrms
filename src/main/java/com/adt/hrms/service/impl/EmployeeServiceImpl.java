@@ -81,11 +81,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public String updateEmpById(EmployeeUpdateByAdminDTO emp) {
-        Optional<Employee> opt = employeeRepo.findById(emp.getEmployeeId());
-        if (!opt.isPresent()) return "Employee not found with id: " + emp.getEmployeeId();
-        opt.get().setIsActive(emp.isActive());
-        return employeeRepo.save(opt.get()).getEmployeeId() + " Employee Updated Successfully";
+    public String updateEmpById(Employee emp) {
+        Employee existEmployee = employeeRepo.findById(emp.getEmployeeId())
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found with id: " + emp.getEmployeeId()));
+        if (emp.getDob() != null) existEmployee.setDob(emp.getDob());
+        if (emp.getFirstName() != null) existEmployee.setFirstName(emp.getFirstName());
+        if (emp.getGender() != null) existEmployee.setGender(emp.getGender());
+        if (emp.getLastName() != null) existEmployee.setLastName(emp.getLastName());
+        if (emp.getMaritalStatus() != null) existEmployee.setMaritalStatus(emp.getMaritalStatus());
+        if (emp.getMobileNo() != null) existEmployee.setMobileNo(emp.getMobileNo());
+        if (emp.getIsActive() != null) existEmployee.setIsActive(emp.getIsActive());
+
+        return "Employee with id " + emp.getEmployeeId() + " Updated Successfully";
     }
 
     @Override
