@@ -91,10 +91,11 @@ public class EmployeeOperationController {
     }
 
     @PreAuthorize("@auth.allow('UPDATE_EMPLOYEE_DETAILS_BY_ADMIN')")
+    @CrossOrigin(origins = "*")
     @PutMapping("/updateEmpById")
-    public ResponseEntity<String> updateEmpById(@RequestBody EmployeeUpdateByAdminDTO emp) {
+    public ResponseEntity<String> updateEmpById(@RequestBody Employee emp) {
         try {
-            LOGGER.info("Employeeservice:employee:updateEmp info level log message");
+            LOGGER.info("Employee service:employee:updateEmp info level log message");
             return new ResponseEntity<>(employeeService.updateEmpById(emp), HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error(e.getMessage());

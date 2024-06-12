@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.adt.hrms.model.MasterAsset;
 import com.adt.hrms.service.MasterAssetService;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/masterAsset")
 public class MasterAssetController {
@@ -64,6 +64,7 @@ public class MasterAssetController {
     }
 
     @PreAuthorize("@auth.allow('UPDATE_MASTER_ASSET_BY_ASSET_ID')")
+    @CrossOrigin(origins = "*")
     @PutMapping("/updateMasterAssetbyid")
     public ResponseEntity<String> updateMasterAssetbyid(@RequestBody MasterAsset asset) {
         LOGGER.info("MasterAssetService:masterAsset:updateMasterAssetById info level log message");

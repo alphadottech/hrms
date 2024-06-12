@@ -81,11 +81,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public String updateEmpById(EmployeeUpdateByAdminDTO emp) {
+    public String updateEmpById(Employee emp) {
         Optional<Employee> opt = employeeRepo.findById(emp.getEmployeeId());
         if (!opt.isPresent()) return "Employee not found with id: " + emp.getEmployeeId();
-        opt.get().setIsActive(emp.isActive());
-        return employeeRepo.save(opt.get()).getEmployeeId() + " Employee Updated Successfully";
+        if (emp.getDob() != null) opt.get().setDob(emp.getDob());
+        if (emp.getFirstName() != null) opt.get().setFirstName(emp.getFirstName());
+        if (emp.getGender() != null) opt.get().setGender(emp.getGender());
+        if (emp.getLastName() != null) opt.get().setLastName(emp.getLastName());
+        if (emp.getMaritalStatus() != null) opt.get().setMaritalStatus(emp.getMaritalStatus());
+        if (emp.getMobileNo() != null) opt.get().setMobileNo(emp.getMobileNo());
+        opt.get().setIsActive(emp.getIsActive());
+        return employeeRepo.save(opt.get()) + " Employee Updated Successfully";
     }
 
     @Override

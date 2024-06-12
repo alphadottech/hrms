@@ -24,7 +24,7 @@ public interface EmployeeService {
 
 	public Page<Employee> SearchByEmail(String email,int page,int size);
 
-	public String updateEmpById(EmployeeUpdateByAdminDTO emp);
+	public String updateEmpById(Employee emp);
 
 	Page<Employee> searchEmployees(String firstName, String lastName, String email, Long mobileNo, String firstLetter, int page, int size);
 
