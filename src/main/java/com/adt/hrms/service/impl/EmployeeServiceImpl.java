@@ -82,16 +82,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public String updateEmpById(Employee emp) {
-        Optional<Employee> opt = employeeRepo.findById(emp.getEmployeeId());
-        if (!opt.isPresent()) return "Employee not found with id: " + emp.getEmployeeId();
-        if (emp.getDob() != null) opt.get().setDob(emp.getDob());
-        if (emp.getFirstName() != null) opt.get().setFirstName(emp.getFirstName());
-        if (emp.getGender() != null) opt.get().setGender(emp.getGender());
-        if (emp.getLastName() != null) opt.get().setLastName(emp.getLastName());
-        if (emp.getMaritalStatus() != null) opt.get().setMaritalStatus(emp.getMaritalStatus());
-        if (emp.getMobileNo() != null) opt.get().setMobileNo(emp.getMobileNo());
-        opt.get().setIsActive(emp.getIsActive());
-        return employeeRepo.save(opt.get()) + " Employee Updated Successfully";
+        Employee existEmployee = employeeRepo.findById(emp.getEmployeeId())
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found with id: " + emp.getEmployeeId()));
+        if (emp.getDob() != null) existEmployee.setDob(emp.getDob());
+        if (emp.getFirstName() != null) existEmployee.setFirstName(emp.getFirstName());
+        if (emp.getGender() != null) existEmployee.setGender(emp.getGender());
+        if (emp.getLastName() != null) existEmployee.setLastName(emp.getLastName());
+        if (emp.getMaritalStatus() != null) existEmployee.setMaritalStatus(emp.getMaritalStatus());
+        if (emp.getMobileNo() != null) existEmployee.setMobileNo(emp.getMobileNo());
+        if (emp.getIsActive() != null) existEmployee.setIsActive(emp.getIsActive());
+
+        return "Employee with id " + emp.getEmployeeId() + " Updated Successfully";
     }
 
     @Override
