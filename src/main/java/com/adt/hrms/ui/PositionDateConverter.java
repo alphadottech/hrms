@@ -7,15 +7,15 @@ import jakarta.persistence.Id;
 public class PositionDateConverter {
 
 	@Id
-	private Integer uiid;
+	private Integer positionId;
 
 	private String positionName;
 
 	private List<String> techStack;
 
-	private String positionopendate;
+	private String positionOpenDate;
 
-	private String positionclosedate;
+	private String positionCloseDate;
 
 	private String status;
 
@@ -27,12 +27,12 @@ public class PositionDateConverter {
 
 	private Integer vacancy;
 
-	public Integer getUiid() {
-		return uiid;
+	public Integer getPositionId() {
+		return positionId;
 	}
 
-	public void setUiid(Integer uiid) {
-		this.uiid = uiid;
+	public void setPositionId(Integer positionId) {
+		this.positionId = positionId;
 	}
 
 	public String getPositionName() {
@@ -51,20 +51,20 @@ public class PositionDateConverter {
 		this.techStack = techStack;
 	}
 
-	public String getPositionopendate() {
-		return positionopendate;
+	public String getPositionOpenDate() {
+		return positionOpenDate;
 	}
 
-	public void setPositionopendate(String positionopendate) {
-		this.positionopendate = positionopendate;
+	public void setPositionOpenDate(String positionOpenDate) {
+		this.positionOpenDate = positionOpenDate;
 	}
 
-	public String getPositionclosedate() {
-		return positionclosedate;
+	public String getPositionCloseDate() {
+		return positionCloseDate;
 	}
 
-	public void setPositionclosedate(String positionclosedate) {
-		this.positionclosedate = positionclosedate;
+	public void setPositionCloseDate(String positionCloseDate) {
+		this.positionCloseDate = positionCloseDate;
 	}
 
 	public String getStatus() {
@@ -107,15 +107,15 @@ public class PositionDateConverter {
 		this.vacancy = vacancy;
 	}
 
-	public PositionDateConverter(Integer uiid, String positionName, List<String> techStack, String positionopendate,
-			String positionclosedate, String status, double experienceInYear, boolean remote, String positionType,
+	public PositionDateConverter(Integer positionId, String positionName, List<String> techStack, String positionOpenDate,
+			String positionCloseDate, String status, double experienceInYear, boolean remote, String positionType,
 			Integer vacancy) {
 		super();
-		this.uiid = uiid;
+		this.positionId = positionId;
 		this.positionName = positionName;
 		this.techStack = techStack;
-		this.positionopendate = positionopendate;
-		this.positionclosedate = positionclosedate;
+		this.positionOpenDate = positionOpenDate;
+		this.positionCloseDate = positionCloseDate;
 		this.status = status;
 		this.experienceInYear = experienceInYear;
 		this.remote = remote;
@@ -125,8 +125,8 @@ public class PositionDateConverter {
 
 	@Override
 	public String toString() {
-		return "PositionDateConverter [uiid=" + uiid + ", positionName=" + positionName + ", techStack=" + techStack
-				+ ", positionopendate=" + positionopendate + ", positionclosedate=" + positionclosedate + ", status="
+		return "PositionDateConverter [positionId=" + positionId + ", positionName=" + positionName + ", techStack=" + techStack
+				+ ", positionOpenDate=" + positionOpenDate + ", positionclosedate=" + positionCloseDate + ", status="
 				+ status + ", experienceInYear=" + experienceInYear + ", remote=" + remote + ", positionType="
 				+ positionType + ", vacancy=" + vacancy + "]";
 	}
