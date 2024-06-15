@@ -15,24 +15,20 @@ public class ProjectEngagement {
 	@Column(name = "project_id")
 	private String projectId;
 
-	// JIRA no. :- HRMS-90 START---
 	@Column(name = "end_date")
 	private String endDate;
 
 	@Column(name = "engaged_employee")
 	private String engagedEmployee;
-	// JIRA no. :- HRMS-90 END---
 
-	@Column(name = "project_description")
-	private String projectDescription;
+	@Column(name = "end_client")
+	private String endClient;
 
-	// JIRA no. :- HRMS-90 START---
-	@Column(name = "project_name")
-	private String projectName;
+	@Column(name = "contractor")
+	private String contractor;
 
 	@Column(name = "start_date")
 	private String startDate;
-	// JIRA no. :- HRMS-90 END---
 
 	@Column(name = "status")
 	private boolean status;
