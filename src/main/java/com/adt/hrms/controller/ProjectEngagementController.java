@@ -80,10 +80,10 @@ public class ProjectEngagementController {
 
     @PreAuthorize("@auth.allow('SEARCH_PROJECT_ENGAGEMENT_DETAILS_BY_PROJECT_NAME')")
     @GetMapping("/SearchByProjectName")
-    public ResponseEntity<List<ProjectEngagement>> searchByProjectName(@RequestParam("query") String projectName,
+    public ResponseEntity<List<ProjectEngagement>> searchByProjectName(@RequestParam("query") String contractor,
                                                                        HttpServletRequest request) {
         LOGGER.info("Employeeservice:engagement:searchByProjectName " + request.getRemoteHost());
-        return new ResponseEntity<List<ProjectEngagement>>(projectEngagementService.SearchByProjectName(projectName),
+        return new ResponseEntity<List<ProjectEngagement>>(projectEngagementService.SearchByProjectName(contractor),
                 HttpStatus.OK);
     }
 

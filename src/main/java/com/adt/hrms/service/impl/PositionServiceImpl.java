@@ -90,13 +90,13 @@ public class PositionServiceImpl implements PositionService {
 
 	    SimpleDateFormat sdfForTime = new SimpleDateFormat("HH.mm.ss");
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		String str =  pdc.getPositionclosedate() + " " + sdfForTime.format(timestamp);
+		String str =  pdc.getPositionCloseDate() + " " + sdfForTime.format(timestamp);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm.ss");
 		LocalDateTime posititonCloseDate = LocalDateTime.parse(str, formatter);
 		pm.setPositionCloseDate(posititonCloseDate);
 
 		LocalTime time1 = LocalTime.now();
-		String str1 = pdc.getPositionopendate() + " " + sdfForTime.format(timestamp);
+		String str1 = pdc.getPositionOpenDate() + " " + sdfForTime.format(timestamp);
 		DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm.ss");
 		LocalDateTime positionOpenDate = LocalDateTime.parse(str1, formatter1);
 		pm.setPositionOpenDate(positionOpenDate);
@@ -133,7 +133,7 @@ public class PositionServiceImpl implements PositionService {
 		for (int i = 0; i < pmlist.size(); i++) {
 			PositionModel pm = pmlist.get(i);
 			PositionDateConverter obj = new PositionDateConverter();
-			obj.setUiid(pm.getPositionId());
+			obj.setPositionId(pm.getPositionId());
 			obj.setPositionName(pm.getPositionName());
 			obj.setTechStack(pm.getTechStack());
 			obj.setStatus(pm.getStatus());
@@ -146,13 +146,13 @@ public class PositionServiceImpl implements PositionService {
             if (pm.getPositionOpenDate() != null) {
                 positionOpenDate = pm.getPositionOpenDate().toLocalDate();
             }
-            obj.setPositionopendate(positionOpenDate != null ? positionOpenDate.toString() : "null");
+            obj.setPositionOpenDate(positionOpenDate != null ? positionOpenDate.toString() : "null");
 
             LocalDate positionCloseDate = null;
             if (pm.getPositionCloseDate() != null) {
                 positionCloseDate = pm.getPositionCloseDate().toLocalDate();
             }
-            obj.setPositionclosedate(positionCloseDate != null ? positionCloseDate.toString() : "null");
+            obj.setPositionCloseDate(positionCloseDate != null ? positionCloseDate.toString() : "null");
 
 			pdclist.add(obj);
 		}
@@ -228,9 +228,9 @@ public class PositionServiceImpl implements PositionService {
 	public String updatePositionNew(PositionDateConverter pdc) {
 		
 		PositionModel pm = new PositionModel();
-		Optional<PositionModel> opt = positionRepo.findById(pdc.getUiid());
+		Optional<PositionModel> opt = positionRepo.findById(pdc.getPositionId());
 		if (!opt.isPresent())
-			return "Position not found with id: " + pdc.getUiid();
+			return "Position not found with id: " + pdc.getPositionId();
 		else
 			opt.get().setPositionName(pdc.getPositionName());
 
@@ -246,7 +246,7 @@ public class PositionServiceImpl implements PositionService {
 		
 		SimpleDateFormat sdfForTime1 = new SimpleDateFormat("HH.mm.ss");
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		String str =  pdc.getPositionclosedate() + " " + sdfForTime1.format(timestamp);
+		String str =  pdc.getPositionCloseDate() + " " + sdfForTime1.format(timestamp);
 		DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm.ss");
 		LocalDateTime posititonCloseDate = LocalDateTime.parse(str, formatter1);
 		pm.setPositionCloseDate(posititonCloseDate);
@@ -254,7 +254,7 @@ public class PositionServiceImpl implements PositionService {
 		
 		SimpleDateFormat sdfForTime2 = new SimpleDateFormat("HH.mm.ss");
 		Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
-		String str1 = pdc.getPositionopendate() + " " + sdfForTime2.format(timestamp1);
+		String str1 = pdc.getPositionOpenDate() + " " + sdfForTime2.format(timestamp1);
 		DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm.ss");
 		LocalDateTime positionOpenDate = LocalDateTime.parse(str1, formatter2);
 		opt.get().setPositionOpenDate(positionOpenDate);
@@ -278,7 +278,7 @@ public class PositionServiceImpl implements PositionService {
 
 		opt.get().setVacancy(pdc.getVacancy());
 
-		return positionRepo.save(opt.get()).getPositionId() + " Positiion Updated Successfully";
+		return positionRepo.save(opt.get()).getPositionId() + " Position Updated Successfully";
 	}
 
 }

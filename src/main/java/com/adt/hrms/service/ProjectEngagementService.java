@@ -18,7 +18,7 @@ public interface ProjectEngagementService {
 
 	public List<ProjectEngagement> SearchByEngagedEmployee(String empName);
 
-	public List<ProjectEngagement> SearchByProjectName(String projectName);
+	public List<ProjectEngagement> SearchByProjectName(String contractor);
 
 	public List<ProjectEngagement> SearchProjectsByDate(String startDate, String endDate);
 

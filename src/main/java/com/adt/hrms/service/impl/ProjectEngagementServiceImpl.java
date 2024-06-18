@@ -65,8 +65,8 @@ public class ProjectEngagementServiceImpl implements ProjectEngagementService {
 		if (projectDetails.isEmpty())
 			return "Project With Id: " + projectId + " is Not Present";
 
-		projectDetails.get().setProjectName(projectEngagement.getProjectName());
-		projectDetails.get().setProjectDescription(projectEngagement.getProjectDescription());
+		projectDetails.get().setContractor(projectEngagement.getContractor());
+		projectDetails.get().setEndClient(projectEngagement.getEndClient());
 		projectDetails.get().setEngagedEmployee(projectEngagement.getEngagedEmployee());
 		projectDetails.get().setStartDate(projectEngagement.getStartDate());
 		projectDetails.get().setEndDate(projectEngagement.getEndDate());
