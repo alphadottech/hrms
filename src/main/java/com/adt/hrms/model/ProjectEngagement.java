@@ -1,25 +1,32 @@
 package com.adt.hrms.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.UUID;
 
 @Entity
 @Data
-@Table(catalog = "EmployeeDB", schema = "employee_schema", name = "project_engagement")
+@Table(catalog = "hrms_sit", schema = "employee_schema", name = "project_engagement")
 public class ProjectEngagement {
+
 
 	@Id
 	@Column(name = "project_id")
-	private String projectId;
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private String projectId = UUID.randomUUID().toString();
 
 	@Column(name = "end_date")
 	private String endDate;
 
-	@Column(name = "engaged_employee")
-	private String engagedEmployee;
+//	@Column(name = "engaged_employee")
+//	private String engagedEmployee;
+
+   @Column(name = "primary_resource")
+   private String primaryResource;
+
+	@Column(name="secondary_resource")
+	private String secondaryResource;
 
 	@Column(name = "end_client")
 	private String endClient;

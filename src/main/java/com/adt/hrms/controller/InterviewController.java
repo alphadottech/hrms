@@ -97,7 +97,7 @@ public class InterviewController {
         return ResponseEntity.ok(interview);
     }
 
-    @PreAuthorize("@auth.allow('UPDATE_INTERVIEW_DETAILS_BY_ID_AND_ROUND')")
+    //@PreAuthorize("@auth.allow('UPDATE_INTERVIEW_DETAILS_BY_ID_AND_ROUND')")
     @CrossOrigin(origins = "*")
     @PutMapping("/updateInterviewByIdAndRound")
     public ResponseEntity<String> updateInterviewDetailByInterviewIDAndRound(@RequestBody InterviewModelDTO intwDTO) {

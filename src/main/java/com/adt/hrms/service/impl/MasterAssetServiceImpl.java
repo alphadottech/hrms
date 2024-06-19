@@ -3,6 +3,7 @@ package com.adt.hrms.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.adt.hrms.util.AssetUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,36 @@ public class MasterAssetServiceImpl implements MasterAssetService{
 	
 	@Override
 	public boolean saveMasterAsset(MasterAsset asset) {
+		if(!AssetUtility.checkValidate(asset.getAssetUser())){
+			throw new IllegalArgumentException("Invalid Asset User...");
+		}
+		if(!AssetUtility.validateName(asset.getAssetName())){
+			throw new IllegalArgumentException("Invalid Asset Name..");
+		}
+		if(!AssetUtility.validateId(asset.getAssetId())){
+			throw new IllegalArgumentException("Invalid Asset ID ");
+		}
+		if(!AssetUtility.validateId(asset.getAssetNo())){
+			throw new IllegalArgumentException("Invalid Asset Number");
+		}
+		if(!AssetUtility.checkValidate(asset.getAssetType())){
+			throw new IllegalArgumentException("Invalid Asset Type...");
+		}
+		if(!AssetUtility.validateProcessor(asset.getProcessor())){
+			throw new IllegalArgumentException("Invalid Processor Details");
+		}
+		if(!AssetUtility.validateRAM(asset.getRam())){
+			throw new IllegalArgumentException("Invalid RAM Details");
+		}
+		if(!AssetUtility.validateDiskType(asset.getDiskType())){
+			throw new IllegalArgumentException("Invalid Disc Type Details");
+		}
+		if(!AssetUtility.validateProcessor(asset.getOperatingSystem())){
+			throw new IllegalArgumentException("Invalid Operating System Details");
+		}
+		if(!AssetUtility.validateProcessor(asset.getWarrenty())){
+			throw new IllegalArgumentException("Invalid Warranty Details");
+		}
 		MasterAsset masterasset = repo.save(asset);
 		
 		return masterasset!=null;
@@ -52,6 +83,36 @@ public class MasterAssetServiceImpl implements MasterAssetService{
 	@Override
 	public String updateMasterAssetById(MasterAsset masterAsset) 
 	{
+		if(!AssetUtility.checkValidate(masterAsset.getAssetUser())){
+			throw new IllegalArgumentException("Invalid Asset User...");
+		}
+		if(!AssetUtility.validateName(masterAsset.getAssetName())){
+			throw new IllegalArgumentException("Invalid Asset Name..");
+		}
+		if(!AssetUtility.validateId(masterAsset.getAssetId())){
+			throw new IllegalArgumentException("Invalid Asset ID ");
+		}
+		if(!AssetUtility.validateId(masterAsset.getAssetNo())){
+			throw new IllegalArgumentException("Invalid Asset Number");
+		}
+		if(!AssetUtility.checkValidate(masterAsset.getAssetType())){
+			throw new IllegalArgumentException("Invalid Asset Type...");
+		}
+		if(!AssetUtility.validateProcessor(masterAsset.getProcessor())){
+			throw new IllegalArgumentException("Invalid Processor Details");
+		}
+		if(!AssetUtility.validateRAM(masterAsset.getRam())){
+			throw new IllegalArgumentException("Invalid RAM Details");
+		}
+		if(!AssetUtility.validateDiskType(masterAsset.getDiskType())){
+			throw new IllegalArgumentException("Invalid Disc Type Details");
+		}
+		if(!AssetUtility.validateProcessor(masterAsset.getOperatingSystem())){
+			throw new IllegalArgumentException("Invalid Operating System Details");
+		}
+		if(!AssetUtility.validateProcessor(masterAsset.getWarrenty())){
+			throw new IllegalArgumentException("Invalid Warranty Details");
+		}
 		MasterAsset dbAsset = repo.findAssetById(masterAsset.getId());
 		if(dbAsset!=null) 
 		{

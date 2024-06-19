@@ -63,7 +63,7 @@ public class MasterAssetController {
         return ResponseEntity.ok(service.SearchByAssetType(query));
     }
 
-    @PreAuthorize("@auth.allow('UPDATE_MASTER_ASSET_BY_ASSET_ID')")
+   // @PreAuthorize("@auth.allow('UPDATE_MASTER_ASSET_BY_ASSET_ID')")
     @CrossOrigin(origins = "*")
     @PutMapping("/updateMasterAssetbyid")
     public ResponseEntity<String> updateMasterAssetbyid(@RequestBody MasterAsset asset) {

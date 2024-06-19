@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import com.adt.hrms.util.ProjectEngagementUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,34 @@ public class InterviewCandidateServiceImpl implements InterviewCandidateService 
 
 	@Override
 	public String saveInterviewCandidateDetail(InterviewCandidateDetails interviewCandidateDetails) {
+		if(!ProjectEngagementUtility.validateEmployee(interviewCandidateDetails.getCandidateName())){
+			throw new IllegalArgumentException("Invalid Candidate Name");
+		}
+		if(!ProjectEngagementUtility.validateEmail(interviewCandidateDetails.getEmailId())){
+			throw new IllegalArgumentException("Invalid Email Format");
+		}
+		if(!ProjectEngagementUtility.validatePhoneNo(interviewCandidateDetails.getContactNo())){
+			throw new IllegalArgumentException("Invalid Contact details");
+		}
+		if(!ProjectEngagementUtility.validateDescription(interviewCandidateDetails.getAddress())){
+			throw new IllegalArgumentException("Invalid Address");
+		}
+		if(!ProjectEngagementUtility.validateDescription(interviewCandidateDetails.getTechnicalStack())){
+			throw new IllegalArgumentException("Invalid Technical Details");
+		}
+		if(!ProjectEngagementUtility.validateDescription(interviewCandidateDetails.getHighestQualification())){
+			throw new IllegalArgumentException("Invalid Qualifications");
+		}
+
+		if(!ProjectEngagementUtility.validateWorkExp(interviewCandidateDetails.getWorkExperience())){
+			throw new IllegalArgumentException("Invalid Experience");
+		}
+		if(!ProjectEngagementUtility.validateCTC(interviewCandidateDetails.getLastCTC())){
+			throw new IllegalArgumentException("Invalid CTC Details");
+		}
+		if(!ProjectEngagementUtility.validateNoticePeriod(interviewCandidateDetails.getNoticePeriod())){
+			throw new IllegalArgumentException("Invalid Notice Period");
+		}
 		List<InterviewCandidateDetails> opt = interviewCandidateRepo
 				.findCandidateDetailsByEmailId(interviewCandidateDetails.getEmailId());
 		if (opt.size() > 0)
@@ -48,6 +77,34 @@ public class InterviewCandidateServiceImpl implements InterviewCandidateService 
 
 	@Override
 	public String updateInterviewCandidateDetail(int candidateId, InterviewCandidateDetails interviewCandidateDetails) {
+		if(!ProjectEngagementUtility.validateEmployee(interviewCandidateDetails.getCandidateName())){
+			throw new IllegalArgumentException("Invalid Candidate Name");
+		}
+		if(!ProjectEngagementUtility.validateEmail(interviewCandidateDetails.getEmailId())){
+			throw new IllegalArgumentException("Invalid Email Format");
+		}
+		if(!ProjectEngagementUtility.validatePhoneNo(interviewCandidateDetails.getContactNo())){
+			throw new IllegalArgumentException("Invalid Contact details");
+		}
+		if(!ProjectEngagementUtility.validateDescription(interviewCandidateDetails.getAddress())){
+			throw new IllegalArgumentException("Invalid Address");
+		}
+		if(!ProjectEngagementUtility.validateDescription(interviewCandidateDetails.getTechnicalStack())){
+			throw new IllegalArgumentException("Invalid Technical Details");
+		}
+		if(!ProjectEngagementUtility.validateDescription(interviewCandidateDetails.getHighestQualification())){
+			throw new IllegalArgumentException("Invalid Qualifications");
+		}
+
+		if(!ProjectEngagementUtility.validateWorkExp(interviewCandidateDetails.getWorkExperience())){
+			throw new IllegalArgumentException("Invalid Experience");
+		}
+		if(!ProjectEngagementUtility.validateCTC(interviewCandidateDetails.getLastCTC())){
+			throw new IllegalArgumentException("Invalid CTC Details");
+		}
+		if(!ProjectEngagementUtility.validateNoticePeriod(interviewCandidateDetails.getNoticePeriod())){
+			throw new IllegalArgumentException("Invalid Notice Period");
+		}
 		Optional<InterviewCandidateDetails> candidateDetails = interviewCandidateRepo.findById(candidateId);
 		if (!candidateDetails.isPresent())
 			return "Candidate With Id: " + candidateId + " is Not Present";
