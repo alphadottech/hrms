@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Table(catalog = "hrms_sit", schema = "employee_schema", name = "project_engagement")
+@Table(catalog = "EmployeeDB", schema = "employee_schema", name = "project_engagement")
 public class ProjectEngagement {
 
 
@@ -18,9 +18,6 @@ public class ProjectEngagement {
 
 	@Column(name = "end_date")
 	private String endDate;
-
-//	@Column(name = "engaged_employee")
-//	private String engagedEmployee;
 
    @Column(name = "primary_resource")
    private String primaryResource;

@@ -20,9 +20,6 @@ public interface ProjectEngagementRepo extends JpaRepository<ProjectEngagement, 
 
 	Optional<ProjectEngagement> findByProjectId(String projectId);
 
-//	@Query(value = "FROM ProjectEngagement pe WHERE pe.engagedEmployee LIKE %:query% ")
-//	List<ProjectEngagement> SearchByEngagedEmployee(@Param("query") String empName);
-
 	@Query(value = "FROM ProjectEngagement pe WHERE pe.contractor LIKE %:query% ")
 	List<ProjectEngagement> SearchByProjectName(@Param("query") String contractor);
 

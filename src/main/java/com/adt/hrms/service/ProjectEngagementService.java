@@ -17,8 +17,6 @@ public interface ProjectEngagementService {
 
 	String deleteProjectDetailById(String projectId);
 
-//	public List<ProjectEngagement> SearchByEngagedEmployee(String empName);
-
 	public List<ProjectEngagement> SearchByProjectName(String contractor);
 
 	public List<ProjectEngagement> SearchProjectsByDate(String startDate, String endDate);

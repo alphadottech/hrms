@@ -40,7 +40,7 @@ public class ProjectEngagementController {
                 HttpStatus.OK);
     }
 
-   @PreAuthorize("@auth.allow('GET_ALL_PROJECT_ENGAGEMENT_DETAILS')")
+    @PreAuthorize("@auth.allow('GET_ALL_PROJECT_ENGAGEMENT_DETAILS')")
     @GetMapping("/allProjectEngagement")
     public ResponseEntity<List<ProjectEngagement>> allProjectEngagement(HttpServletRequest request) {
         LOGGER.info("API Call From IP: " + request.getRemoteHost());
@@ -48,7 +48,7 @@ public class ProjectEngagementController {
                 HttpStatus.OK);
     }
 
- // @PreAuthorize("@auth.allow('UPDATE_PROJECT_ENGAGEMENT_DETAILS_BY_PROJECT_ID')")
+    @PreAuthorize("@auth.allow('UPDATE_PROJECT_ENGAGEMENT_DETAILS_BY_PROJECT_ID')")
     @PutMapping("/updateProjectEngagement/{projectId}")
     public ResponseEntity<String> updateProjectDetail(@PathVariable("projectId") String projectId,
                                                       @RequestBody ProjectEngagement projectEngagement, HttpServletRequest request) {
@@ -74,16 +74,6 @@ public class ProjectEngagementController {
         return new ResponseEntity<String>(projectEngagementService.deleteProjectDetailById(projectId), HttpStatus.OK);
     }
 
-//    @PreAuthorize("@auth.allow('SEARCH_PROJECT_ENGAGEMENT_DETAILS_BY_EMPLOYEE_NAME')")
-//    @GetMapping("/SearchByEngagedEmployee")
-//    public ResponseEntity<List<ProjectEngagement>> searchByEngagedEmployee(@RequestParam("query") String empName,
-//                                                                           HttpServletRequest request) {
-//        LOGGER.info("Employeeservice:engagement:searchByEngagedEmployee " + request.getRemoteHost());
-//
-//        return new ResponseEntity<List<ProjectEngagement>>(projectEngagementService.SearchByEngagedEmployee(empName),
-//                HttpStatus.OK);
-//    }
-
     @PreAuthorize("@auth.allow('SEARCH_PROJECT_ENGAGEMENT_DETAILS_BY_PROJECT_NAME')")
     @GetMapping("/SearchByProjectName")
     public ResponseEntity<List<ProjectEngagement>> searchByProjectName(@RequestParam("query") String contractor,
@@ -101,6 +91,7 @@ public class ProjectEngagementController {
         return new ResponseEntity<List<ProjectEngagement>>(
                 projectEngagementService.SearchProjectsByDate(startDate, endDate), HttpStatus.OK);
     }
+    @PreAuthorize("@auth.allow('SAVE_PROJECT_REVENUE')")
     @PostMapping("/saveProjectRevenue")
     public ResponseEntity<String> saveProjectRevenueDetails(@RequestBody ProjectRevenue projectRevenue,
                                                             HttpServletRequest request) {
@@ -108,14 +99,14 @@ public class ProjectEngagementController {
         return new ResponseEntity<>(projectRevenueService.saveProjectRevenueDetails(projectRevenue),
                 HttpStatus.OK);
     }
-
+    @PreAuthorize("@auth.allow('UPDATE_PROJECT_REVENUE')")
     @PutMapping("/updateProjectRevenue")
     public ResponseEntity<String> updateProjectRevenue(@RequestBody ProjectRevenue projectRevenue, HttpServletRequest request) {
         LOGGER.info("API Call From IP: " + request.getRemoteHost());
         return new ResponseEntity<>(projectRevenueService.updateProjectRevenueDetails(projectRevenue),
                 HttpStatus.OK);
     }
-
+    @PreAuthorize("@auth.allow('GET_PROJECT_REVENUE_DETAILS_BY_ID')")
     @GetMapping("/getProjectRevenueDetailById/{id}")
     public ResponseEntity<ProjectRevenue> getProjectRevenueDetailById(@PathVariable("id") Integer id,
                                                                       HttpServletRequest request) {
@@ -123,19 +114,21 @@ public class ProjectEngagementController {
         return new ResponseEntity<ProjectRevenue>(projectRevenueService.getProjectRevenueDetailsById(id),
                 HttpStatus.OK);
     }
-
+    @PreAuthorize("@auth.allow('DELETE_PROJECT_REVENUE_DETAILS_BY_ID')")
     @DeleteMapping("/deleteProjectRevenue/{id}")
     public ResponseEntity<String> deleteProjectRevenueById(@PathVariable("id") Integer id,
                                                            HttpServletRequest request) throws NoSuchFieldException {
         LOGGER.info("API Call From IP: " + request.getRemoteHost());
         return new ResponseEntity<String>(projectRevenueService.deleteProjectRevenueDetailById(id), HttpStatus.OK);
     }
+    @PreAuthorize("@auth.allow('GET_ALL_PROJECT_REVENUE_DETAILS')")
     @GetMapping("/getAllProjectRevenue")
     public ResponseEntity<List<ProjectRevenue>> allProjectRevenueList(HttpServletRequest request) {
         LOGGER.info("API Call From IP: " + request.getRemoteHost());
         return new ResponseEntity<List<ProjectRevenue>>(projectRevenueService.allProjectRevenueDetails(),
                 HttpStatus.OK);
     }
+    @PreAuthorize("@auth.allow('SEARCH_PROJECT_ENGAGEMENT_DETAILS_BY_FIELDS')")
     @GetMapping("/getProjectEngagementByFields")
     public ResponseEntity<Page<ProjectEngagement>>searchProjectEngagementByFields(
             @RequestParam(value="primaryResource" ,required = false) String primaryResource,
