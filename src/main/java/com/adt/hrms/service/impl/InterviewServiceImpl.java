@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import com.adt.hrms.util.ProjectEngagementUtility;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -80,6 +81,37 @@ public class InterviewServiceImpl implements InterviewService {
 	public Interview updateInterviewDetailByInterviewIdAndRound(Integer interviewId, Integer round,
 			InterviewModelDTO intwDTO) {
 		// TODO Auto-generated method stub
+		if(!ProjectEngagementUtility.validateEmployee(intwDTO.getInterviewerName())){
+			throw new IllegalArgumentException("Invalid Name Details");
+		}
+// 		if(!ProjectEngagementUtility.validateEmployee(intwDTO.getCandidateName())){
+//			throw new IllegalArgumentException("Invalid Candidate Name Details");
+//		}
+		if(!ProjectEngagementUtility.validateEmployee(intwDTO.getSource())){
+			throw new IllegalArgumentException("Invalid Source Details");
+		}
+		if(!ProjectEngagementUtility.validateEmployee(intwDTO.getClientName())){
+			throw new IllegalArgumentException("Invalid Client Name Details");
+		}
+		if(!ProjectEngagementUtility.validateDescription(intwDTO.getNotes())){
+			throw new IllegalArgumentException("Invalid Notes......");
+		}
+		if(!ProjectEngagementUtility.validateCTC(intwDTO.getWorkExInYears())){
+			throw new IllegalArgumentException("Invalid Work Exp.Details");
+		}
+
+		if(!ProjectEngagementUtility.validateInteger(intwDTO.getRounds())){
+			throw new IllegalArgumentException("Invalid Rounds");
+		}
+		if(!ProjectEngagementUtility.validateInteger(intwDTO.getMarks())){
+			throw new IllegalArgumentException("Invalid Marks");
+		}
+		if(!ProjectEngagementUtility.validateInteger(intwDTO.getCommunication())){
+			throw new IllegalArgumentException("Invalid Communication Marks");
+		}
+		if(!ProjectEngagementUtility.validateInteger(intwDTO.getEnthusiasm())){
+			throw new IllegalArgumentException("Invalid Enthusiasm Marks");
+		}
 
 		Optional<Interview> opt = interviewRepository.getInterviewDetailByInterviewIdAndRound(interviewId, round);
 
@@ -135,6 +167,37 @@ public class InterviewServiceImpl implements InterviewService {
 	// HRMS-66 START Added new method
 	@Override
 	public String saveInterviewNew(InterviewModelDTO intwDTO) {
+		if(!ProjectEngagementUtility.validateEmployee(intwDTO.getInterviewerName())){
+			throw new IllegalArgumentException("Invalid Name Details");
+		}
+// 		if(!ProjectEngagementUtility.validateEmployee(intwDTO.getCandidateName())){
+//			throw new IllegalArgumentException("Invalid Candidate Name Details");
+//		}
+		if(!ProjectEngagementUtility.validateEmployee(intwDTO.getSource())){
+			throw new IllegalArgumentException("Invalid Source Details");
+		}
+		if(!ProjectEngagementUtility.validateEmployee(intwDTO.getClientName())){
+			throw new IllegalArgumentException("Invalid Client Name Details");
+		}
+		if(!ProjectEngagementUtility.validateDescription(intwDTO.getNotes())){
+			throw new IllegalArgumentException("Invalid Notes......");
+		}
+		if(!ProjectEngagementUtility.validateCTC(intwDTO.getWorkExInYears())){
+			throw new IllegalArgumentException("Invalid Work Exp.Details");
+		}
+
+		if(!ProjectEngagementUtility.validateInteger(intwDTO.getRounds())){
+			throw new IllegalArgumentException("Invalid Rounds");
+		}
+		if(!ProjectEngagementUtility.validateInteger(intwDTO.getMarks())){
+			throw new IllegalArgumentException("Invalid Marks");
+		}
+		if(!ProjectEngagementUtility.validateInteger(intwDTO.getCommunication())){
+			throw new IllegalArgumentException("Invalid Communication Marks");
+		}
+		if(!ProjectEngagementUtility.validateInteger(intwDTO.getEnthusiasm())){
+			throw new IllegalArgumentException("Invalid Enthusiasm Marks");
+		}
 
 		Integer interviewId = intwDTO.getInterviewId();
 		Integer round = intwDTO.getRounds();
