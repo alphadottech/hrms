@@ -18,7 +18,7 @@ import lombok.Data;
 @Proxy(lazy = false)
 @Data
 public class AssetAttributeMapping {
-	
+
 	@Id
 //	@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "asset_attribute_mapping_seq")
@@ -29,7 +29,7 @@ public class AssetAttributeMapping {
 //	@Column(name = "asset_id")
 	@ManyToOne
 	@JoinColumn(name = "asset_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-	private Asset assetInfo;
+	private AssetInfo assetInfo;
 	private Integer asset_id;
 
 //	@Column(name = "asset_attribute_id")

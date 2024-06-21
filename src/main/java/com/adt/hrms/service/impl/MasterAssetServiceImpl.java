@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adt.hrms.model.AssetAttribute;
+import com.adt.hrms.model.AssetAttributeMapping;
+import com.adt.hrms.model.AssetInfo;
 import com.adt.hrms.model.AssetType;
 import com.adt.hrms.model.MasterAsset;
 import com.adt.hrms.repository.AssetAttributeMappingRepo;
@@ -177,7 +179,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				responseDTO.setData(assetTypesList);
 			}
 		} catch (Exception e) {
-			log.error("Exception : " + e);
+			log.error("getAllAssetType Exception : " + e);
 			e.printStackTrace();
 			responseDTO.setMessage(e.getMessage());
 			responseDTO.setStatus("failed");
@@ -205,7 +207,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				responseDTO.setData(assetAttributeList);
 			}
 		} catch (Exception e) {
-			log.error("Exception : " + e);
+			log.error("getAllAssetAttributesByAssetTypeId Exception : " + e);
 			e.printStackTrace();
 			responseDTO.setMessage(e.getMessage());
 			responseDTO.setStatus("failed");
@@ -257,7 +259,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 			responseDTO.setData(createAssetDTO);
 
 		} catch (Exception e) {
-			log.error("Exception : " + e);
+			log.error("saveAssetDetailsWithAttributes Exception : " + e);
 			e.printStackTrace();
 			responseDTO.setMessage(e.getMessage());
 			responseDTO.setStatus("failed");
@@ -266,20 +268,41 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		return responseDTO;
 	}
 
-//	@Override
-//	public ResponseDTO saveAsset(AssetDTO assetDTO) {
-//		ResponseDTO responseDTO = new ResponseDTO();
-//	log.info("MasterAssetServiceImpl:saveAsset info level log message");
-//		try {
-//
-//		} catch (Exception e) {
-//	log.error("Exception : "+e);
-//			e.printStackTrace();
-//			responseDTO.setMessage(e.getMessage());
-//			responseDTO.setStatus("failed");
-//			responseDTO.setData(null);
-//		}
-//		return responseDTO;
-//	}
+	@Override
+	public ResponseDTO saveAssetInfo(AssetDTO assetDTO) {
+		ResponseDTO responseDTO = new ResponseDTO();
+		log.info("MasterAssetServiceImpl:saveAssetInfo info level log message");
+
+		try {
+			AssetInfo asset = new AssetInfo();
+			asset.setAsset_type_id(assetDTO.getAssetId());
+			AssetInfo savedAssetInfo = assetInfoRepo.save(asset);
+
+			if (savedAssetInfo != null && !savedAssetInfo.equals("")) {
+				AssetAttributeMapping assetAttributeMapping = new AssetAttributeMapping();
+
+				assetAttributeMapping.setAsset_id(assetDTO.getAssetId());
+				assetAttributeMapping.setAsset_attribute_id(assetDTO.getAssetAttributeId());
+				assetAttributeMapping.setAssetAttributeValue(assetDTO.getAssetAttributeValue());
+				assetAttributeMappingRepo.save(assetAttributeMapping);
+
+			} else {
+				responseDTO.setStatus("NotSaved");
+				responseDTO.setMessage("AssetInfo data not saved yet");
+				responseDTO.setData(assetDTO);
+			}
+			responseDTO.setStatus("Success");
+			responseDTO.setMessage("Data Saved Successfully");
+			responseDTO.setData(assetDTO);
+
+		} catch (Exception e) {
+			log.error("saveAssetInfo Exception : " + e);
+			e.printStackTrace();
+			responseDTO.setMessage(e.getMessage());
+			responseDTO.setStatus("failed");
+			responseDTO.setData(null);
+		}
+		return responseDTO;
+	}
 
 }

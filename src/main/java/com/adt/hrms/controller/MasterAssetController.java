@@ -130,18 +130,18 @@ public class MasterAssetController {
 		}
 	}
 
-//	@PreAuthorize("@auth.allow('SAVE_ASSET')")
-//	@PostMapping(value = "/saveAsset")
-//	public ResponseEntity<Object> saveAsset(@RequestBody AssetDTO assetDTO) {
-//	LOGGER.info("MasterAssetController:masterAsset:saveAsset info level log message");
-//		ResponseDTO responseDTO = service.saveAsset(assetDTO);
-//		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-//			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-//		} else if (responseDTO.getStatus().equalsIgnoreCase("NotSaved")) {
-//			return new ResponseEntity<Object>(responseDTO, HttpStatus.BAD_REQUEST);
-//		} else {
-//			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
+	@PreAuthorize("@auth.allow('SAVE_ASSET_INFO')")
+	@PostMapping(value = "/saveAssetInfo")
+	public ResponseEntity<Object> saveAssetInfo(@RequestBody AssetDTO assetDTO) {
+		LOGGER.info("MasterAssetController:masterAsset:saveAsset info level log message");
+		ResponseDTO responseDTO = service.saveAssetInfo(assetDTO);
+		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
+		} else if (responseDTO.getStatus().equalsIgnoreCase("NotSaved")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 }

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.adt.hrms.model.AssetAttributeMapping;
 
 @Repository
-public interface AssetAttributeMappingRepo extends JpaRepository<AssetAttributeMapping, Integer>{
+public interface AssetAttributeMappingRepo extends JpaRepository<AssetAttributeMapping, Integer> {
 
 }

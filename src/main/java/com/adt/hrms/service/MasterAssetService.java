@@ -7,8 +7,6 @@ import com.adt.hrms.request.AssetDTO;
 import com.adt.hrms.request.CreateAssetDTO;
 import com.adt.hrms.request.ResponseDTO;
 
-//JyotiPancholi - Jira no ->  HRMS-63(START)
-
 public interface MasterAssetService {
 
 	public boolean saveMasterAsset(MasterAsset asset);
@@ -31,5 +29,6 @@ public interface MasterAssetService {
 
 	public ResponseDTO saveAssetDetailsWithAttributes(CreateAssetDTO createAssetDTO);
 
-//	public ResponseDTO saveAsset(AssetDTO assetDTO);
+	public ResponseDTO saveAssetInfo(AssetDTO assetDTO);
+
 }

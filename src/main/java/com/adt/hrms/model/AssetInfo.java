@@ -19,7 +19,7 @@ import lombok.Data;
 @Table(catalog = "EmployeeDB", schema = "employee_schema", name = "asset")
 @Proxy(lazy = false)
 @Data
-public class Asset {
+public class AssetInfo {
 
 	@Id
 	@Column(name = "id")

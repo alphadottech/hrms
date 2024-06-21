@@ -3,7 +3,6 @@ package com.adt.hrms.request;
 import java.util.List;
 
 import com.adt.hrms.model.AssetAttribute;
-import com.adt.hrms.model.AssetType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
