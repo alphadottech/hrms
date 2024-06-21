@@ -3,11 +3,14 @@ package com.adt.hrms.service;
 import java.util.List;
 
 import com.adt.hrms.model.MasterAsset;
+import com.adt.hrms.request.AssetDTO;
+import com.adt.hrms.request.CreateAssetDTO;
+import com.adt.hrms.request.ResponseDTO;
 
 //JyotiPancholi - Jira no ->  HRMS-63(START)
 
-public interface MasterAssetService {  
-	
+public interface MasterAssetService {
+
 	public boolean saveMasterAsset(MasterAsset asset);
 
 	public MasterAsset TakeAssetById(Integer id);
@@ -22,5 +25,11 @@ public interface MasterAssetService {
 
 	public List<MasterAsset> findAllMasterAsset();
 
-}
+	public ResponseDTO getAllAssetType();
 
+	public ResponseDTO getAllAssetAttributesByAssetTypeId(Integer assetTypeId);
+
+	public ResponseDTO saveAssetDetailsWithAttributes(CreateAssetDTO createAssetDTO);
+
+//	public ResponseDTO saveAsset(AssetDTO assetDTO);
+}
