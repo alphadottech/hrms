@@ -37,7 +37,7 @@ public class PositionModel {
 
 	private String status;
 
-	private Double experienceInYear;
+	private String experienceInYear;
 
 	private Boolean remote;
 
@@ -93,11 +93,11 @@ public class PositionModel {
 		this.status = status;
 	}
 
-	public Double getExperienceInYear() {
+	public String getExperienceInYear() {
 		return experienceInYear;
 	}
 
-	public void setExperienceInYear(Double experienceInYear) {
+	public void setExperienceInYear(String experienceInYear) {
 		this.experienceInYear = experienceInYear;
 	}
 
@@ -126,7 +126,7 @@ public class PositionModel {
 	}
 
 	public PositionModel(Integer positionId, String positionName, List<String> techStack,
-			LocalDateTime positionOpenDate, LocalDateTime positionCloseDate, String status, Double experienceInYear,
+			LocalDateTime positionOpenDate, LocalDateTime positionCloseDate, String status, String experienceInYear,
 			Boolean remote, String positionType, Integer vacancy) {
 		super();
 		this.positionId = positionId;
