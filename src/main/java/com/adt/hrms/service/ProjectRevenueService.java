@@ -10,11 +10,12 @@ public interface ProjectRevenueService {
     String updateProjectRevenueDetails(ProjectRevenue projectRevenue);
 
 
-
     ProjectRevenue getProjectRevenueDetailsById(Integer id);
 
     String deleteProjectRevenueDetailById(Integer id);
 
 
     List<ProjectRevenue> allProjectRevenueDetails();
+
+    List<ProjectRevenue> getProjectRevenueDetailsByProjectId(String projectId);
 }
