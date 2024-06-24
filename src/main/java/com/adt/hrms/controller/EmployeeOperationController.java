@@ -207,9 +207,13 @@ public class EmployeeOperationController {
 
     @PreAuthorize("@auth.allow('GET_EMPLOYEE_PAYROLL_DETAILS_BY_EMPLOYEE_ID') or @auth.allow('ROLE_USER',T(java.util.Map).of('currentUser', #empId))")
     @GetMapping("/getEmpPayrollById/{empId}")
-    public ResponseEntity<EmpPayrollDetails> getEmpPayrollDetails(@PathVariable("empId") Integer empId) {
+    public ResponseEntity<?> getEmpPayrollDetails(@PathVariable("empId") Integer empId) {
         LOGGER.info("Employee-service:employee:getEmpPayrollDetails info level log message");
-        return ResponseEntity.ok(empPayrollDetailsService.getEmpPayrollDetails(empId));
+		EmpPayrollDetails payrolldetails = empPayrollDetailsService.getEmpPayrollDetails(empId);
+		if (payrolldetails != null) {
+			return ResponseEntity.ok(payrolldetails);
+		}
+		return ResponseEntity.ok("Payroll details not found");
     }
 
     @PreAuthorize("@auth.allow('SEARCH_EMPLOYEE_BY_CRITERIA')")
