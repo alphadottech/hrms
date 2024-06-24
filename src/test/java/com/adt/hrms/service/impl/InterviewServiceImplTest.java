@@ -174,7 +174,7 @@ public class InterviewServiceImplTest {
 				noticePeriod(30).dob(LocalDate.parse("2019-06-06")).build();
 		
 		
-		PositionModel position = PositionModel.builder().experienceInYear(2.5)
+		PositionModel position = PositionModel.builder().experienceInYear("2-4")
 				.positionId(1).positionName("Software Engineer").vacancy(2).build();
 		
 		Interview interview = Interview.builder().interviewId(2).rounds(1).candidateName("Sunali")
