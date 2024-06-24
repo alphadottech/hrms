@@ -275,13 +275,13 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 
 		try {
 			AssetInfo asset = new AssetInfo();
-			asset.setAsset_type_id(assetDTO.getAssetId());
+			asset.setAsset_type_id(assetDTO.getAssetTypeId());
 			AssetInfo savedAssetInfo = assetInfoRepo.save(asset);
 
 			if (savedAssetInfo != null && !savedAssetInfo.equals("")) {
 				AssetAttributeMapping assetAttributeMapping = new AssetAttributeMapping();
 
-				assetAttributeMapping.setAsset_id(assetDTO.getAssetId());
+				assetAttributeMapping.setAsset_id(savedAssetInfo.getId());
 				assetAttributeMapping.setAsset_attribute_id(assetDTO.getAssetAttributeId());
 				assetAttributeMapping.setAssetAttributeValue(assetDTO.getAssetAttributeValue());
 				assetAttributeMappingRepo.save(assetAttributeMapping);
