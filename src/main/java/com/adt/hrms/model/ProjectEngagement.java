@@ -1,38 +1,38 @@
 package com.adt.hrms.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.UUID;
 
 @Entity
 @Data
 @Table(catalog = "EmployeeDB", schema = "employee_schema", name = "project_engagement")
 public class ProjectEngagement {
 
+
 	@Id
 	@Column(name = "project_id")
-	private String projectId;
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private String projectId = UUID.randomUUID().toString();
 
-	// JIRA no. :- HRMS-90 START---
 	@Column(name = "end_date")
 	private String endDate;
 
-	@Column(name = "engaged_employee")
-	private String engagedEmployee;
-	// JIRA no. :- HRMS-90 END---
+   @Column(name = "primary_resource")
+   private String primaryResource;
 
-	@Column(name = "project_description")
-	private String projectDescription;
+	@Column(name="secondary_resource")
+	private String secondaryResource;
 
-	// JIRA no. :- HRMS-90 START---
-	@Column(name = "project_name")
-	private String projectName;
+	@Column(name = "end_client")
+	private String endClient;
+
+	@Column(name = "contractor")
+	private String contractor;
 
 	@Column(name = "start_date")
 	private String startDate;
-	// JIRA no. :- HRMS-90 END---
 
 	@Column(name = "status")
 	private boolean status;

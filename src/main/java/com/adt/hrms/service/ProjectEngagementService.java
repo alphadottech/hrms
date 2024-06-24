@@ -1,6 +1,7 @@
 package com.adt.hrms.service;
 
 import com.adt.hrms.model.ProjectEngagement;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -16,10 +17,9 @@ public interface ProjectEngagementService {
 
 	String deleteProjectDetailById(String projectId);
 
-	public List<ProjectEngagement> SearchByEngagedEmployee(String empName);
-
-	public List<ProjectEngagement> SearchByProjectName(String projectName);
+	public List<ProjectEngagement> SearchByProjectName(String contractor);
 
 	public List<ProjectEngagement> SearchProjectsByDate(String startDate, String endDate);
 
+	Page<ProjectEngagement> searchProjectEngagementbyFields(String primaryResource, String secondaryResource, String startDate, String endDate, int page, int size);
 }

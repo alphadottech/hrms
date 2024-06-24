@@ -10,14 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.adt.hrms.model.AVTechnology;
 import com.adt.hrms.model.Interview;
@@ -31,7 +24,7 @@ import com.adt.hrms.ui.PositionDateConverter;
 import com.adt.hrms.ui.PositionUIModel;
 
 import jakarta.servlet.http.HttpServletResponse;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/interview")
 public class InterviewController {
@@ -71,6 +64,7 @@ public class InterviewController {
     }
 
     @PreAuthorize("@auth.allow('ROLE_ADMIN')")
+    @CrossOrigin(origins = "*")
     @PutMapping("/updateInterviewDetails")
     public ResponseEntity<String> updateInterviewDetails(@RequestBody Interview interviewRequest) {
         LOGGER.info("Employeeservice:Interview:updateInterviewDetails info level log message");
@@ -104,6 +98,7 @@ public class InterviewController {
     }
 
     @PreAuthorize("@auth.allow('UPDATE_INTERVIEW_DETAILS_BY_ID_AND_ROUND')")
+    @CrossOrigin(origins = "*")
     @PutMapping("/updateInterviewByIdAndRound")
     public ResponseEntity<String> updateInterviewDetailByInterviewIDAndRound(@RequestBody InterviewModelDTO intwDTO) {
 
@@ -188,6 +183,7 @@ public class InterviewController {
     }
 
     @PreAuthorize("@auth.allow('UPDATE_INTERVIEW_POSITION_BY_ID')")
+    @CrossOrigin(origins = "*")
     @PutMapping("/updatePositionNew")
     public ResponseEntity<String> updatePositionNew(@RequestBody PositionDateConverter pdc) {
         LOGGER.info("Employeeservice:InterviewPosition:updatePosition info level log message");

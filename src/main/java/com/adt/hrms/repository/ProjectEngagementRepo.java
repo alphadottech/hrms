@@ -1,6 +1,9 @@
 package com.adt.hrms.repository;
 
 import com.adt.hrms.model.ProjectEngagement;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,23 +13,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProjectEngagementRepo extends JpaRepository<ProjectEngagement, Integer> {
+public interface ProjectEngagementRepo extends JpaRepository<ProjectEngagement, String> {
 
-	List<ProjectEngagement> findProjectEngagementByProjectName(String projectName);
-
-	@Query(value = "select count(status) FROM ProjectEngagement")
-	Integer findCount();
+	List<ProjectEngagement> findProjectEngagementByProjectId(String projectId);
+	boolean existsById(String projectId);
 
 	Optional<ProjectEngagement> findByProjectId(String projectId);
 
-	// JIRA no. :- HRMS-90 START---
-	@Query(value = "FROM ProjectEngagement pe WHERE pe.engagedEmployee LIKE %:query% ")
-	List<ProjectEngagement> SearchByEngagedEmployee(@Param("query") String empName);
-
-	@Query(value = "FROM ProjectEngagement pe WHERE pe.projectName LIKE %:query% ")
-	List<ProjectEngagement> SearchByProjectName(@Param("query") String projectName);
+	@Query(value = "FROM ProjectEngagement pe WHERE pe.contractor LIKE %:query% ")
+	List<ProjectEngagement> SearchByProjectName(@Param("query") String contractor);
 
 	@Query(value = "FROM ProjectEngagement pe WHERE pe.startDate LIKE %:startDate% AND pe.endDate LIKE %:endDate%")
 	List<ProjectEngagement> findByProjectDate(String startDate, String endDate);
-	// JIRA no. :- HRMS-90 END---
+
+    Page<ProjectEngagement> findAll(Specification<ProjectEngagement> spec, Pageable pageable);
 }
