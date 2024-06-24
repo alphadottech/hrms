@@ -24,5 +24,4 @@ public interface ProjectEngagementService {
 
 	Page<ProjectEngagement> searchProjectEngagementbyFields(String primaryResource, String secondaryResource, String startDate, String endDate, int page, int size);
 
-	List<ProjectRevenue> getProjectRevenueDetailsByProjectId(String projectId);
 }

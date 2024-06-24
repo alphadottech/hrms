@@ -102,6 +102,15 @@ public class ProjectRevenueServiceImpl implements ProjectRevenueService {
         List<ProjectRevenue> projectlist=projectRevenueRepo.findAll();
         return projectlist;
     }
+
+    public List<ProjectRevenue> getProjectRevenueDetailsByProjectId(String projectId) {
+        Optional<ProjectEngagement> projectEngagement = projectEngagementRepo.findByProjectId(projectId);
+        if (projectEngagement.isPresent()) {
+            return projectRevenueRepo.findByProjectEngagementProjectId(projectId);
+        } else {
+            throw new EntityNotFoundException("Project Engagement Not Found");
+        }
+    }
 }
 
 

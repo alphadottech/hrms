@@ -34,8 +34,6 @@ public class ProjectEngagementServiceImpl implements ProjectEngagementService {
 
 	@Autowired
 	private MessageSource messageSource;
-	@Autowired
-	ProjectRevenueRepo projectRevenueRepo;
 
 	private final Object lock = new Object();
 	@Transactional
@@ -182,13 +180,6 @@ public class ProjectEngagementServiceImpl implements ProjectEngagementService {
 		return projectEngagementRepo.findAll(spec,pageable);
 	}
 
-	public List<ProjectRevenue> getProjectRevenueDetailsByProjectId(String projectId) {
-		Optional<ProjectEngagement> projectEngagement = projectEngagementRepo.findByProjectId(projectId);
-		if (projectEngagement.isPresent()) {
-			return projectRevenueRepo.findByProjectEngagementProjectId(projectId);
-		} else {
-			throw new EntityNotFoundException("Project Engagement Not Found");
-		}
-	}
+
 	
 }
