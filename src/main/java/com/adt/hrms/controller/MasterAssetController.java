@@ -90,7 +90,7 @@ public class MasterAssetController {
 		return new ResponseEntity<List<MasterAsset>>(service.findAllMasterAsset(), HttpStatus.OK);
 	}
 
-	@PreAuthorize("@auth.allow('GET_ALL_ASSET_TYPE')")
+//	@PreAuthorize("@auth.allow('GET_ALL_ASSET_TYPE')")
 	@GetMapping(value = "/getAllAssetType")
 	public ResponseEntity<Object> getAllAssetType() {
 		LOGGER.info("MasterAssetController:masterAsset:getAllAssetType info level log message");
@@ -104,7 +104,7 @@ public class MasterAssetController {
 		}
 	}
 
-	@PreAuthorize("@auth.allow('GET_ALL_ASSET_ATTRIBUTES_BY_ASSET_TYPE_ID')")
+//	@PreAuthorize("@auth.allow('GET_ALL_ASSET_ATTRIBUTES_BY_ASSET_TYPE_ID')")
 	@GetMapping(value = "/getAllAssetAttributesByAssetTypeId/{assetTypeId}")
 	public ResponseEntity<Object> getAllAssetAttributesByAssetTypeId(@PathVariable Integer assetTypeId) {
 		LOGGER.info("MasterAssetController:masterAsset:getAllAssetAttributesByAssetTypeId info level log message");
@@ -118,7 +118,7 @@ public class MasterAssetController {
 		}
 	}
 
-	@PreAuthorize("@auth.allow('SAVE_ASSET_DETAILS_WITH_ATTRIBUTES')")
+//	@PreAuthorize("@auth.allow('SAVE_ASSET_DETAILS_WITH_ATTRIBUTES')")
 	@PostMapping(value = "/saveAssetDetailsWithAttributes")
 	public ResponseEntity<Object> saveAssetDetailsWithAttributes(@RequestBody CreateAssetDTO createAssetDTO) {
 		LOGGER.info("MasterAssetController:masterAsset:saveAssetDetailsWithAttributes info level log message");
@@ -130,7 +130,7 @@ public class MasterAssetController {
 		}
 	}
 
-	@PreAuthorize("@auth.allow('SAVE_ASSET_INFO')")
+//	@PreAuthorize("@auth.allow('SAVE_ASSET_INFO')")
 	@PostMapping(value = "/saveAssetInfo")
 	public ResponseEntity<Object> saveAssetInfo(@RequestBody AssetDTO assetDTO) {
 		LOGGER.info("MasterAssetController:masterAsset:saveAsset info level log message");
