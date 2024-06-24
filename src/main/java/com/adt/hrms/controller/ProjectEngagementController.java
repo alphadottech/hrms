@@ -142,5 +142,12 @@ public class ProjectEngagementController {
         return ResponseEntity.ok(searchResult);
     }
 
+    @PreAuthorize("@auth.allow('GET_PROJECT_REVENUE_DETAILS_BY_PROJECT_ID')")
+
+    @GetMapping("/getRevenueDetailsByprojectId/{projectId}")
+    public List<ProjectRevenue> getProjectRevenueByProjectId(@PathVariable String projectId) {
+        return projectRevenueService.getProjectRevenueDetailsByProjectId(projectId);
+    }
+
 
 }

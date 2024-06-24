@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import com.adt.hrms.model.ProjectRevenue;
+import com.adt.hrms.repository.ProjectRevenueRepo;
 import com.adt.hrms.util.AssetUtility;
 import com.adt.hrms.util.ProjectEngagementUtility;
 import jakarta.transaction.Transactional;
@@ -32,6 +34,8 @@ public class ProjectEngagementServiceImpl implements ProjectEngagementService {
 
 	@Autowired
 	private MessageSource messageSource;
+	@Autowired
+	ProjectRevenueRepo projectRevenueRepo;
 
 	private final Object lock = new Object();
 	@Transactional
@@ -176,6 +180,15 @@ public class ProjectEngagementServiceImpl implements ProjectEngagementService {
 			spec = spec.or((root, query, cb) -> cb.equal(root.get("endDate"), endDate));
 		}
 		return projectEngagementRepo.findAll(spec,pageable);
+	}
+
+	public List<ProjectRevenue> getProjectRevenueDetailsByProjectId(String projectId) {
+		Optional<ProjectEngagement> projectEngagement = projectEngagementRepo.findByProjectId(projectId);
+		if (projectEngagement.isPresent()) {
+			return projectRevenueRepo.findByProjectEngagementProjectId(projectId);
+		} else {
+			throw new EntityNotFoundException("Project Engagement Not Found");
+		}
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.adt.hrms.service;
 
 import com.adt.hrms.model.ProjectEngagement;
+import com.adt.hrms.model.ProjectRevenue;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface ProjectEngagementService {
 	public List<ProjectEngagement> SearchProjectsByDate(String startDate, String endDate);
 
 	Page<ProjectEngagement> searchProjectEngagementbyFields(String primaryResource, String secondaryResource, String startDate, String endDate, int page, int size);
+
+	List<ProjectRevenue> getProjectRevenueDetailsByProjectId(String projectId);
 }
