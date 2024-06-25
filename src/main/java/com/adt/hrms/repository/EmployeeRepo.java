@@ -20,5 +20,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 	Page<Employee> SearchByEmail(@Param("query") String email,Pageable pageable);
 
 	Page<Employee> findAll(Specification<Employee> sp, Pageable pageable);
+	Page<Employee> findByIsActiveTrue(Pageable pageable);
+
 
 }

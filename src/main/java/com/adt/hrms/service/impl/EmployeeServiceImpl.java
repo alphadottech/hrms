@@ -30,11 +30,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     // JIRA NO. :- HRMS-106(Bug Resolved) START---
     @Override
     public Page<Employee> getAllEmps(int page, int size) {
-    	if (size <= 0 || size > MAX_PAGE_SIZE) {
+        if (size <= 0 || size > MAX_PAGE_SIZE) {
             size = DEFAULT_PAGE_SIZE;
         }
         Pageable pageable = PageRequest.of(page, size);
-        return employeeRepo.findAll(pageable);
+        return employeeRepo.findByIsActiveTrue(pageable);
     }
     // JIRA NO. :- HRMS-106(Bug Resolved) END---
 
@@ -50,8 +50,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     public String deleteEmpById(Integer empId) {
         Optional<Employee> opt = employeeRepo.findById(empId);
         if (opt.isPresent()) {
-            employeeRepo.deleteById(empId);
-            return empId + " has been Deleted";
+            Employee employee=opt.get();
+            employee.setIsActive(false);
+            employeeRepo.save(employee);
+            return empId + " has been InActive";
         } else return "Invalid Employe Id :: " + empId;
     }
 
@@ -84,16 +86,36 @@ public class EmployeeServiceImpl implements EmployeeService {
     public String updateEmpById(Employee emp) {
         Employee existEmployee = employeeRepo.findById(emp.getEmployeeId())
                 .orElseThrow(() -> new IllegalArgumentException("Employee not found with id: " + emp.getEmployeeId()));
-        if (emp.getDob() != null) existEmployee.setDob(emp.getDob());
-        if (emp.getFirstName() != null) existEmployee.setFirstName(emp.getFirstName());
-        if (emp.getGender() != null) existEmployee.setGender(emp.getGender());
-        if (emp.getLastName() != null) existEmployee.setLastName(emp.getLastName());
-        if (emp.getMaritalStatus() != null) existEmployee.setMaritalStatus(emp.getMaritalStatus());
-        if (emp.getMobileNo() != null) existEmployee.setMobileNo(emp.getMobileNo());
-        if (emp.getIsActive() != null) existEmployee.setIsActive(emp.getIsActive());
 
-        return "Employee with id " + emp.getEmployeeId() + " Updated Successfully";
+
+        if (emp.getDob() != null) {
+            existEmployee.setDob(emp.getDob());
+        }
+        if (emp.getFirstName() != null) {
+            existEmployee.setFirstName(emp.getFirstName());
+        }
+        if (emp.getGender() != null) {
+            existEmployee.setGender(emp.getGender());
+        }
+        if (emp.getLastName() != null) {
+            existEmployee.setLastName(emp.getLastName());
+        }
+        if (emp.getMaritalStatus() != null) {
+            existEmployee.setMaritalStatus(emp.getMaritalStatus());
+        }
+        if (emp.getMobileNo() != null) {
+            existEmployee.setMobileNo(emp.getMobileNo());
+        }
+        if (emp.getIsActive() != null) {
+            existEmployee.setIsActive(emp.getIsActive());
+        }
+
+
+        employeeRepo.save(existEmployee);
+
+        return "Employee with id " + emp.getEmployeeId() + " updated successfully";
     }
+
 
     @Override
     public Employee getEmp(Integer empId) {
