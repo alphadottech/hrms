@@ -19,7 +19,7 @@ public class PositionDateConverter {
 
 	private String status;
 
-	private double experienceInYear;
+	private String  experienceInYear;
 
 	private boolean remote;
 
@@ -75,11 +75,11 @@ public class PositionDateConverter {
 		this.status = status;
 	}
 
-	public double getExperienceInYear() {
+	public String getExperienceInYear() {
 		return experienceInYear;
 	}
 
-	public void setExperienceInYear(double experienceInYear) {
+	public void setExperienceInYear(String experienceInYear) {
 		this.experienceInYear = experienceInYear;
 	}
 
@@ -108,7 +108,7 @@ public class PositionDateConverter {
 	}
 
 	public PositionDateConverter(Integer positionId, String positionName, List<String> techStack, String positionOpenDate,
-			String positionCloseDate, String status, double experienceInYear, boolean remote, String positionType,
+			String positionCloseDate, String status, String experienceInYear, boolean remote, String positionType,
 			Integer vacancy) {
 		super();
 		this.positionId = positionId;

@@ -14,7 +14,7 @@ public class PositionUIModel {
 
 	private String status;
 
-	private double experienceInYear;
+	private String experienceInYear;
 
 	private boolean remote;
 
@@ -68,11 +68,11 @@ public class PositionUIModel {
 		this.status = status;
 	}
 
-	public double getExperienceInYear() {
+	public String getExperienceInYear() {
 		return experienceInYear;
 	}
 
-	public void setExperienceInYear(double experienceInYear) {
+	public void setExperienceInYear(String experienceInYear) {
 		this.experienceInYear = experienceInYear;
 	}
 
