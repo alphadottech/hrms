@@ -24,11 +24,6 @@ public class ProjectRevenueServiceImpl implements ProjectRevenueService {
     ProjectEngagementRepo projectEngagementRepo;
 
     @Override
-    public String saveOrUpdateProjectRevenue(ProjectRevenue projectRevenue) {
-        return "";
-    }
-
-    @Override
     public String saveProjectRevenueDetails(ProjectRevenue projectRevenue) {
         // Validate project revenue details
         if (!ProjectEngagementUtility.validateCTC(projectRevenue.getProjectRevenue())) {
@@ -70,38 +65,6 @@ public class ProjectRevenueServiceImpl implements ProjectRevenueService {
         }
     }
 
-
-
-
-    //    @Override
-//    public String updateProjectRevenueDetails(ProjectRevenue projectRevenue) {
-//
-//        if (!ProjectEngagementUtility.validateCTC(projectRevenue.getProjectRevenue())) {
-//            throw new IllegalArgumentException("Invalid Revenue Details");
-//        }
-//        if (!ProjectEngagementUtility.validateCTC(projectRevenue.getResourceExpense())) {
-//            throw new IllegalArgumentException("Invalid Expense Details");
-//        }
-//        if (!ProjectEngagementUtility.validateEmployee(projectRevenue.getMonth())) {
-//            throw new IllegalArgumentException("Invalid Month Details");
-//        }
-//      if (!AssetUtility.validateYear(projectRevenue.getYear())) {
-//            throw new IllegalArgumentException("Invalid Year Details");
-//        }
-//        Optional<ProjectRevenue> ProjectRevenueOptional = projectRevenueRepo.findById(projectRevenue.getId());
-//
-//
-//        if (ProjectRevenueOptional.isPresent()) {
-//            ProjectRevenueOptional.get().setYear(projectRevenue.getYear());
-//            ProjectRevenueOptional.get().setMonth(projectRevenue.getMonth());;
-//            ProjectRevenueOptional.get().setProjectRevenue(projectRevenue.getProjectRevenue());
-//            ProjectRevenueOptional.get().setResourceExpense(projectRevenue.getResourceExpense());
-//            projectRevenueRepo.save(ProjectRevenueOptional.get());
-//            return "Project revenue details updated";
-//        } else {
-//            return "Project revenue details not found";
-//        }
-//    }
     @Override
     public ProjectRevenue getProjectRevenueDetailsById(Integer id) {
         Optional<ProjectRevenue> projectRevenue=projectRevenueRepo.findById(id);

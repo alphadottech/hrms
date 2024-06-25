@@ -241,6 +241,8 @@ public class EmployeeOperationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @PreAuthorize("@auth.allow('DELETE_EMPLOYEE_BY_EMP_ID')")
     @DeleteMapping("/deleteEmployeeById/{employeeId}")
     public ResponseEntity<String> deleteEmployeeById(@PathVariable ("employeeId") int employeeId ){
         LOGGER.info("Deleted employee with id: {}", employeeId);

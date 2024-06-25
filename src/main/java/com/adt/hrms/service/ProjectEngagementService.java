@@ -25,5 +25,6 @@ public interface ProjectEngagementService {
 	public List<ProjectEngagement> SearchProjectsByDate(String startDate, String endDate);
 
 	Page<ProjectEngagement> searchProjectEngagementbyFields(String primaryResource, String secondaryResource, String startDate, String endDate, int page, int size);
+
 	ByteArrayInputStream getExcelData() throws IOException;
 }

@@ -100,7 +100,7 @@ public class ProjectEngagementController {
     }
 
 
-  //  @PreAuthorize("@auth.allow('SAVE OR_UPDATE_PROJECT_REVENUE')")
+  @PreAuthorize("@auth.allow('SAVE_PROJECT_REVENUE')")
   @PostMapping("/saveProjectRevenue")
   public ResponseEntity<String> saveOrUpdateProjectRevenue(@RequestBody ProjectRevenue projectRevenue,
                                                            HttpServletRequest request) {
@@ -153,12 +153,13 @@ public class ProjectEngagementController {
 
 
 
-//    @PreAuthorize("@auth.allow('GET_PROJECT_REVENUE_DETAILS_BY_PROJECT_ID')")
-//    @GetMapping("/getRevenueDetailsByprojectId/{projectId}")
-//    public List<ProjectRevenue> getProjectRevenueByProjectId(@PathVariable String projectId) {
-//        return projectRevenueService.getProjectRevenueDetailsByProjectId(projectId);
-//    }
+    @PreAuthorize("@auth.allow('GET_PROJECT_REVENUE_DETAILS_BY_PROJECT_ID')")
+    @GetMapping("/getRevenueDetailsByprojectId/{projectId}")
+    public List<ProjectRevenue> getProjectRevenueByProjectId(@PathVariable String projectId) {
+        return projectRevenueService.getProjectRevenueDetailsByProjectId(projectId);
+    }
 
+    @PreAuthorize("@auth.allow('GET_ALL_PROJECT_ENGAGEMENT_TO_EXCEL')")
     @GetMapping("/getAllProjectEngagementExportToExcel")
     public ResponseEntity<Resource> getAllProjectEngagementDetailsExportToExcel() throws IOException {
 
@@ -170,7 +171,7 @@ public class ProjectEngagementController {
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                 .body(file);
     }
-
+    @PreAuthorize("@auth.allow('GET_PROJECT_REVENUE_BY_YEAR_MONTH')")
     @GetMapping("getProjectRevenue/{projectId}/{year}/{month}")
     public Optional<ProjectRevenue> getProjectRevenueDetails(
             @PathVariable String projectId,
