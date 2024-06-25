@@ -16,4 +16,7 @@ public interface ProjectRevenueRepo extends JpaRepository<ProjectRevenue,Integer
     Optional<ProjectRevenue> findByProjectEngagement(Optional<ProjectEngagement> projectEngagement);
 
     List<ProjectRevenue> findByProjectEngagementProjectId(String projectId);
+//    List<ProjectRevenue> findByProjectEngagementProjectIdAndYearAndMonth(String projectId, String year, String month);
+
+    Optional<ProjectRevenue> findByProjectEngagementProjectIdAndYearAndMonth(String projectId, String year, String month);
 }

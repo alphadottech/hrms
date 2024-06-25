@@ -4,6 +4,8 @@ import com.adt.hrms.model.ProjectEngagement;
 import com.adt.hrms.model.ProjectRevenue;
 import org.springframework.data.domain.Page;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
 public interface ProjectEngagementService {
@@ -23,5 +25,5 @@ public interface ProjectEngagementService {
 	public List<ProjectEngagement> SearchProjectsByDate(String startDate, String endDate);
 
 	Page<ProjectEngagement> searchProjectEngagementbyFields(String primaryResource, String secondaryResource, String startDate, String endDate, int page, int size);
-
+	ByteArrayInputStream getExcelData() throws IOException;
 }
