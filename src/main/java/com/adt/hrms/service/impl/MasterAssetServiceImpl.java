@@ -305,4 +305,105 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		return responseDTO;
 	}
 
+	@Override
+	public ResponseDTO deleteAssetByAssetTypeId(Integer assetTypeId, Integer assetAttributeId) {
+		ResponseDTO responseDTO = new ResponseDTO();
+		log.info("MasterAssetServiceImpl:deleteAssetByAssetTypeId info level log message");
+		try {
+			Optional<List<AssetInfo>> assetInfoListExist = assetInfoRepo.findAssetInfoListByAssetTypeId(assetTypeId);
+
+			if (assetInfoListExist.isPresent() && !assetInfoListExist.get().isEmpty()) {
+				responseDTO.setMessage(
+						"This AssetInfo is already associated with AssetTypeId: " + assetTypeId + ", we cannot delete");
+				responseDTO.setStatus("AlreadyAssociated");
+				responseDTO.setData(null);
+				return responseDTO;
+			}
+
+			Optional<List<AssetAttribute>> assetAttributeListExist = assetAttributeRepo
+					.findAssetAttributeByAssetTypeId(assetAttributeId, assetTypeId);
+
+			if (assetAttributeListExist.isPresent() && !assetAttributeListExist.get().isEmpty()) {
+				responseDTO.setMessage("This AssetAttribute is already associated with AssetTypeId: " + assetTypeId
+						+ ", we cannot delete");
+				responseDTO.setStatus("AlreadyAssociated");
+				responseDTO.setData(null);
+				return responseDTO;
+			}
+
+			Optional<AssetType> assetTypeExist = assetTypeRepo.findAssetByAssetTypeId(assetTypeId);
+
+			if (assetTypeExist.isPresent()) {
+
+				if (!assetInfoListExist.isPresent() && assetInfoListExist.get().isEmpty()) {
+					assetInfoRepo.deleteByAssetTypeId(assetTypeId);
+				}
+
+				if (!assetAttributeListExist.isPresent() && assetAttributeListExist.get().isEmpty()) {
+					assetAttributeRepo.deleteByAssetTypeId(assetTypeId);
+				}
+
+				assetTypeRepo.delete(assetTypeExist.get());
+
+				responseDTO.setMessage("AssetType with AssetTypeId: " + assetTypeId + " is deleted successfully");
+				responseDTO.setStatus("Success");
+				responseDTO.setData(null);
+			} else {
+				responseDTO.setMessage("AssetType with AssetTypeId: " + assetTypeId + " is not found");
+				responseDTO.setStatus("NotFound");
+				responseDTO.setData(null);
+			}
+		} catch (Exception e) {
+			log.error("MasterAssetServiceImpl: deleteAssetByAssetTypeId Exception: " + e);
+			e.printStackTrace();
+			responseDTO.setMessage(e.getMessage());
+			responseDTO.setStatus("Failed");
+			responseDTO.setData(null);
+		}
+		return responseDTO;
+	}
+
+	@Override
+	public ResponseDTO updateAssetAttributeValueByAssetId(Integer assetId, Integer assetAttributeId,
+			String assetAttributeValue) {
+		ResponseDTO responseDTO = new ResponseDTO();
+		log.info("MasterAssetServiceImpl:updateAssetAttributeValueByAssetId info level log message");
+		try {
+			Optional<AssetInfo> assetInfoExist = assetInfoRepo.findAssetByAssetId(assetId);
+			if (assetInfoExist.isPresent()) {
+				Optional<AssetAttributeMapping> assetAttributeMappingExist = assetAttributeMappingRepo
+						.findByAssetIdAndAssetAttributeId(assetId, assetAttributeId);
+
+				if (assetAttributeMappingExist.isPresent()) {
+
+					assetAttributeMappingExist.get().setAssetAttributeValue(assetAttributeValue);
+					assetAttributeMappingRepo.save(assetAttributeMappingExist.get());
+
+					responseDTO.setMessage("AssetAttributeValue with AssetId:" + assetId + " and AssetAttributeId:"
+							+ assetAttributeId + " is Updated Successfully");
+					responseDTO.setStatus("success");
+					responseDTO.setData(null);
+				} else {
+					responseDTO.setMessage("AssetAttributeValue is not Updated since it's Not Exist with AssetId:"
+							+ assetId + " and AssetAttributeId:" + assetAttributeId);
+					responseDTO.setStatus("NotSaved");
+					responseDTO.setData(null);
+					return responseDTO;
+				}
+			} else {
+				responseDTO.setMessage("AssetInfo with AssetId:" + assetId + " is not found");
+				responseDTO.setStatus("NotFound");
+				responseDTO.setData(null);
+				return responseDTO;
+			}
+		} catch (Exception e) {
+			log.error("MasterAssetServiceImpl: updateAssetAttributeValueByAssetId Exception : " + e);
+			e.printStackTrace();
+			responseDTO.setMessage(e.getMessage());
+			responseDTO.setStatus("failed");
+			responseDTO.setData(null);
+		}
+		return responseDTO;
+	}
+
 }

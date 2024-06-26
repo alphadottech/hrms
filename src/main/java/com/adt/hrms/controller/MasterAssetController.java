@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -139,6 +140,42 @@ public class MasterAssetController {
 			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
 		} else if (responseDTO.getStatus().equalsIgnoreCase("NotSaved")) {
 			return new ResponseEntity<Object>(responseDTO, HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PreAuthorize("@auth.allow('DELETE_ASSET_BY_ASSET_TYPE_ID')")
+	@DeleteMapping(value = "/deleteAssetByAssetTypeId")
+	public ResponseEntity<Object> deleteAssetByAssetTypeId(@RequestParam("assetTypeId") Integer assetTypeId,
+			@RequestParam("assetAttributeId") Integer assetAttributeId) {
+		LOGGER.info("MasterAssetController:masterAsset:deleteAssetByAssetTypeId info level log message");
+		ResponseDTO responseDTO = service.deleteAssetByAssetTypeId(assetTypeId, assetAttributeId);
+		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
+		} else if (responseDTO.getStatus().equalsIgnoreCase("AlreadyAssociated")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
+		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PreAuthorize("@auth.allow('UPDATE_ASSET_ATTRIBUTE_VALUE_BY_ASSET_ID')")
+	@PutMapping(value = "/updateAssetAttributeValueByAssetId/{assetId}")
+	public ResponseEntity<Object> updateAssetAttributeValueByAssetId(@PathVariable Integer assetId,
+			@RequestParam("assetAttributeId") Integer assetAttributeId,
+			@RequestParam("assetAttributeValue") String assetAttributeValue) {
+		LOGGER.info("MasterAssetController:masterAsset:updateAssetAttributeValueByAssetId info level log message");
+		ResponseDTO responseDTO = service.updateAssetAttributeValueByAssetId(assetId, assetAttributeId,
+				assetAttributeValue);
+		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
+		} else if (responseDTO.getStatus().equalsIgnoreCase("NotUpdated")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.BAD_REQUEST);
+		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
 		} else {
 			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
