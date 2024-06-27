@@ -1,5 +1,7 @@
 package com.adt.hrms.service.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -176,6 +178,13 @@ public class ProjectEngagementServiceImpl implements ProjectEngagementService {
 			spec = spec.or((root, query, cb) -> cb.equal(root.get("endDate"), endDate));
 		}
 		return projectEngagementRepo.findAll(spec,pageable);
+	}
+
+
+	public ByteArrayInputStream getExcelData() throws IOException {
+		List<ProjectEngagement> list=projectEngagementRepo.findAll();
+		ByteArrayInputStream byteArrayInputStream= Helper.dataToExcel(list);
+		return byteArrayInputStream;
 	}
 	
 }

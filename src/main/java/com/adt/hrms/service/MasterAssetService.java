@@ -31,4 +31,9 @@ public interface MasterAssetService {
 
 	public ResponseDTO saveAssetInfo(AssetDTO assetDTO);
 
+	public ResponseDTO deleteAssetByAssetTypeId(Integer assetTypeId, Integer assetAttributeId);
+
+	public ResponseDTO updateAssetAttributeValueByAssetId(Integer assetId, Integer assetAttributeId,
+			String assetAttributeValue);
+
 }

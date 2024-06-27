@@ -55,9 +55,9 @@ public class EmployeeOperationController {
 
     @PreAuthorize("@auth.allow('GET_ALL_EMPLOYEE_PERSONAL_DETAILS')")
     @GetMapping("/getAllEmp")
-    public ResponseEntity<Page<Employee>> getAllEmps(@RequestParam(value = "page", defaultValue = "0", required = false) int page,
-                                                     @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
-        LOGGER.info("Employee-service:employee:getAllEmp info level log message");
+    public ResponseEntity<Page<Employee>> getAllEmps(
+            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
         return new ResponseEntity<>(employeeService.getAllEmps(page, size), HttpStatus.OK);
     }
 
@@ -240,6 +240,13 @@ public class EmployeeOperationController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @PreAuthorize("@auth.allow('DELETE_EMPLOYEE_BY_EMP_ID')")
+    @DeleteMapping("/deleteEmployeeById/{employeeId}")
+    public ResponseEntity<String> deleteEmployeeById(@PathVariable ("employeeId") int employeeId ){
+        LOGGER.info("Deleted employee with id: {}", employeeId);
+        return new ResponseEntity<String>(employeeService.deleteEmpById(employeeId), HttpStatus.OK);
     }
 
 
