@@ -56,6 +56,9 @@ public class InterviewModelDTO {
 
 	//HRMS-102 - start
 	private String status;
+	
+	private String email;
+	
 //	private Boolean screeningRound;
 //	private Boolean selected;
 	//HRMS-102 - end
