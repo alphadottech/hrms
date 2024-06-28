@@ -1,11 +1,11 @@
 package com.adt.hrms.service.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import com.adt.hrms.model.ProjectRevenue;
-import com.adt.hrms.repository.ProjectRevenueRepo;
 import com.adt.hrms.util.AssetUtility;
 import com.adt.hrms.util.ProjectEngagementUtility;
 import jakarta.transaction.Transactional;
@@ -181,5 +181,10 @@ public class ProjectEngagementServiceImpl implements ProjectEngagementService {
 	}
 
 
+	public ByteArrayInputStream getExcelData() throws IOException {
+		List<ProjectEngagement> list=projectEngagementRepo.findAll();
+		ByteArrayInputStream byteArrayInputStream= Helper.dataToExcel(list);
+		return byteArrayInputStream;
+	}
 	
 }

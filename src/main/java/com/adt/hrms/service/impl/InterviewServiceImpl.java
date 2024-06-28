@@ -3,9 +3,12 @@ package com.adt.hrms.service.impl;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.adt.hrms.util.ProjectEngagementUtility;
+import com.adt.hrms.util.TableDataExtractor;
+
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -40,6 +43,10 @@ public class InterviewServiceImpl implements InterviewService {
 
 	@Autowired
 	private AVTechnologyRepo techRepo;
+	
+	@Autowired
+	private TableDataExtractor dataExtractor;
+
 
 	@Override
 	public String saveInterview(Interview in) {
@@ -157,6 +164,7 @@ public class InterviewServiceImpl implements InterviewService {
 			}
 
 			Interview updatedRecord = interviewRepository.save(opt.get());
+			
 
 			return updatedRecord;
 		}
@@ -198,10 +206,27 @@ public class InterviewServiceImpl implements InterviewService {
 		if(!ProjectEngagementUtility.validateInteger(intwDTO.getEnthusiasm())){
 			throw new IllegalArgumentException("Invalid Enthusiasm Marks");
 		}
-
-		Integer interviewId = intwDTO.getInterviewId();
+		
+		Optional<InterviewCandidateDetails> interviewCandidateDetails=interviewCandidateRepo.findCandidateIdByEmailId(intwDTO.getEmail());
+		
+		Integer interviewId = null;
+		if (interviewCandidateDetails.isPresent()) {
+			String sql = "SELECT interview_id FROM employee_schema.interview where candidate_id="
+					+ interviewCandidateDetails.get().getCandidateId();
+			List<Map<String, Object>> interviewData = dataExtractor.extractDataFromTable(sql);
+			for (Map<String, Object> data : interviewData) {
+				interviewId = Integer.parseInt(String.valueOf(data.get("interview_id")));
+			}
+		}
+		if (interviewId == null) {
+			String sql = "select max(interview_id)+1 as interview_id from employee_schema.interview";
+			List<Map<String, Object>> interviewData = dataExtractor.extractDataFromTable(sql);
+			for (Map<String, Object> data : interviewData) {
+				interviewId = Integer.parseInt(String.valueOf(data.get("interview_id")));
+			}
+		}
+		intwDTO.setInterviewId(interviewId);
 		Integer round = intwDTO.getRounds();
-
 		// **** If the interview id and round is not present already, then only save,
 		// otherwise return that the record is already present **
 		Optional<Interview> opt = interviewRepository.getInterviewDetailByInterviewIdAndRound(interviewId, round);

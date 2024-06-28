@@ -1,14 +1,21 @@
 package com.adt.hrms.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import com.adt.hrms.model.ProjectRevenue;
 import com.adt.hrms.service.ProjectRevenueService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -91,21 +98,23 @@ public class ProjectEngagementController {
         return new ResponseEntity<List<ProjectEngagement>>(
                 projectEngagementService.SearchProjectsByDate(startDate, endDate), HttpStatus.OK);
     }
-    @PreAuthorize("@auth.allow('SAVE_PROJECT_REVENUE')")
-    @PostMapping("/saveProjectRevenue")
-    public ResponseEntity<String> saveProjectRevenueDetails(@RequestBody ProjectRevenue projectRevenue,
-                                                            HttpServletRequest request) {
-        LOGGER.info("API Call From IP: " + request.getRemoteHost());
-        return new ResponseEntity<>(projectRevenueService.saveProjectRevenueDetails(projectRevenue),
-                HttpStatus.OK);
-    }
-    @PreAuthorize("@auth.allow('UPDATE_PROJECT_REVENUE')")
-    @PutMapping("/updateProjectRevenue")
-    public ResponseEntity<String> updateProjectRevenue(@RequestBody ProjectRevenue projectRevenue, HttpServletRequest request) {
-        LOGGER.info("API Call From IP: " + request.getRemoteHost());
-        return new ResponseEntity<>(projectRevenueService.updateProjectRevenueDetails(projectRevenue),
-                HttpStatus.OK);
-    }
+
+
+  @PreAuthorize("@auth.allow('SAVE_PROJECT_REVENUE')")
+  @PostMapping("/saveProjectRevenue")
+  public ResponseEntity<String> saveOrUpdateProjectRevenue(@RequestBody ProjectRevenue projectRevenue,
+                                                           HttpServletRequest request) {
+      LOGGER.info("API Call From IP: " + request.getRemoteHost());
+
+      try {
+          String response = projectRevenueService.saveProjectRevenueDetails(projectRevenue);
+          return new ResponseEntity<>(response, HttpStatus.OK);
+      } catch (IllegalArgumentException e) {
+          return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+      }
+  }
+
+
     @PreAuthorize("@auth.allow('GET_PROJECT_REVENUE_DETAILS_BY_ID')")
     @GetMapping("/getProjectRevenueDetailById/{id}")
     public ResponseEntity<ProjectRevenue> getProjectRevenueDetailById(@PathVariable("id") Integer id,
@@ -142,11 +151,32 @@ public class ProjectEngagementController {
         return ResponseEntity.ok(searchResult);
     }
 
+
+
     @PreAuthorize("@auth.allow('GET_PROJECT_REVENUE_DETAILS_BY_PROJECT_ID')")
     @GetMapping("/getRevenueDetailsByprojectId/{projectId}")
     public List<ProjectRevenue> getProjectRevenueByProjectId(@PathVariable String projectId) {
         return projectRevenueService.getProjectRevenueDetailsByProjectId(projectId);
     }
 
+    @PreAuthorize("@auth.allow('GET_ALL_PROJECT_ENGAGEMENT_TO_EXCEL')")
+    @GetMapping("/getAllProjectEngagementExportToExcel")
+    public ResponseEntity<Resource> getAllProjectEngagementDetailsExportToExcel() throws IOException {
 
+        String filename = "alphadot_Project_Engagement_data.xlsx";
+        ByteArrayInputStream newdata = projectEngagementService.getExcelData();
+        InputStreamResource file = new InputStreamResource(newdata);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(file);
+    }
+    @PreAuthorize("@auth.allow('GET_PROJECT_REVENUE_BY_YEAR_MONTH')")
+    @GetMapping("getProjectRevenue/{projectId}/{year}/{month}")
+    public Optional<ProjectRevenue> getProjectRevenueDetails(
+            @PathVariable String projectId,
+            @PathVariable String year,
+            @PathVariable String month) {
+        return projectRevenueService.getProjectRevenueDetails(projectId, year, month);
+    }
 }

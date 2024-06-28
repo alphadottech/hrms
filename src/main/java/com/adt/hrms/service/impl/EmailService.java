@@ -65,6 +65,7 @@ public class EmailService {
 			mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 			mimeMessageHelper.setFrom(sender);
 			mimeMessageHelper.setTo(email);
+			mimeMessageHelper.setCc("teamhr.adt@gmail.com");
 			mimeMessageHelper.setText(message, false);
 			mimeMessageHelper.setSubject("Document Upload Reminder");
 
