@@ -28,5 +28,9 @@ public class ProjectRevenue {
 
     @Column(name="resource_expense")
     private double resourceExpense;
+
+    @Column(name="contractor_revenue")
+    private double contractorRevenue;
+
 }
 
