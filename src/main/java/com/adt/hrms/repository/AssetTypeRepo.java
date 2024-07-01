@@ -14,7 +14,10 @@ public interface AssetTypeRepo extends JpaRepository<AssetType, Integer> {
 	@Query(value = "SELECT * FROM av_schema.asset_type where name=?1", nativeQuery = true)
 	Optional<AssetType> findByAssetName(String assetName);
 
-//	@Query(value = "SELECT * FROM av_schema.asset_type where id=?1", nativeQuery = true)
-//	Optional<AssetType> findAssetTypeById(Integer id);
+	@Query(value = "SELECT * FROM av_schema.asset_type where id=?1", nativeQuery = true)
+	Optional<AssetType> findAssetByAssetTypeId(Integer assetTypeId);
+
+//	@Query(value = "DELETE FROM av_schema.asset_type WHERE id=?1", nativeQuery = true)
+//	void deleteAssetByAssetTypeId(Integer assetTypeId);
 
 }

@@ -32,6 +32,9 @@ public class ProjectRevenueServiceImpl implements ProjectRevenueService {
         if (!ProjectEngagementUtility.validateCTC(projectRevenue.getResourceExpense())) {
             throw new IllegalArgumentException("Invalid Expense Details");
         }
+        if (!ProjectEngagementUtility.validateCTC(projectRevenue.getContractorRevenue())) {
+            throw new IllegalArgumentException("Invalid Expense Details");
+        }
         if (!ProjectEngagementUtility.validateEmployee(projectRevenue.getMonth())) {
             throw new IllegalArgumentException("Invalid Month Details");
         }
@@ -57,6 +60,7 @@ public class ProjectRevenueServiceImpl implements ProjectRevenueService {
                 ProjectRevenue revenue = existingRevenue.get();
                 revenue.setProjectRevenue(projectRevenue.getProjectRevenue());
                 revenue.setResourceExpense(projectRevenue.getResourceExpense());
+                revenue.setContractorRevenue((projectRevenue.getContractorRevenue()));
                 projectRevenueRepo.save(revenue);
                 return "Project revenue details updated";
             }
