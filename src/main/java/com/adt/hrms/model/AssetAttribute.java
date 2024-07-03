@@ -26,11 +26,11 @@ public class AssetAttribute {
 	private Integer id;
 
 	@Column(name = "name")
-	private String name;
+	private String assetAttributeName;
 
 	@ManyToOne
 	@JoinColumn(name = "asset_type_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
 	private AssetType assetType;
-	private int asset_type_id;
+	private Integer asset_type_id;
 
 }
