@@ -1,7 +1,5 @@
 package com.adt.hrms.model;
 
-import java.time.LocalDate;
-
 import org.hibernate.annotations.Proxy;
 
 import jakarta.persistence.Column;
@@ -23,7 +21,6 @@ public class AssetInfo {
 
 	@Id
 	@Column(name = "id")
-//	@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "asset_seq")
 	@SequenceGenerator(name = "asset_seq", allocationSize = 1, schema = "employee_schema")
 	private Integer id;
@@ -31,6 +28,6 @@ public class AssetInfo {
 	@OneToOne
 	@JoinColumn(name = "asset_type_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
 	private AssetType assetType;
-	private int asset_type_id;
+	private Integer asset_type_id;
 
 }

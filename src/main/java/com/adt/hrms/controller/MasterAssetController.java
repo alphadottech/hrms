@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adt.hrms.model.AssetType;
 import com.adt.hrms.model.MasterAsset;
 import com.adt.hrms.request.AssetDTO;
-import com.adt.hrms.request.CreateAssetDTO;
 import com.adt.hrms.request.ResponseDTO;
 import com.adt.hrms.service.MasterAssetService;
 
@@ -119,22 +119,10 @@ public class MasterAssetController {
 		}
 	}
 
-	@PreAuthorize("@auth.allow('SAVE_ASSET_DETAILS_WITH_ATTRIBUTES')")
-	@PostMapping(value = "/saveAssetDetailsWithAttributes")
-	public ResponseEntity<Object> saveAssetDetailsWithAttributes(@RequestBody CreateAssetDTO createAssetDTO) {
-		LOGGER.info("MasterAssetController:masterAsset:saveAssetDetailsWithAttributes info level log message");
-		ResponseDTO responseDTO = service.saveAssetDetailsWithAttributes(createAssetDTO);
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
 	@PreAuthorize("@auth.allow('SAVE_ASSET_INFO')")
 	@PostMapping(value = "/saveAssetInfo")
 	public ResponseEntity<Object> saveAssetInfo(@RequestBody AssetDTO assetDTO) {
-		LOGGER.info("MasterAssetController:masterAsset:saveAsset info level log message");
+		LOGGER.info("MasterAssetController:masterAsset:saveAssetInfo info level log message");
 		ResponseDTO responseDTO = service.saveAssetInfo(assetDTO);
 		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
 			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
@@ -145,12 +133,84 @@ public class MasterAssetController {
 		}
 	}
 
-	@PreAuthorize("@auth.allow('DELETE_ASSET_BY_ASSET_TYPE_ID')")
-	@DeleteMapping(value = "/deleteAssetByAssetTypeId")
-	public ResponseEntity<Object> deleteAssetByAssetTypeId(@RequestParam("assetTypeId") Integer assetTypeId,
-			@RequestParam("assetAttributeId") Integer assetAttributeId) {
-		LOGGER.info("MasterAssetController:masterAsset:deleteAssetByAssetTypeId info level log message");
-		ResponseDTO responseDTO = service.deleteAssetByAssetTypeId(assetTypeId, assetAttributeId);
+	@PreAuthorize("@auth.allow('DELETE_ASSET_INFO_BY_ID')")
+	@DeleteMapping(value = "/deleteAssetInfoById/{assetId}")
+	public ResponseEntity<Object> deleteAssetInfoById(@PathVariable Integer assetId) {
+		LOGGER.info("MasterAssetController:masterAsset:deleteAssetInfoById info level log message");
+		ResponseDTO responseDTO = service.deleteAssetInfoById(assetId);
+		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
+		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PreAuthorize("@auth.allow('UPDATE_ASSET_ATTRIBUTE_MAPPING_BY_ASSET_ID')")
+	@PutMapping(value = "/updateAssetAttributeMappingByAssetId")
+	public ResponseEntity<Object> updateAssetAttributeMappingByAssetId(@RequestBody AssetDTO assetDTO) {
+		LOGGER.info("MasterAssetController:masterAsset:updateAssetAttributeMappingByAssetId info level log message");
+		ResponseDTO responseDTO = service.updateAssetAttributeMappingByAssetId(assetDTO);
+		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
+		} else if (responseDTO.getStatus().equalsIgnoreCase("NotUpdated")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.BAD_REQUEST);
+		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PreAuthorize("@auth.allow('ADD_ASSET_TYPE')")
+	@PostMapping(value = "/addAssetType")
+	public ResponseEntity<Object> addAssetType(@RequestBody AssetType assetType) {
+		LOGGER.info("MasterAssetController:masterAsset:addAssetType info level log message");
+		ResponseDTO responseDTO = service.addAssetType(assetType);
+		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
+		} else if (responseDTO.getStatus().equalsIgnoreCase("NotSaved")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PreAuthorize("@auth.allow('GET_ASSET_TYPE_BY_ID')")
+	@GetMapping(value = "/getAssetTypeById/{assetTypeId}")
+	public ResponseEntity<Object> getAssetTypeById(@PathVariable Integer assetTypeId) {
+		LOGGER.info("MasterAssetController:masterAsset:getAssetTypeById info level log message");
+		ResponseDTO responseDTO = service.getAssetTypeById(assetTypeId);
+		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
+		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PreAuthorize("@auth.allow('UPDATE_ASSET_TYPE_BY_ID')")
+	@PutMapping(value = "/updateAssetTypeById/{assetTypeId}")
+	public ResponseEntity<Object> updateAssetTypeById(@PathVariable Integer assetTypeId,
+			@RequestParam("assetTypeName") String assetTypeName) {
+		LOGGER.info("MasterAssetController:masterAsset:updateAssetTypeById info level log message");
+		ResponseDTO responseDTO = service.updateAssetTypeById(assetTypeId, assetTypeName);
+		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
+		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PreAuthorize("@auth.allow('DELETE_ASSET_TYPE_BY_ID')")
+	@DeleteMapping(value = "/deleteAssetTypeById/{assetTypeId}")
+	public ResponseEntity<Object> deleteAssetTypeById(@PathVariable Integer assetTypeId) {
+		LOGGER.info("MasterAssetController:masterAsset:deleteAssetTypeById info level log message");
+		ResponseDTO responseDTO = service.deleteAssetTypeById(assetTypeId);
 		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
 			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
 		} else if (responseDTO.getStatus().equalsIgnoreCase("AlreadyAssociated")) {
@@ -162,23 +222,61 @@ public class MasterAssetController {
 		}
 	}
 
-	@PreAuthorize("@auth.allow('UPDATE_ASSET_ATTRIBUTE_VALUE_BY_ASSET_ID')")
-	@PutMapping(value = "/updateAssetAttributeValueByAssetId/{assetId}")
-	public ResponseEntity<Object> updateAssetAttributeValueByAssetId(@PathVariable Integer assetId,
-			@RequestParam("assetAttributeId") Integer assetAttributeId,
-			@RequestParam("assetAttributeValue") String assetAttributeValue) {
-		LOGGER.info("MasterAssetController:masterAsset:updateAssetAttributeValueByAssetId info level log message");
-		ResponseDTO responseDTO = service.updateAssetAttributeValueByAssetId(assetId, assetAttributeId,
-				assetAttributeValue);
+	@PreAuthorize("@auth.allow('ADD_ASSET_ATTRIBUTE_BY_ASSET_TYPE_ID')")
+	@PostMapping(value = "/addAssetAttributeByAssetTypeId/{assetTypeId}")
+	public ResponseEntity<Object> addAssetAttributeByAssetTypeId(@PathVariable Integer assetTypeId,
+			@RequestParam("assetAttributeName") String assetAttributeName) {
+		LOGGER.info("MasterAssetController:masterAsset:addAssetAttributeByAssetTypeId info level log message");
+		ResponseDTO responseDTO = service.addAssetAttributesByAssetTypeId(assetTypeId, assetAttributeName);
 		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
 			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotUpdated")) {
+		} else if (responseDTO.getStatus().equalsIgnoreCase("NotSaved")) {
 			return new ResponseEntity<Object>(responseDTO, HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PreAuthorize("@auth.allow('UPDATE_ASSET_ATTRIBUTE_BY_ID')")
+	@PutMapping(value = "/updateAssetAttributeById/{assetAttributeId}")
+	public ResponseEntity<Object> updateAssetAttributeById(@PathVariable Integer assetAttributeId,
+			@RequestParam("assetTypeId") Integer assetTypeId,
+			@RequestParam("assetAttributeName") String assetAttributeName) {
+		LOGGER.info("MasterAssetController:masterAsset:updateAssetAttributeById info level log message");
+		ResponseDTO responseDTO = service.updateAssetAttributeById(assetAttributeId, assetTypeId, assetAttributeName);
+		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
 		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
 			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
 		} else {
 			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	@PreAuthorize("@auth.allow('DELETE_ASSET_ATTRIBUTE_BY_ID')")
+	@DeleteMapping(value = "/deleteAssetAttributeById/{assetAttributeId}")
+	public ResponseEntity<Object> deleteAssetAttributeById(@PathVariable Integer assetAttributeId) {
+		LOGGER.info("MasterAssetController:masterAsset:deleteAssetAttributeById info level log message");
+		ResponseDTO responseDTO = service.deleteAssetAttributeById(assetAttributeId);
+		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
+		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+//@PreAuthorize("@auth.allow('SAVE_ASSET_DETAILS_WITH_ATTRIBUTES')")
+//@PostMapping(value = "/saveAssetDetailsWithAttributes")
+//public ResponseEntity<Object> saveAssetDetailsWithAttributes(@RequestBody CreateAssetDTO createAssetDTO) {
+//	LOGGER.info("MasterAssetController:masterAsset:saveAssetDetailsWithAttributes info level log message");
+//	ResponseDTO responseDTO = service.saveAssetDetailsWithAttributes(createAssetDTO);
+//	if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
+//		return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
+//	} else {
+//		return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+//	}
+//}
 
 }
