@@ -8,4 +8,5 @@ import com.adt.hrms.model.AVTechnology;
 
 public interface AVTechnologyRepo extends JpaRepository<AVTechnology, Serializable> {
 
+    AVTechnology findByDescription(String description);
 }
