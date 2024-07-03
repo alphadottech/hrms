@@ -1,11 +1,6 @@
 package com.adt.hrms.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +15,8 @@ import lombok.NoArgsConstructor;
 public class AVTechnology {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "technology_seq")
+	@SequenceGenerator(name = "technology_seq", allocationSize = 1, schema = "av_schema")
 	@Column(name = "tech_id")
 	private Integer techId;
 

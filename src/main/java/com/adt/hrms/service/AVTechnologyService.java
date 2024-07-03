@@ -11,4 +11,9 @@ public interface AVTechnologyService {
 	public AVTechnology getTechnology(Integer techId);
 
 
+    String updateAVTechnology(AVTechnology technology);
+
+	String deleteAVTechnologyById(Integer techId);
+
+	AVTechnology getAVTechnologyById(Integer id);
 }
