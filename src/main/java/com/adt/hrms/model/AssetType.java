@@ -18,7 +18,6 @@ import lombok.Data;
 public class AssetType {
 
 	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "asset_type_seq")
 	@SequenceGenerator(name = "asset_type_seq", allocationSize = 1, schema = "av_schema")
 	@Column(name = "id")
