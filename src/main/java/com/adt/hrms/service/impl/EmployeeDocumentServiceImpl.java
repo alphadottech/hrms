@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -234,21 +235,29 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
         String folderId = null;
         List<String> result = new LinkedList<>();
         com.google.api.services.drive.model.File parentFolderMetadata = null;
-        String parentFolderId = getFolderIdByName(parentFolderName, service, "");
+        try {
+            String parentFolderId = getFolderIdByName(parentFolderName, service, "");
 
-        if (parentFolderId == null) {
-            parentFolderMetadata = new com.google.api.services.drive.model.File();
-            parentFolderMetadata.setName(parentFolderName);
-            parentFolderMetadata.setMimeType(folderMimeType);
-            parentFolderMetadata = service.files().create(parentFolderMetadata).setFields("id, webViewLink").execute();
-            parentFolderId = parentFolderMetadata.getId();
+            if (parentFolderId == null) {
+                parentFolderMetadata = new com.google.api.services.drive.model.File();
+                parentFolderMetadata.setName(parentFolderName);
+                parentFolderMetadata.setMimeType(folderMimeType);
+                parentFolderMetadata = service.files().create(parentFolderMetadata).setFields("id, webViewLink").execute();
+                parentFolderId = parentFolderMetadata.getId();
+            }
+            if (activeProfile.equalsIgnoreCase("sit")) {
+                folderId = createOrCheckSubfolder("sit", parentFolderId, service);
+            } else {
+                folderId = createOrCheckSubfolder("production", parentFolderId, service);
+            }
+            result.add(createOrCheckSubfolder(folderName, folderId, service));
+        }catch (GoogleJsonResponseException e) {
+            System.err.println("Google Drive API error: " + e.getDetails().getMessage());
+        } catch (IOException e) {
+            System.err.println("I/O error: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
         }
-        if (activeProfile.equalsIgnoreCase("sit")) {
-            folderId = createOrCheckSubfolder("sit", parentFolderId, service);
-        } else {
-            folderId = createOrCheckSubfolder("production", parentFolderId, service);
-        }
-        result.add(createOrCheckSubfolder(folderName, folderId, service));
         return result;
     }
 
@@ -284,9 +293,15 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
             drive.permissions().create(fileMetadata.getId(), userPermission).execute();
             fileId = fileMetadata.getId();
             return fileId;
+        } catch (GoogleJsonResponseException e) {
+            // Handle errors returned by the Google Drive API
+            System.err.println("Google Drive API returned an error: " + e.getDetails().getMessage());
+        } catch (IOException e) {
+            // Handle general I/O errors
+            System.err.println("I/O error: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-
+            // Handle any other unexpected errors
+            System.err.println("Unexpected error: " + e.getMessage());
         }
         return null;
     }
