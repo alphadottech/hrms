@@ -20,23 +20,20 @@ import lombok.Data;
 public class AssetAttributeMapping {
 
 	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "asset_attribute_mapping_seq")
 	@SequenceGenerator(name = "asset_attribute_mapping_seq", allocationSize = 1, schema = "employee_schema")
 	@Column(name = "id")
 	private Integer id;
 
-//	@Column(name = "asset_id")
 	@ManyToOne
 	@JoinColumn(name = "asset_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
 	private AssetInfo assetInfo;
 	private Integer asset_id;
 
-//	@Column(name = "asset_attribute_id")
 	@ManyToOne
 	@JoinColumn(name = "asset_attribute_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
 	private AssetAttribute assetAttribute;
-	private int asset_attribute_id;
+	private Integer asset_attribute_id;
 
 	@Column(name = "asset_attribute_value")
 	private String assetAttributeValue;

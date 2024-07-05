@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.adt.hrms.model.MasterAsset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,6 +190,28 @@ public class InterviewController {
         LOGGER.info("Employeeservice:InterviewPosition:updatePosition info level log message");
         return new ResponseEntity<>(positionService.updatePositionNew(pdc), HttpStatus.OK);
     }
+   @PreAuthorize("@auth.allow('SAVE_AV_TECHNOLOGY')")
+    @PostMapping("/saveTechnology")
+    public ResponseEntity<String> saveTechnology(@RequestBody AVTechnology technology){
+        LOGGER.info("AVTechnology:SaveAVTechnology:info level log message");
+        return new ResponseEntity<>( avTechnologyService.saveTechnology(technology),HttpStatus.OK);
+    }
+    @PreAuthorize("@auth.allow('UPDATE_AV_TECHNOLOGY')")
+     @PutMapping("/updateTechnology")
+    public ResponseEntity<String>updateTechnologyById(@RequestBody AVTechnology technology){
+        LOGGER.info("Employeeservice:InterviewPosition:updatePosition info level log message");
+        return new ResponseEntity<>(avTechnologyService.updateAVTechnology(technology), HttpStatus.OK);
 
-
+    }
+    @PreAuthorize("@auth.allow('DELETE_AV_TECHNOLOGY')")
+    @DeleteMapping("/deleteTechnology/{techId}")
+    public ResponseEntity<String> deleteTechnologyById(@PathVariable Integer techId) {
+        return new ResponseEntity<>(avTechnologyService.deleteAVTechnologyById(techId), HttpStatus.OK);
+    }
+   @PreAuthorize("@auth.allow('GET_AV_TECHNOLOGY_BY_ID')")
+    @GetMapping("/getTechnologyById/{id}")
+    public ResponseEntity<AVTechnology> getTechnologyById(@PathVariable Integer id) {
+        LOGGER.info("InterviewController:AVTechnology:getAVTechnologyById info level log message");
+        return ResponseEntity.ok(avTechnologyService.getAVTechnologyById(id));
+    }
 }

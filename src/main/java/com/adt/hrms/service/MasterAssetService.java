@@ -2,9 +2,9 @@ package com.adt.hrms.service;
 
 import java.util.List;
 
+import com.adt.hrms.model.AssetType;
 import com.adt.hrms.model.MasterAsset;
 import com.adt.hrms.request.AssetDTO;
-import com.adt.hrms.request.CreateAssetDTO;
 import com.adt.hrms.request.ResponseDTO;
 
 public interface MasterAssetService {
@@ -27,13 +27,27 @@ public interface MasterAssetService {
 
 	public ResponseDTO getAllAssetAttributesByAssetTypeId(Integer assetTypeId);
 
-	public ResponseDTO saveAssetDetailsWithAttributes(CreateAssetDTO createAssetDTO);
-
 	public ResponseDTO saveAssetInfo(AssetDTO assetDTO);
 
-	public ResponseDTO deleteAssetByAssetTypeId(Integer assetTypeId, Integer assetAttributeId);
+	public ResponseDTO deleteAssetInfoById(Integer assetId);
 
-	public ResponseDTO updateAssetAttributeValueByAssetId(Integer assetId, Integer assetAttributeId,
-			String assetAttributeValue);
+	public ResponseDTO updateAssetAttributeMappingByAssetId(AssetDTO assetDTO);
+
+	public ResponseDTO addAssetType(AssetType assetType);
+
+	public ResponseDTO getAssetTypeById(Integer assetTypeId);
+
+	public ResponseDTO updateAssetTypeById(Integer assetTypeId, String assetTypeName);
+
+	public ResponseDTO deleteAssetTypeById(Integer assetTypeId);
+
+	public ResponseDTO addAssetAttributesByAssetTypeId(Integer assetTypeId, String assetAttributeName);
+
+	public ResponseDTO updateAssetAttributeById(Integer assetAttributeId, Integer assetTypeId,
+			String assetAttributeName);
+
+	public ResponseDTO deleteAssetAttributeById(Integer assetAttributeId);
+
+//	public ResponseDTO saveAssetDetailsWithAttributes(CreateAssetDTO createAssetDTO);
 
 }
