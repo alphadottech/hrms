@@ -22,6 +22,9 @@ public class EmailService {
 	@Value("${spring.mail.username}")
 	private String sender;
 
+	@Value("${spring.mail.cc}")
+	private String ccEmail;
+
 	@Autowired
 	private JavaMailSender javaMailSender;
 
@@ -65,7 +68,7 @@ public class EmailService {
 			mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 			mimeMessageHelper.setFrom(sender);
 			mimeMessageHelper.setTo(email);
-			mimeMessageHelper.setCc("teamhr.adt@gmail.com");
+			mimeMessageHelper.setCc(ccEmail);
 			mimeMessageHelper.setText(message, false);
 			mimeMessageHelper.setSubject("Document Upload Reminder");
 

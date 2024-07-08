@@ -1,11 +1,15 @@
 package com.adt.hrms.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.adt.hrms.model.AssetAttribute;
@@ -27,6 +31,9 @@ import com.adt.hrms.util.AssetUtility;
 public class MasterAssetServiceImpl implements MasterAssetService {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+	private static final int MAX_PAGE_SIZE = 50;
+	private static final int DEFAULT_PAGE_SIZE = 10;
 
 	@Autowired
 	private AssetTypeRepo assetTypeRepo;
@@ -415,6 +422,70 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 			responseDTO.setData(null);
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: deleteAssetInfoById Exception : " + e);
+			e.printStackTrace();
+			responseDTO.setMessage(e.getMessage());
+			responseDTO.setStatus("failed");
+			responseDTO.setData(null);
+		}
+		return responseDTO;
+	}
+
+	@Override
+	public ResponseDTO getAllAssetInfoByAssetTypeIdAndPagination(Integer assetTypeId, int page, int size) {
+		ResponseDTO responseDTO = new ResponseDTO();
+		log.info("MasterAssetServiceImpl:getAllAssetInfoByAssetTypeIdAndPagination info level log message");
+		try {
+
+			if (assetTypeId == 0 || assetTypeId.equals("")) {
+				throw new IllegalArgumentException(
+						"Provide Valid AssetTypeId,AssetTypeId should not be 0 or Invalid or Null");
+			}
+
+			if (size <= 0 || size > MAX_PAGE_SIZE) {
+				size = DEFAULT_PAGE_SIZE;
+			}
+
+			Pageable pageable = PageRequest.of(page, size);
+			Page<AssetInfo> assetInfoListPage = assetInfoRepo.findListByAssetTypeIdWithPagination(assetTypeId,
+					pageable);
+
+			if (!assetInfoListPage.isEmpty()) {
+
+				List<AssetDTO> assetDTOList = new ArrayList<>();
+
+				for (AssetInfo assetInfo : assetInfoListPage) {
+
+					List<AssetAttributeMapping> assetAttributeMappingsList = assetAttributeMappingRepo
+							.findAssetMappingListByAssetId(assetInfo.getId());
+
+					AssetDTO assetDTO = new AssetDTO();
+
+					assetDTO.setAssetId(assetInfo.getId());
+					assetDTO.setAssetTypeId(assetInfo.getAsset_type_id());
+
+					if (!assetAttributeMappingsList.isEmpty()) {
+						assetDTO.setAssetAttributeMappingList(assetAttributeMappingsList);
+					} else {
+						assetDTO.setAssetAttributeMappingList(null);
+					}
+					assetDTOList.add(assetDTO);
+				}
+
+				responseDTO.setStatus("success");
+				responseDTO.setMessage("AssetInfoList found for AssetTypeId: " + assetTypeId);
+				responseDTO.setData(assetDTOList);
+			} else {
+				responseDTO.setStatus("NotFound");
+				responseDTO.setMessage("AssetInfoList not found for AssetTypeId: " + assetTypeId);
+				responseDTO.setData(null);
+			}
+		} catch (IllegalArgumentException e) {
+			log.error("getAllAssetInfoByAssetTypeIdAndPagination IllegalArgumentException : " + e.getMessage());
+			responseDTO.setMessage(e.getMessage());
+			responseDTO.setStatus("failed");
+			responseDTO.setData(null);
+		} catch (Exception e) {
+			log.error("MasterAssetServiceImpl: getAllAssetInfoByAssetTypeIdAndPagination Exception : " + e);
 			e.printStackTrace();
 			responseDTO.setMessage(e.getMessage());
 			responseDTO.setStatus("failed");

@@ -63,5 +63,8 @@ public class Employee {
 
 	@Column(name = "username")
 	private String userName;
+	
+	@Column(name = "ADT_ID",nullable = false,unique = true)
+	private String adtId;
 
 }
