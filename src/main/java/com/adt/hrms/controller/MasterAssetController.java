@@ -147,6 +147,23 @@ public class MasterAssetController {
 		}
 	}
 
+	@PreAuthorize("@auth.allow('GET_ALL_ASSET_INFO_BY_ASSET_TYPE_ID_AND_PAGINATION')")
+	@GetMapping(value = "/getAllAssetInfoByAssetTypeIdAndPagination/{assetTypeId}")
+	public ResponseEntity<Object> getAllAssetInfoByAssetTypeIdAndPagination(@PathVariable Integer assetTypeId,
+			@RequestParam(value = "page", defaultValue = "0", required = false) int page,
+			@RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+		LOGGER.info(
+				"MasterAssetController:masterAsset:getAllAssetInfoByAssetTypeIdAndPagination info level log message");
+		ResponseDTO responseDTO = service.getAllAssetInfoByAssetTypeIdAndPagination(assetTypeId, page, size);
+		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
+		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@PreAuthorize("@auth.allow('UPDATE_ASSET_ATTRIBUTE_MAPPING_BY_ASSET_ID')")
 	@PutMapping(value = "/updateAssetAttributeMappingByAssetId")
 	public ResponseEntity<Object> updateAssetAttributeMappingByAssetId(@RequestBody AssetDTO assetDTO) {
