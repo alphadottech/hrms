@@ -20,13 +20,13 @@ public interface EmployeeService {
 
 	public Employee getEmployeeById(int empId);
 
-	public Page<Employee> SearchByName(String name,int page,int size);
+	public Page<Employee> SearchByName(String name, int page, int size);
 
-	public Page<Employee> SearchByEmail(String email,int page,int size);
+	public Page<Employee> SearchByEmail(String email, int page, int size);
 
 	public String updateEmpById(Employee emp);
 
-	Page<Employee> searchEmployees(String firstName, String lastName, String email, Long mobileNo, String firstLetter, int page, int size);
-
+	Page<Employee> searchEmployees(String firstName, String lastName, String email, Long mobileNo, String firstLetter,
+			int page, int size);
 
 }
