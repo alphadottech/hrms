@@ -34,7 +34,6 @@ public class Employee {
 	@Column(name = "IS_ACTIVE", nullable = false)
 	private Boolean isActive;
 
-
 	@Column(name = "DOB")
 	private String dob;
 
@@ -51,7 +50,6 @@ public class Employee {
 	@Column(name = "IS_EMAIL_VERIFIED", nullable = false)
 	private Boolean isEmailVerified;
 
-
 	@Column(name = "LAST_NAME")
 	private String lastName;
 
@@ -63,8 +61,11 @@ public class Employee {
 
 	@Column(name = "username")
 	private String userName;
-	
-	@Column(name = "ADT_ID",nullable = false,unique = true)
+
+	@Column(name = "ADT_ID", nullable = false, unique = true)
 	private String adtId;
+
+	@Column(name = "employee_type")
+	private String employeeType;
 
 }
