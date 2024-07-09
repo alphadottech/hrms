@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.adt.hrms.model.Employee;
 import com.adt.hrms.repository.EmployeeRepo;
 import com.adt.hrms.request.EmployeeRequest;
-import com.adt.hrms.request.EmployeeUpdateByAdminDTO;
 import com.adt.hrms.service.EmployeeService;
 
 @Service
@@ -25,9 +24,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     private static final int DEFAULT_PAGE_SIZE = 10;
 
 
-
- 
-    // JIRA NO. :- HRMS-106(Bug Resolved) START---
     @Override
     public Page<Employee> getAllEmps(int page, int size) {
         if (size <= 0 || size > MAX_PAGE_SIZE) {
@@ -36,7 +32,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         Pageable pageable = PageRequest.of(page, size);
         return employeeRepo.findByIsActiveTrue(pageable);
     }
-    // JIRA NO. :- HRMS-106(Bug Resolved) END---
 
     @Override
     public String saveEmp(Employee emp) {
@@ -47,14 +42,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public String deleteEmpById(Integer empId) {
-        Optional<Employee> opt = employeeRepo.findById(empId);
+    public String deleteEmpById(String empId) {
+        Optional<Employee> opt = employeeRepo.findByAdtId(empId);
         if (opt.isPresent()) {
             Employee employee=opt.get();
             employee.setIsActive(false);
             employeeRepo.save(employee);
-            return empId + " has been InActive";
-        } else return "Invalid Employe Id :: " + empId;
+            return empId + " deleted Successfully";
+        } else return "Invalid Employee Id : " + empId;
     }
 
   
@@ -138,90 +133,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepo.save(opt.get()).getEmployeeId() + " Employee Updated Successfully";
     }
 
-//	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager START---
-//	@Override
-//	public byte[] downloadAadharCard(int id, HttpServletResponse resp) throws IOException {
-//
-//		String headerKey = "Content-Disposition";
-//
-//		Optional<Employee> dbImageData = employeeRepo.findById(id);
-//		String firstName = dbImageData.get().getFirstName();
-//		String lastName = dbImageData.get().getLastName();
-//		byte[] aadhar = dbImageData.get().getAadharCard();
-//
-//		String headerValue = null;
-//
-//		try {
-//			if (aadhar == null && headerValue == null) {
-//				System.out.println(" Aadhar Card is Not Available !!!");
-//			} else {
-//
-//				resp.setContentType("image/jpeg");
-//
-//				if (!firstName.isEmpty() && !lastName.isEmpty()) {
-//					headerValue = "attachment;filename=" + firstName + "_" + lastName + "_AadharCard.jpg";
-//					System.out.println(firstName + "_" + lastName + " : " + " Aadhar Card Downloaded Successfully !!!");
-//				} else if (firstName.isEmpty() && !lastName.isEmpty()) {
-//					headerValue = "attachment;filename=" + lastName + "_AadharCard.jpg";
-//					System.out.println(lastName + " : " + " Aadhar Card Downloaded Successfully !!!");
-//				} else if (!firstName.isEmpty() && lastName.isEmpty()) {
-//					headerValue = "attachment;filename=" + firstName + "_AadharCard.jpg";
-//					System.out.println(firstName + " : " + " Aadhar Card Downloaded Successfully !!!");
-//				} else if (firstName.isEmpty() && lastName.isEmpty()) {
-//					headerValue = "attachment;filename=_AadharCard.jpg";
-//					System.out.println(" Aadhar Card Downloaded Successfully !!!");
-//				}
-//
-//				resp.setHeader(headerKey, headerValue);
-//				resp.flushBuffer();
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return aadhar;
-//	}
-
-//	@Override
-//	public byte[] downloadPanCard(int id, HttpServletResponse resp) throws IOException {
-//		String headerKey = "Content-Disposition";
-//
-//		Optional<Employee> dbImageData = employeeRepo.findById(id);
-//		String firstName = dbImageData.get().getFirstName();
-//		String lastName = dbImageData.get().getLastName();
-//		byte[] pan = dbImageData.get().getPanCard();
-//
-//		String headerValue = null;
-//
-//		try {
-//			if (pan == null && headerValue == null) {
-//				System.out.println(" Pan Card is Not Available !!!");
-//			} else {
-//
-//				resp.setContentType("image/jpeg");
-//
-//				if (!firstName.isEmpty() && !lastName.isEmpty()) {
-//					headerValue = "attachment;filename=" + firstName + "_" + lastName + "_PanCard.jpg";
-//					System.out.println(firstName + "_" + lastName + " : " + " Pan Card Downloaded Successfully !!!");
-//				} else if (firstName.isEmpty() && !lastName.isEmpty()) {
-//					headerValue = "attachment;filename=" + lastName + "_PanCard.jpg";
-//					System.out.println(lastName + " : " + " Pan Card Downloaded Successfully !!!");
-//				} else if (!firstName.isEmpty() && lastName.isEmpty()) {
-//					headerValue = "attachment;filename=" + firstName + "_PanCard.jpg";
-//					System.out.println(firstName + " : " + " Pan Card Downloaded Successfully !!!");
-//				} else if (firstName.isEmpty() && lastName.isEmpty()) {
-//					headerValue = "attachment;filename=_PanCard.jpg";
-//					System.out.println(" Pan Card Downloaded Successfully !!!");
-//				}
-//
-//				resp.setHeader(headerKey, headerValue);
-//				resp.flushBuffer();
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return pan;
-//	}
-//	// JIRA NO. :- HRMS-108 Download Aadhaar & Pan Images in File Manager END---
 @Override
 public Page<Employee> searchEmployees(String firstName, String lastName, String email, Long mobileNo, String firstLetter, int page, int size) {
     if (email == "") {

@@ -1,6 +1,7 @@
 package com.adt.hrms.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,5 +23,6 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 	Page<Employee> findAll(Specification<Employee> sp, Pageable pageable);
 	Page<Employee> findByIsActiveTrue(Pageable pageable);
 
-
+	@Query(value = "select * from user_schema._employee where adt_id=?1",nativeQuery = true)
+    Optional<Employee> findByAdtId(String empId);
 }
