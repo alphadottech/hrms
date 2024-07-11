@@ -14,7 +14,7 @@ public interface EmployeeService {
 
 	public String saveEmp(Employee emp);
 
-	public String deleteEmpById(String empId);
+	public String deleteEmpById(Integer empId);
 
 	public String updateEmp(EmployeeRequest empRequest);
 

@@ -41,13 +41,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public String deleteEmpById(String empId) {
-		Optional<Employee> opt = employeeRepo.findByAdtId(empId);
+	public String deleteEmpById(Integer empId) {
+		Optional<Employee> opt = employeeRepo.findById(empId);
 		if (opt.isPresent()) {
+			if(opt.get().getAdtId()!=null&&!opt.get().getAdtId().isEmpty()) {
 			Employee employee = opt.get();
 			employee.setIsActive(false);
 			employeeRepo.save(employee);
 			return empId + " deleted Successfully";
+			}else {
+				return "ADT ID is null or Invalid";
+			}
 		} else
 			return "Invalid Employee Id : " + empId;
 	}
@@ -80,9 +84,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee existEmployee = employeeRepo.findById(emp.getEmployeeId())
 				.orElseThrow(() -> new IllegalArgumentException("Employee not found with id: " + emp.getEmployeeId()));
 
-		if (emp.getEmail() != null) {
-            existEmployee.setDob(emp.getEmail());
-        }
 		if (emp.getDob() != null) {
 			existEmployee.setDob(emp.getDob());
 		}
