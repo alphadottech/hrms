@@ -83,7 +83,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public String updateEmpById(Employee emp) {
 		Employee existEmployee = employeeRepo.findById(emp.getEmployeeId())
 				.orElseThrow(() -> new IllegalArgumentException("Employee not found with id: " + emp.getEmployeeId()));
-
+		
+		if (emp.getEmail() != null) {
+			existEmployee.setEmail(emp.getEmail());
+		}
 		if (emp.getDob() != null) {
 			existEmployee.setDob(emp.getDob());
 		}

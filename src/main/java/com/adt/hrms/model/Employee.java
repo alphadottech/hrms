@@ -37,8 +37,8 @@ public class Employee {
 	@Column(name = "DOB")
 	private String dob;
 
-	@NaturalId
-	@Column(name = "EMAIL", unique = true)
+	
+	@Column(name = "EMAIL")
 	private String email;
 
 	@Column(name = "FIRST_NAME")
