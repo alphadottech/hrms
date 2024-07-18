@@ -1,27 +1,10 @@
 package com.adt.hrms.service;
 
-import java.util.List;
-
 import com.adt.hrms.model.AssetType;
-import com.adt.hrms.model.MasterAsset;
 import com.adt.hrms.request.AssetDTO;
 import com.adt.hrms.request.ResponseDTO;
 
 public interface MasterAssetService {
-
-	public boolean saveMasterAsset(MasterAsset asset);
-
-	public MasterAsset TakeAssetById(Integer id);
-
-	public List<MasterAsset> SearchByAssetUser(String assetUser);
-
-	public List<MasterAsset> SearchByStatus(String status);
-
-	public List<MasterAsset> SearchByAssetType(String assetType);
-
-	public String updateMasterAssetById(MasterAsset masterAsset);
-
-	public List<MasterAsset> findAllMasterAsset();
 
 	public ResponseDTO getAllAssetType();
 
@@ -39,7 +22,7 @@ public interface MasterAssetService {
 
 	public ResponseDTO getAssetTypeById(Integer assetTypeId);
 
-	public ResponseDTO updateAssetTypeById(Integer assetTypeId, String assetTypeName);
+	public ResponseDTO updateAssetTypeById(Integer assetTypeId, AssetType assetType);
 
 	public ResponseDTO deleteAssetTypeById(Integer assetTypeId);
 
@@ -51,5 +34,13 @@ public interface MasterAssetService {
 	public ResponseDTO deleteAssetAttributeById(Integer assetAttributeId);
 
 //	public ResponseDTO saveAssetDetailsWithAttributes(CreateAssetDTO createAssetDTO);
+
+//	public boolean saveMasterAsset(MasterAsset asset);
+//	public MasterAsset TakeAssetById(Integer id);
+//	public List<MasterAsset> SearchByAssetUser(String assetUser);
+//	public List<MasterAsset> SearchByStatus(String status);
+//	public List<MasterAsset> SearchByAssetType(String assetType);
+//	public String updateMasterAssetById(MasterAsset masterAsset);
+//	public List<MasterAsset> findAllMasterAsset();
 
 }

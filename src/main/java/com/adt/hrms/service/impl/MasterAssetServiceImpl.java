@@ -2,30 +2,30 @@ package com.adt.hrms.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.adt.hrms.model.AssetAttribute;
 import com.adt.hrms.model.AssetAttributeMapping;
 import com.adt.hrms.model.AssetInfo;
 import com.adt.hrms.model.AssetType;
-import com.adt.hrms.model.MasterAsset;
 import com.adt.hrms.repository.AssetAttributeMappingRepo;
 import com.adt.hrms.repository.AssetAttributeRepo;
 import com.adt.hrms.repository.AssetInfoRepo;
 import com.adt.hrms.repository.AssetTypeRepo;
-import com.adt.hrms.repository.MasterAssetRepository;
 import com.adt.hrms.request.AssetDTO;
 import com.adt.hrms.request.ResponseDTO;
 import com.adt.hrms.service.MasterAssetService;
-import com.adt.hrms.util.AssetUtility;
+import com.adt.hrms.util.TableDataExtractor;
 
 @Service
 public class MasterAssetServiceImpl implements MasterAssetService {
@@ -34,6 +34,9 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 
 	private static final int MAX_PAGE_SIZE = 50;
 	private static final int DEFAULT_PAGE_SIZE = 10;
+
+	@Autowired
+	private TableDataExtractor dataExtractor;
 
 	@Autowired
 	private AssetTypeRepo assetTypeRepo;
@@ -47,282 +50,189 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 	@Autowired
 	private AssetAttributeMappingRepo assetAttributeMappingRepo;
 
-	@Autowired
-	private MasterAssetRepository repo;
+//	@Autowired
+//	private MasterAssetRepository repo;
 
-	@Override
-	public boolean saveMasterAsset(MasterAsset asset) {
-		if (!AssetUtility.checkValidate(asset.getAssetUser())) {
-			throw new IllegalArgumentException("Invalid Asset User...");
-		}
-		if (!AssetUtility.validateName(asset.getAssetName())) {
-			throw new IllegalArgumentException("Invalid Asset Name..");
-		}
-		if (!AssetUtility.validateId(asset.getAssetId())) {
-			throw new IllegalArgumentException("Invalid Asset ID ");
-		}
-		if (!AssetUtility.validateId(asset.getAssetNo())) {
-			throw new IllegalArgumentException("Invalid Asset Number");
-		}
-		if (!AssetUtility.checkValidate(asset.getAssetType())) {
-			throw new IllegalArgumentException("Invalid Asset Type...");
-		}
-		if (!AssetUtility.validateProcessor(asset.getProcessor())) {
-			throw new IllegalArgumentException("Invalid Processor Details");
-		}
-		if (!AssetUtility.validateRAM(asset.getRam())) {
-			throw new IllegalArgumentException("Invalid RAM Details");
-		}
-		if (!AssetUtility.validateDiskType(asset.getDiskType())) {
-			throw new IllegalArgumentException("Invalid Disc Type Details");
-		}
-		if (!AssetUtility.validateProcessor(asset.getOperatingSystem())) {
-			throw new IllegalArgumentException("Invalid Operating System Details");
-		}
-		if (!AssetUtility.validateProcessor(asset.getWarrenty())) {
-			throw new IllegalArgumentException("Invalid Warranty Details");
-		}
-		MasterAsset masterasset = repo.save(asset);
-
-		return masterasset != null;
+	private ResponseDTO buildResponse(String status, String message, Object data) {
+		ResponseDTO responseDTO = new ResponseDTO();
+		responseDTO.setStatus(status);
+		responseDTO.setMessage(message);
+		responseDTO.setData(data);
+		return responseDTO;
 	}
 
-	@Override
-	public MasterAsset TakeAssetById(Integer id) {
-		Optional<MasterAsset> getById = repo.findById(id);
-		return getById.get();
-	}
+	@Transactional
+	public synchronized String generateAssetADTId(String assetName) {
+		Optional<String> abbreviationOpt = assetTypeRepo.findAbbreviationByAssetName(assetName.toUpperCase());
 
-	@Override
-	public List<MasterAsset> SearchByAssetUser(String assetUser) {
-		return repo.findByAssetUser(assetUser);
-	}
-
-	@Override
-	public List<MasterAsset> SearchByStatus(String status) {
-		return repo.findByStatus(status);
-	}
-
-	@Override
-	public List<MasterAsset> SearchByAssetType(String assetType) {
-		return repo.findByAssetType(assetType);
-	}
-
-	@Override
-	public String updateMasterAssetById(MasterAsset masterAsset) {
-		if (!AssetUtility.checkValidate(masterAsset.getAssetUser())) {
-			throw new IllegalArgumentException("Invalid Asset User...");
-		}
-		if (!AssetUtility.validateName(masterAsset.getAssetName())) {
-			throw new IllegalArgumentException("Invalid Asset Name..");
-		}
-		if (!AssetUtility.validateId(masterAsset.getAssetId())) {
-			throw new IllegalArgumentException("Invalid Asset ID ");
-		}
-		if (!AssetUtility.validateId(masterAsset.getAssetNo())) {
-			throw new IllegalArgumentException("Invalid Asset Number");
-		}
-		if (!AssetUtility.checkValidate(masterAsset.getAssetType())) {
-			throw new IllegalArgumentException("Invalid Asset Type...");
-		}
-		if (!AssetUtility.validateProcessor(masterAsset.getProcessor())) {
-			throw new IllegalArgumentException("Invalid Processor Details");
-		}
-		if (!AssetUtility.validateRAM(masterAsset.getRam())) {
-			throw new IllegalArgumentException("Invalid RAM Details");
-		}
-		if (!AssetUtility.validateDiskType(masterAsset.getDiskType())) {
-			throw new IllegalArgumentException("Invalid Disc Type Details");
-		}
-		if (!AssetUtility.validateProcessor(masterAsset.getOperatingSystem())) {
-			throw new IllegalArgumentException("Invalid Operating System Details");
-		}
-		if (!AssetUtility.validateProcessor(masterAsset.getWarrenty())) {
-			throw new IllegalArgumentException("Invalid Warranty Details");
-		}
-		MasterAsset dbAsset = repo.findAssetById(masterAsset.getId());
-		if (dbAsset != null) {
-			dbAsset.setAssetName(masterAsset.getAssetName());
-			dbAsset.setAssetNo(masterAsset.getAssetNo());
-			dbAsset.setAssetType(masterAsset.getAssetType());
-			dbAsset.setAssetUser(masterAsset.getAssetUser());
-			dbAsset.setDiskType(masterAsset.getDiskType());
-			dbAsset.setOperatingSystem(masterAsset.getOperatingSystem());
-			dbAsset.setProcessor(masterAsset.getProcessor());
-			dbAsset.setRam(masterAsset.getRam());
-			dbAsset.setStatus(masterAsset.getStatus());
-			dbAsset.setWarrenty(masterAsset.getWarrenty());
-			dbAsset.setPurchesDate(masterAsset.getPurchesDate());
-			dbAsset.setWarrentyDate(masterAsset.getWarrentyDate());
-
-			return repo.save(dbAsset).getAssetId() + " Updated Successfully";
+		if (!abbreviationOpt.isPresent()) {
+			throw new IllegalArgumentException("No abbreviation found for asset name:" + assetName);
 		}
 
-		return masterAsset.getAssetId() + " Not Updated ";
-	}
+		String abbreviation = abbreviationOpt.get().toUpperCase();
+		String prefix = "ADT_" + abbreviation + "_";
+		String sql = "SELECT asset_adt_id FROM employee_schema.asset WHERE asset_adt_id LIKE '" + prefix
+				+ "%' ORDER BY asset_adt_id DESC LIMIT 1";
+		List<Map<String, Object>> adtIdData = dataExtractor.extractDataFromTable(sql);
 
-	@Override
-	public List<MasterAsset> findAllMasterAsset() {
-		return (List<MasterAsset>) repo.findAll();
+		int newIdNumber = 1;
+		if (!adtIdData.isEmpty()) {
+			String lastId = (String) adtIdData.get(0).get("asset_adt_id");
+			String numberPart = lastId.substring(prefix.length());
+			newIdNumber = Integer.parseInt(numberPart) + 1;
+		}
+
+		return String.format("%s%04d", prefix, newIdNumber);
 	}
 
 	@Override
 	public ResponseDTO getAllAssetType() {
-		ResponseDTO responseDTO = new ResponseDTO();
 		log.info("MasterAssetServiceImpl:masterAsset:getAllAssetType info level log message");
 		try {
 			List<AssetType> assetTypesList = assetTypeRepo.findAll();
 
 			if (assetTypesList.isEmpty()) {
-
-				responseDTO.setStatus("NotFound");
-				responseDTO.setMessage("No AssetType found");
-				responseDTO.setData(null);
+				return buildResponse("NotFound", "No asset type found", null);
 			} else {
-				responseDTO.setStatus("Success");
-				responseDTO.setMessage("All AssetType Fetched successfully");
-				responseDTO.setData(assetTypesList);
+				return buildResponse("Success", "All asset type fetched successfully", assetTypesList);
 			}
 		} catch (Exception e) {
 			log.error("getAllAssetType Exception : " + e);
 			e.printStackTrace();
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
 		}
-		return responseDTO;
 	}
 
 	@Override
 	public ResponseDTO getAllAssetAttributesByAssetTypeId(Integer assetTypeId) {
-		ResponseDTO responseDTO = new ResponseDTO();
-		log.info("MasterAssetServiceImpl:masterAsset:getAllAssetAttributesByAssetTypeId info level log message");
+		log.info("MasterAssetServiceImpl : getAllAssetAttributesByAssetTypeId info level log message");
 		try {
 			if (assetTypeId == 0 || assetTypeId.equals("")) {
 				throw new IllegalArgumentException(
-						"Provide Valid AssetTypeId,AssetTypeId should not be 0 or Invalid or Null");
+						"Provide valid AssetTypeId, asset type id should not be 0 or invalid or null");
 			}
 
 			List<AssetAttribute> assetAttributeList = assetAttributeRepo
 					.findAllAssetAttributesByAssetTypeId(assetTypeId);
 
 			if (assetAttributeList.isEmpty()) {
-				responseDTO.setStatus("NotFound");
-				responseDTO.setMessage("No AssetAttributes found");
-				responseDTO.setData(null);
+				return buildResponse("NotFound", "No asset attributes found", null);
 			} else {
-				responseDTO.setStatus("Success");
-				responseDTO.setMessage("AssetAttributes with AssetTypeId: " + assetTypeId + " Fetched successfully");
-				responseDTO.setData(assetAttributeList);
+				return buildResponse("Success",
+						"AssetAttributes with asset type id:" + assetTypeId + " fetched successfully",
+						assetAttributeList);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("getAllAssetAttributesByAssetTypeId IllegalArgumentException : " + e.getMessage());
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
 			log.error("getAllAssetAttributesByAssetTypeId Exception : " + e);
 			e.printStackTrace();
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
 		}
-		return responseDTO;
 	}
 
+	@Transactional
 	@Override
 	public ResponseDTO saveAssetInfo(AssetDTO assetDTO) {
-		ResponseDTO responseDTO = new ResponseDTO();
 		log.info("MasterAssetServiceImpl:saveAssetInfo info level log message");
 		try {
-			if (assetDTO.getAssetTypeId() == 0 || assetDTO.getAssetTypeId().equals("")) {
+			if (assetDTO.getAssetTypeId() == null || assetDTO.getAssetTypeId() == 0) {
 				throw new IllegalArgumentException(
-						"Provide Valid AssetTypeId, AssetTypeId should not be 0 or Null or Invalid");
+						"Provide valid AssetTypeId, AssetTypeId should not be 0 or null or invalid");
 			}
 			if (assetDTO.getAssetAttributeMappingList() == null) {
 				throw new IllegalArgumentException(
-						"Provide Valid AssetAttributeId, AssetAttributeId should not be 0 or Null or Invalid");
+						"Provide valid AssetAttributeId, AssetAttributeId should not be 0 or null or invalid");
+			}
+			if (assetDTO.getAssetStatus() == null || assetDTO.getAssetStatus().isBlank()) {
+				throw new IllegalArgumentException(
+						"Provide valid AssetStatus, AssetStatus should not be null or invalid");
 			}
 			for (AssetAttributeMapping assetAttributeMapping : assetDTO.getAssetAttributeMappingList()) {
 				if (assetAttributeMapping.getAsset_attribute_id() == 0
 						|| assetAttributeMapping.getAsset_attribute_id().equals("")) {
 					throw new IllegalArgumentException(
-							"Provide Valid AssetAttributeId, AssetAttributeId should not be 0 or Null or Invalid");
+							"Provide valid AssetAttributeId, AssetAttributeId should not be 0 or null or invalid");
 				}
 				if ((assetAttributeMapping.getAssetAttributeValue() == null
 						|| assetAttributeMapping.getAssetAttributeValue().equals(""))
 						|| assetAttributeMapping.getAssetAttributeValue().isEmpty()
 						|| (assetAttributeMapping.getAssetAttributeValue().length() > 200)) {
 					throw new IllegalArgumentException(
-							"AssetAttributeValue should not be Null or Invalid, AND AssetAttributeValue should not be Greater than 200 Characters");
+							"AssetAttributeValue should not be null or invalid, and AssetAttributeValue should not be greater than 200 characters");
 				}
 			}
 
-			AssetInfo asset = new AssetInfo();
-			asset.setAsset_type_id(assetDTO.getAssetTypeId());
-			AssetInfo savedAssetInfo = assetInfoRepo.save(asset);
+			Optional<AssetType> existingAssetType = assetTypeRepo.findAssetByAssetTypeId(assetDTO.getAssetTypeId());
 
-			if (savedAssetInfo != null && !savedAssetInfo.equals("")) {
+			if (existingAssetType.isPresent()) {
 
-				for (AssetAttributeMapping assetAttributeMapping : assetDTO.getAssetAttributeMappingList()) {
+				String assetADTId = generateAssetADTId(existingAssetType.get().getAssetName());
 
-					AssetAttributeMapping assetAttributeMappingSaved = new AssetAttributeMapping();
+				AssetInfo asset = new AssetInfo();
+				asset.setAsset_type_id(assetDTO.getAssetTypeId());
+				asset.setAssetADT_ID(assetADTId);
+				asset.setAssetStatus(assetDTO.getAssetStatus().toUpperCase());
 
-					assetAttributeMappingSaved.setAsset_id(savedAssetInfo.getId());
-					assetAttributeMappingSaved.setAsset_attribute_id(assetAttributeMapping.getAsset_attribute_id());
-					assetAttributeMappingSaved.setAssetAttributeValue(assetAttributeMapping.getAssetAttributeValue());
-					assetAttributeMappingRepo.save(assetAttributeMappingSaved);
+				AssetInfo savedAssetInfo = assetInfoRepo.save(asset);
+
+				if (savedAssetInfo != null && !savedAssetInfo.equals("")) {
+
+					for (AssetAttributeMapping assetAttributeMapping : assetDTO.getAssetAttributeMappingList()) {
+
+						AssetAttributeMapping assetAttributeMappingSaved = new AssetAttributeMapping();
+
+						assetAttributeMappingSaved.setAsset_id(savedAssetInfo.getId());
+						assetAttributeMappingSaved.setAsset_attribute_id(assetAttributeMapping.getAsset_attribute_id());
+						assetAttributeMappingSaved
+								.setAssetAttributeValue(assetAttributeMapping.getAssetAttributeValue().toUpperCase());
+						assetAttributeMappingRepo.save(assetAttributeMappingSaved);
+					}
+					return buildResponse("Success", "AssetInfo data saved successfully", null);
+				} else {
+					return buildResponse("NotSaved", "AssetInfo data not saved yet", null);
 				}
-				responseDTO.setStatus("Success");
-				responseDTO.setMessage("AssetInfo Data Saved Successfully");
-				responseDTO.setData(null);
 			} else {
-				responseDTO.setStatus("NotSaved");
-				responseDTO.setMessage("AssetInfo data not saved yet");
-				responseDTO.setData(null);
-				return responseDTO;
+				return buildResponse("NotFound", "AssetType with id:" + assetDTO.getAssetTypeId() + " data not found",
+						null);
 			}
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
 			log.error("saveAssetInfo IllegalArgumentException : " + e.getMessage());
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
 			log.error("saveAssetInfo Exception : " + e);
 			e.printStackTrace();
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
 		}
-		return responseDTO;
 	}
 
 	@Override
 	public ResponseDTO updateAssetAttributeMappingByAssetId(AssetDTO assetDTO) {
-		ResponseDTO responseDTO = new ResponseDTO();
 		log.info("MasterAssetServiceImpl:updateAssetAttributeMappingByAssetId info level log message");
 
 		try {
 			if (assetDTO.getAssetId() == null || assetDTO.getAssetId() == 0 || assetDTO.getAssetId().equals("")) {
 				throw new IllegalArgumentException(
-						"Provide Valid AssetInfoId, AssetInfoId should not be 0 or Invalid or Null");
+						"Provide valid AssetInfoId, AssetInfoId should not be 0 or invalid or null");
 			}
 			if (assetDTO.getAssetAttributeMappingList() == null) {
 				throw new IllegalArgumentException(
-						"Provide Valid AssetAttributeId, AssetAttributeId should not be 0 or Null or Invalid");
+						"Provide valid AssetAttributeId, AssetAttributeId should not be 0 or null or invalid");
 			}
 			for (AssetAttributeMapping assetAttributeMapping : assetDTO.getAssetAttributeMappingList()) {
 				if (assetAttributeMapping.getAsset_attribute_id() == 0
 						|| assetAttributeMapping.getAsset_attribute_id().equals("")) {
 					throw new IllegalArgumentException(
-							"Provide Valid AssetAttributeId, AssetAttributeId should not be 0 or Null or Invalid");
+							"Provide valid AssetAttributeId, AssetAttributeId should not be 0 or null or invalid");
 				}
 				if ((assetAttributeMapping.getAssetAttributeValue() == null
 						|| assetAttributeMapping.getAssetAttributeValue().equals(""))
 						|| assetAttributeMapping.getAssetAttributeValue().isEmpty()
 						|| (assetAttributeMapping.getAssetAttributeValue().length() > 200)) {
 					throw new IllegalArgumentException(
-							"AssetAttributeValue should not be Null or Invalid, AND AssetAttributeValue should not be Greater than 200 Characters");
+							"AssetAttributeValue should not be null or invalid, and AssetAttributeValue should not be greater than 200 characters");
 				}
 			}
 
@@ -345,49 +255,38 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 
 						saveAssetAttributeMapping.setAsset_id(assetDTO.getAssetId());
 						saveAssetAttributeMapping.setAsset_attribute_id(attributeMapping.getAsset_attribute_id());
-						saveAssetAttributeMapping.setAssetAttributeValue(attributeMapping.getAssetAttributeValue());
+						saveAssetAttributeMapping
+								.setAssetAttributeValue(attributeMapping.getAssetAttributeValue().toUpperCase());
 						assetAttributeMappingRepo.save(saveAssetAttributeMapping);
 					}
-					responseDTO.setMessage(
-							"AssetAttributeMapping is Updated Successfully with AssetId: " + assetDTO.getAssetId());
-					responseDTO.setStatus("success");
-					responseDTO.setData(null);
-					return responseDTO;
+
+					return buildResponse("Success",
+							"AssetAttributeMapping is updated successfully with AssetId:" + assetDTO.getAssetId(),
+							null);
 				}
-				responseDTO.setMessage("AssetInfo is Not Updated with AssetInfoId: " + assetDTO.getAssetId());
-				responseDTO.setStatus("NotUpdated");
-				responseDTO.setData(null);
-				return responseDTO;
-
+				return buildResponse("NotUpdated", "AssetInfo is not updated with AssetInfoId:" + assetDTO.getAssetId(),
+						null);
 			} else {
-				responseDTO.setMessage("AssetInfo is Not found with AssetInfoId: " + assetDTO.getAssetId());
-				responseDTO.setStatus("NotFound");
-				responseDTO.setData(null);
-				return responseDTO;
+				return buildResponse("NotFound", "AssetInfo is not found with AssetInfoId:" + assetDTO.getAssetId(),
+						null);
 			}
-
 		} catch (IllegalArgumentException e) {
 			log.error("updateAssetAttributeMappingByAssetId IllegalArgumentException: " + e.getMessage());
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			e.printStackTrace();
+			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: updateAssetAttributeMappingByAssetId Exception: " + e);
 			e.printStackTrace();
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
 		}
-		return responseDTO;
 	}
 
 	@Override
 	public ResponseDTO deleteAssetInfoById(Integer assetId) {
-		ResponseDTO responseDTO = new ResponseDTO();
 		log.info("MasterAssetServiceImpl:deleteAssetInfoById info level log message");
 		try {
 			if (assetId == 0 || assetId.equals("")) {
-				throw new IllegalArgumentException("Provide Valid AssetId, AssetId should not be 0 or Invalid or Null");
+				throw new IllegalArgumentException("Provide valid AssetId, AssetId should not be 0 or invalid or null");
 			}
 			Optional<AssetInfo> assetInfoExist = assetInfoRepo.findAssetByAssetId(assetId);
 
@@ -405,40 +304,29 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				}
 
 				assetInfoRepo.deleteById(assetId);
-
-				responseDTO.setMessage("AssetInfo with ID:" + assetId + " Deleted Successfully");
-				responseDTO.setStatus("success");
-				responseDTO.setData(null);
+				return buildResponse("Success", "AssetInfo with id:" + assetId + " is deleted successfully", null);
 			} else {
-				responseDTO.setMessage("AssetInfo with ID:" + assetId + " not Found");
-				responseDTO.setStatus("NotFound");
-				responseDTO.setData(null);
-				return responseDTO;
+				return buildResponse("NotFound", "AssetInfo with id:" + assetId + " not Found", null);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("deleteAssetInfoById IllegalArgumentException : " + e.getMessage());
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			e.printStackTrace();
+			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: deleteAssetInfoById Exception : " + e);
 			e.printStackTrace();
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
 		}
-		return responseDTO;
 	}
 
 	@Override
 	public ResponseDTO getAllAssetInfoByAssetTypeIdAndPagination(Integer assetTypeId, int page, int size) {
-		ResponseDTO responseDTO = new ResponseDTO();
 		log.info("MasterAssetServiceImpl:getAllAssetInfoByAssetTypeIdAndPagination info level log message");
 		try {
 
 			if (assetTypeId == 0 || assetTypeId.equals("")) {
 				throw new IllegalArgumentException(
-						"Provide Valid AssetTypeId,AssetTypeId should not be 0 or Invalid or Null");
+						"Provide valid AssetTypeId, AssetTypeId should not be 0 or invalid or null");
 			}
 
 			if (size <= 0 || size > MAX_PAGE_SIZE) {
@@ -470,160 +358,161 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 					}
 					assetDTOList.add(assetDTO);
 				}
-
-				responseDTO.setStatus("success");
-				responseDTO.setMessage("AssetInfoList found for AssetTypeId: " + assetTypeId);
-				responseDTO.setData(assetDTOList);
+				return buildResponse("Success", "AssetInfoList found for AssetTypeId:" + assetTypeId, assetDTOList);
 			} else {
-				responseDTO.setStatus("NotFound");
-				responseDTO.setMessage("AssetInfoList not found for AssetTypeId: " + assetTypeId);
-				responseDTO.setData(null);
+				return buildResponse("NotFound", "AssetInfoList not found for AssetTypeId:" + assetTypeId, null);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("getAllAssetInfoByAssetTypeIdAndPagination IllegalArgumentException : " + e.getMessage());
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			e.printStackTrace();
+			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: getAllAssetInfoByAssetTypeIdAndPagination Exception : " + e);
 			e.printStackTrace();
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
 		}
-		return responseDTO;
 	}
 
 	@Override
 	public ResponseDTO addAssetType(AssetType assetType) {
-		ResponseDTO responseDTO = new ResponseDTO();
 		log.info("MasterAssetServiceImpl:addAssetType info level log message");
+
 		try {
-
-			if (assetType == null || assetType.equals("")) {
-				throw new IllegalArgumentException("AssetType should not be Null or Invalid");
+			if (assetType == null) {
+				throw new IllegalArgumentException("AssetType should not be null or invalid");
 			}
-			if ((assetType.getAssetName() == null || assetType.getAssetName().equals(""))
-					|| (assetType.getAssetName().length() > 200)) {
+
+			String assetName = assetType.getAssetName();
+			String assetAbbreviation = assetType.getAssetAbbreviation();
+
+			String upperAssetName = assetName.toUpperCase();
+			String upperAssetAbbreviation = assetAbbreviation.toUpperCase();
+
+			if (assetName == null || assetName.trim().isEmpty() || assetName.length() > 200) {
 				throw new IllegalArgumentException(
-						"AssetTypeName should not be Null or Invalid, AND AssetTypeName should not be Greater than 200 Characters ");
+						"AssetTypeName should not be null, empty, or greater than 200 characters");
 			}
 
-			if (assetType != null && !assetType.equals("")) {
-				assetTypeRepo.save(assetType);
-
-				responseDTO.setStatus("Success");
-				responseDTO.setMessage("Data Saved Successfully");
-				responseDTO.setData(null);
-
-			} else {
-				responseDTO.setStatus("NotSaved");
-				responseDTO.setMessage("AssetType data not saved yet");
-				responseDTO.setData(null);
+			if (assetAbbreviation == null || assetAbbreviation.trim().isEmpty() || assetAbbreviation.length() > 200) {
+				throw new IllegalArgumentException(
+						"AssetAbbreviation should not be null, empty, or greater than 200 characters");
 			}
+
+			Optional<AssetType> assetTypeExistByName = assetTypeRepo.findByAssetName(upperAssetName);
+			if (assetTypeExistByName.isPresent()) {
+				return buildResponse("AlreadyExist", "This AssetTypeName: " + upperAssetName
+						+ " already exists, please enter a unique asset type name", null);
+			}
+
+			Optional<AssetType> assetTypeExistByAbbreviation = assetTypeRepo
+					.findByAssetAbbreviation(upperAssetAbbreviation);
+			if (assetTypeExistByAbbreviation.isPresent()) {
+				return buildResponse("AlreadyExist", "This AssetAbbreviation: " + upperAssetAbbreviation
+						+ " already exists, please enter a unique asset abbreviation", null);
+			}
+
+			assetType.setAssetName(upperAssetName);
+			assetType.setAssetAbbreviation(upperAssetAbbreviation);
+			assetTypeRepo.save(assetType);
+
+			return buildResponse("Success", "AssetType data saved successfully", null);
+
 		} catch (IllegalArgumentException e) {
-			log.error("addAssetType IllegalArgumentException : " + e.getMessage());
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
-		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: addAssetType Exception : " + e);
 			e.printStackTrace();
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			log.error("addAssetType IllegalArgumentException: " + e.getMessage());
+			return buildResponse("Failed", e.getMessage(), null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.error("MasterAssetServiceImpl: addAssetType Exception: ", e);
+			return buildResponse("Failed", e.getMessage(), null);
 		}
-		return responseDTO;
 	}
 
 	@Override
 	public ResponseDTO getAssetTypeById(Integer assetTypeId) {
-		ResponseDTO responseDTO = new ResponseDTO();
 		log.info("MasterAssetServiceImpl:getAssetTypeById info level log message");
 		try {
 			if (assetTypeId == 0 || assetTypeId.equals("")) {
 				throw new IllegalArgumentException(
-						"Provide Valid AssetTypeId, AssetTypeId should not be 0 or Invalid or Null");
+						"Provide valid AssetTypeId, AssetTypeId should not be 0 or invalid or null");
 			}
 
 			Optional<AssetType> assetType = assetTypeRepo.findAssetByAssetTypeId(assetTypeId);
 
 			if (assetType.isEmpty()) {
-				responseDTO.setStatus("NotFound");
-				responseDTO.setMessage("No AssetType found");
-				responseDTO.setData(null);
+				return buildResponse("NotFound", "No AssetType found with id:" + assetTypeId, null);
 			} else {
-				responseDTO.setStatus("Success");
-				responseDTO.setMessage("AssetType with Id: " + assetTypeId + " Fetched successfully");
-				responseDTO.setData(assetType.get());
+				return buildResponse("Success", "AssetType with id:" + assetTypeId + " fetched successfully",
+						assetType.get());
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("getAssetTypeById IllegalArgumentException : " + e.getMessage());
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			e.printStackTrace();
+			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: getAssetTypeById Exception : " + e);
 			e.printStackTrace();
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
 		}
-		return responseDTO;
 	}
 
 	@Override
-	public ResponseDTO updateAssetTypeById(Integer assetTypeId, String assetTypeName) {
-		ResponseDTO responseDTO = new ResponseDTO();
+	public ResponseDTO updateAssetTypeById(Integer assetTypeId, AssetType assetType) {
 		log.info("MasterAssetServiceImpl:updateAssetTypeById info level log message");
+
 		try {
-			if (assetTypeId == 0 || assetTypeId.equals("")) {
-				throw new IllegalArgumentException(
-						"Provide Valid AssetTypeId, AssetTypeId should not be 0 or Invalid or Null");
-			}
-			if ((assetTypeName == null || assetTypeName.equals("")) || (assetTypeName.length() > 200)) {
-				throw new IllegalArgumentException(
-						"AssetTypeName should not be Null or Invalid, AND AssetTypeName should not be Greater than 200 Characters ");
+			if (assetTypeId == null || assetTypeId == 0) {
+				throw new IllegalArgumentException("Provide valid AssetTypeId:" + assetTypeId
+						+ " , asset type id should not be 0 or invalid or null");
 			}
 
-			Optional<AssetType> assetType = assetTypeRepo.findAssetByAssetTypeId(assetTypeId);
+			String assetName = assetType.getAssetName();
+			String assetAbbreviation = assetType.getAssetAbbreviation();
 
-			if (assetType.isPresent()) {
+			if (assetName == null || assetName.trim().isEmpty() || assetName.length() > 200) {
+				throw new IllegalArgumentException(
+						"AssetTypeName should not be null, invalid, or greater than 200 characters");
+			}
 
-				assetType.get().setAssetName(assetTypeName);
-				assetTypeRepo.save(assetType.get());
+			if (assetAbbreviation == null || assetAbbreviation.trim().isEmpty() || assetAbbreviation.length() > 200) {
+				throw new IllegalArgumentException(
+						"AssetAbbreviation should not be null, invalid, or greater than 200 characters");
+			}
 
-				responseDTO.setStatus("Success");
-				responseDTO.setMessage("AssetType with AssetTypeId: " + assetTypeId + " Updated successfully");
-				responseDTO.setData(null);
+			Optional<AssetType> existingAssetType = assetTypeRepo.findAssetByAssetTypeId(assetTypeId);
+
+			if (existingAssetType.isPresent()) {
+				AssetType assetToUpdate = existingAssetType.get();
+				if (assetName != null && !assetName.trim().isEmpty()) {
+					assetToUpdate.setAssetName(assetName.toUpperCase());
+				}
+				if (assetAbbreviation != null && !assetAbbreviation.trim().isEmpty()) {
+					assetToUpdate.setAssetAbbreviation(assetAbbreviation.toUpperCase());
+				}
+
+				assetTypeRepo.save(assetToUpdate);
+				return buildResponse("Success", "AssetType with id:" + assetTypeId + " is updated successfully", null);
 			} else {
-				responseDTO.setStatus("NotFound");
-				responseDTO.setMessage("No AssetType found");
-				responseDTO.setData(null);
+				return buildResponse("NotFound", "No AssetType found with id:" + assetTypeId, null);
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("updateAssetTypeById IllegalArgumentException : " + e.getMessage());
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
-		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: updateAssetTypeById Exception : " + e);
+			log.error("updateAssetTypeById IllegalArgumentException: " + e.getMessage());
 			e.printStackTrace();
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
+		} catch (Exception e) {
+			log.error("MasterAssetServiceImpl: updateAssetTypeById Exception: ", e);
+			e.printStackTrace();
+			return buildResponse("Failed", e.getMessage(), null);
 		}
-		return responseDTO;
 	}
 
 	@Override
 	public ResponseDTO deleteAssetTypeById(Integer assetTypeId) {
-		ResponseDTO responseDTO = new ResponseDTO();
 		log.info("MasterAssetServiceImpl:deleteAssetTypeById info level log message");
 		try {
 			if (assetTypeId == 0 || assetTypeId.equals("")) {
 				throw new IllegalArgumentException(
-						"Provide Valid AssetTypeId, AssetTypeId should not be 0 or Invalid or Null");
+						"Provide valid AssetTypeId, AssetTypeId should not be 0 or invalid or null");
 			}
 
 			Optional<List<AssetInfo>> assetInfoListExist = assetInfoRepo.findAssetInfoListByAssetTypeId(assetTypeId);
@@ -633,28 +522,21 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 							.findAssetAttributeMappingListByAssetInfoId(assetInfo.getId());
 					if (assetAttributeMappingListExist.isPresent() && !assetAttributeMappingListExist.get().isEmpty()) {
 
-						responseDTO.setMessage("This AssetAttributeMapping is already associated with AssetTypeId: "
-								+ assetTypeId + ", we cannot delete");
-						responseDTO.setStatus("AlreadyAssociated");
-						responseDTO.setData(null);
-						return responseDTO;
+						return buildResponse("AlreadyAssociated",
+								"This AssetAttributeMapping is already associated with AssetTypeId: " + assetTypeId
+										+ ", we cannot delete",
+								null);
 					}
 				}
-				responseDTO.setMessage(
-						"This AssetInfo is already associated with AssetTypeId: " + assetTypeId + ", we cannot delete");
-				responseDTO.setStatus("AlreadyAssociated");
-				responseDTO.setData(null);
-				return responseDTO;
+				return buildResponse("AlreadyAssociated", "This AssetInfo is already associated with AssetTypeId: "
+						+ assetTypeId + ", we cannot delete" + assetTypeId, null);
 			}
 
 			Optional<List<AssetAttribute>> assetAttributeListExist = assetAttributeRepo
 					.findAssetAttributeByAssetTypeId(assetTypeId);
 			if (assetAttributeListExist.isPresent() && !assetAttributeListExist.get().isEmpty()) {
-				responseDTO.setMessage("This AssetAttribute is already associated with AssetTypeId: " + assetTypeId
-						+ ", we cannot delete");
-				responseDTO.setStatus("AlreadyAssociated");
-				responseDTO.setData(null);
-				return responseDTO;
+				return buildResponse("AlreadyAssociated", "This AssetAttribute is already associated with AssetTypeId: "
+						+ assetTypeId + ", we cannot delete", null);
 			}
 
 			Optional<AssetType> assetTypeExist = assetTypeRepo.findAssetByAssetTypeId(assetTypeId);
@@ -670,137 +552,114 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 
 				assetTypeRepo.delete(assetTypeExist.get());
 
-				responseDTO.setMessage("AssetType with Id: " + assetTypeId + " is Deleted successfully");
-				responseDTO.setStatus("Success");
-				responseDTO.setData(null);
+				return buildResponse("Success",
+						"AssetType with id:" + assetTypeId + " is deleted successfully" + assetTypeId, null);
 			} else {
-				responseDTO.setMessage("AssetType with AssetTypeId: " + assetTypeId + " is not found");
-				responseDTO.setStatus("NotFound");
-				responseDTO.setData(null);
+				return buildResponse("NotFound", "AssetType with AssetTypeId:" + assetTypeId + " is not found", null);
 			}
 
 		} catch (IllegalArgumentException e) {
 			log.error("deleteAssetTypeById IllegalArgumentException : " + e.getMessage());
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			e.printStackTrace();
+			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: deleteAssetTypeById Exception: " + e);
 			e.printStackTrace();
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("Failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
 		}
-		return responseDTO;
 	}
 
 	@Override
 	public ResponseDTO addAssetAttributesByAssetTypeId(Integer assetTypeId, String assetAttributeName) {
-		ResponseDTO responseDTO = new ResponseDTO();
 		log.info("MasterAssetServiceImpl:addAssetAttributesByAssetTypeId info level log message");
 		try {
 			if (assetTypeId == 0 || assetTypeId.equals("")) {
 				throw new IllegalArgumentException(
-						"Provide Valid AssetTypeId, AssetTypeId should not be 0 or Invalid or Null");
+						"Provide valid AssetTypeId, AssetTypeId should not be 0 or invalid or null");
 			}
 			if ((assetAttributeName == null || assetAttributeName.equals("")) || (assetAttributeName.length() > 200)) {
 				throw new IllegalArgumentException(
-						"AssetAttributeName should not be Null or Invalid, AND AssetAttributeName should not be Greater than 200 Characters ");
+						"AssetAttributeName should not be null or invalid, AND AssetAttributeName should not be greater than 200 characters ");
 			}
 
-			if (assetAttributeName != null && !assetAttributeName.equals("")) {
+			Optional<AssetType> existingAssetType = assetTypeRepo.findAssetByAssetTypeId(assetTypeId);
+			if (existingAssetType.isPresent()) {
 
-				AssetAttribute assetAttributeSave = new AssetAttribute();
-				assetAttributeSave.setAssetAttributeName(assetAttributeName);
-				assetAttributeSave.setAsset_type_id(assetTypeId);
+				if (assetAttributeName != null && !assetAttributeName.equals("")) {
 
-				assetAttributeRepo.save(assetAttributeSave);
+					AssetAttribute assetAttributeSave = new AssetAttribute();
+					assetAttributeSave.setAssetAttributeName(assetAttributeName.toUpperCase());
+					assetAttributeSave.setAsset_type_id(assetTypeId);
 
-				responseDTO.setStatus("Success");
-				responseDTO.setMessage("Data Saved Successfully");
-				responseDTO.setData(null);
+					assetAttributeRepo.save(assetAttributeSave);
+					return buildResponse("Success", "AssetAttribute data saved successfully", null);
 
+				} else {
+					return buildResponse("NotSaved", "AssetAttribute data not saved yet", null);
+				}
 			} else {
-				responseDTO.setStatus("NotSaved");
-				responseDTO.setMessage("AssetType data not saved yet");
-				responseDTO.setData(null);
+				return buildResponse("NotFound", "AssetType with id:" + assetTypeId + " not found", null);
 			}
-
 		} catch (IllegalArgumentException e) {
 			log.error("addAssetAttributesByAssetTypeId IllegalArgumentException : " + e.getMessage());
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			e.printStackTrace();
+			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: addAssetAttributesByAssetTypeId Exception : " + e);
 			e.printStackTrace();
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
 		}
-		return responseDTO;
 	}
 
 	@Override
 	public ResponseDTO updateAssetAttributeById(Integer assetAttributeId, Integer assetTypeId,
 			String assetAttributeName) {
-		ResponseDTO responseDTO = new ResponseDTO();
 		log.info("MasterAssetServiceImpl:updateAssetAttributeById info level log message");
 		try {
 			if (assetTypeId == 0 || assetTypeId.equals("")) {
 				throw new IllegalArgumentException(
-						"Provide Valid AssetTypeId, AssetTypeId should not be 0 or Invalid or Null");
+						"Provide valid AssetTypeId, AssetTypeId should not be 0 or invalid or null");
 			}
 			if (assetAttributeId == 0 || assetAttributeId.equals("")) {
 				throw new IllegalArgumentException(
-						"Provide Valid AssetAttributeId,AssetAttributeId should not be 0 or Invalid or Null");
+						"Provide valid AssetAttributeId, AssetAttributeId should not be 0 or invalid or null");
 			}
 			if ((assetAttributeName == null || assetAttributeName.equals("")) || (assetAttributeName.length() > 200)) {
 				throw new IllegalArgumentException(
-						"AssetAttributeName should not be Null or Invalid, AND AssetAttributeName should not be Greater than 200 Characters ");
+						"AssetAttributeName should not be null or invalid, and AssetAttributeName should not be greater than 200 characters ");
 			}
 
 			Optional<AssetAttribute> assetAttributeExist = assetAttributeRepo.findById(assetAttributeId);
 
 			if (assetAttributeExist.isPresent()) {
 
-				assetAttributeExist.get().setAssetAttributeName(assetAttributeName);
+				assetAttributeExist.get().setAssetAttributeName(assetAttributeName.toUpperCase());
 				assetAttributeExist.get().getAssetType();
 				assetAttributeExist.get().setAsset_type_id(assetTypeId);
 				assetAttributeRepo.save(assetAttributeExist.get());
-
-				responseDTO.setStatus("Success");
-				responseDTO.setMessage(
-						"AssetAttribute with AssetAttributeId: " + assetAttributeId + " Updated successfully");
-				responseDTO.setData(null);
+				return buildResponse("Success", "AssetAttribute with id: " + assetAttributeId + " updated successfully",
+						null);
 			} else {
-				responseDTO.setStatus("NotFound");
-				responseDTO.setMessage("No AssetAttribute found");
-				responseDTO.setData(null);
+				return buildResponse("NotFound", "No AssetAttribute found with id:" + assetAttributeId, null);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("updateAssetAttributeById IllegalArgumentException : " + e.getMessage());
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			e.printStackTrace();
+			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: updateAssetAttributeById Exception : " + e);
 			e.printStackTrace();
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
 		}
-		return responseDTO;
 	}
 
 	@Override
 	public ResponseDTO deleteAssetAttributeById(Integer assetAttributeId) {
-		ResponseDTO responseDTO = new ResponseDTO();
 		log.info("MasterAssetServiceImpl:deleteAssetAttributeById info level log message");
 		try {
 			if (assetAttributeId == 0 || assetAttributeId.equals("")) {
 				throw new IllegalArgumentException(
-						"Provide Valid AssetAttributeId,AssetAttributeId should not be 0 or Invalid or Null");
+						"Provide valid AssetAttributeId,AssetAttributeId should not be 0 or invalid or null");
 			}
 
 			Optional<AssetAttribute> assetAttributeExist = assetAttributeRepo.findById(assetAttributeId);
@@ -809,27 +668,20 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 
 				assetAttributeRepo.deleteById(assetAttributeId);
 
-				responseDTO.setStatus("Success");
-				responseDTO.setMessage("AssetAttribute with Id: " + assetAttributeId + " Deleted successfully");
-				responseDTO.setData(null);
+				return buildResponse("Success", "AssetAttribute with id:" + assetAttributeId + " deleted successfully",
+						null);
 			} else {
-				responseDTO.setStatus("NotFound");
-				responseDTO.setMessage("No AssetAttribute found");
-				responseDTO.setData(null);
+				return buildResponse("NotFound", "No AssetAttribute found with id:" + assetAttributeId, null);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("deleteAssetAttributeById IllegalArgumentException : " + e.getMessage());
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			e.printStackTrace();
+			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: deleteAssetAttributeById Exception : " + e);
 			e.printStackTrace();
-			responseDTO.setMessage(e.getMessage());
-			responseDTO.setStatus("failed");
-			responseDTO.setData(null);
+			return buildResponse("Failed", e.getMessage(), null);
 		}
-		return responseDTO;
 	}
 
 //	@Override
@@ -839,18 +691,18 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 //		try {
 //
 //			if (createAssetDTO == null || createAssetDTO.equals("")) {
-//				throw new IllegalArgumentException("CreateAssetDTO should not be null or Invalid");
+//				throw new IllegalArgumentException("CreateAssetDTO should not be null or invalid");
 //			}
 //			if (createAssetDTO.getAssetName() == null || createAssetDTO.getAssetName().equals("")) {
-//				throw new IllegalArgumentException("Asset Name should not be null or Invalid");
+//				throw new IllegalArgumentException("Asset Name should not be null or invalid");
 //			}
 //			if (createAssetDTO.getAssetAttributeList() == null || createAssetDTO.getAssetAttributeList().equals("")) {
-//				throw new IllegalArgumentException("Asset Attribute list should not be null or Invalid");
+//				throw new IllegalArgumentException("Asset Attribute list should not be null or invalid");
 //			}
 //			for (AssetAttribute assetAttribute : createAssetDTO.getAssetAttributeList()) {
 //				if (assetAttribute.getAssetAttributeName() == null
 //						|| assetAttribute.getAssetAttributeName().equals("")) {
-//					throw new IllegalArgumentException("Asset Attribute name should not be null or Invalid");
+//					throw new IllegalArgumentException("Asset Attribute name should not be null or invalid");
 //				}
 //			}
 //
@@ -906,4 +758,119 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 //		return responseDTO;
 //	}
 
+//	@Override
+//	public boolean saveMasterAsset(MasterAsset asset) {
+//		if (!AssetUtility.checkvalidate(asset.getAssetUser())) {
+//			throw new IllegalArgumentException("invalid Asset User...");
+//		}
+//		if (!AssetUtility.validateName(asset.getAssetName())) {
+//			throw new IllegalArgumentException("invalid Asset Name..");
+//		}
+//		if (!AssetUtility.validateId(asset.getAssetId())) {
+//			throw new IllegalArgumentException("invalid Asset ID ");
+//		}
+//		if (!AssetUtility.validateId(asset.getAssetNo())) {
+//			throw new IllegalArgumentException("invalid Asset Number");
+//		}
+//		if (!AssetUtility.checkvalidate(asset.getAssetType())) {
+//			throw new IllegalArgumentException("invalid Asset Type...");
+//		}
+//		if (!AssetUtility.validateProcessor(asset.getProcessor())) {
+//			throw new IllegalArgumentException("invalid Processor Details");
+//		}
+//		if (!AssetUtility.validateRAM(asset.getRam())) {
+//			throw new IllegalArgumentException("invalid RAM Details");
+//		}
+//		if (!AssetUtility.validateDiskType(asset.getDiskType())) {
+//			throw new IllegalArgumentException("invalid Disc Type Details");
+//		}
+//		if (!AssetUtility.validateProcessor(asset.getOperatingSystem())) {
+//			throw new IllegalArgumentException("invalid Operating System Details");
+//		}
+//		if (!AssetUtility.validateProcessor(asset.getWarrenty())) {
+//			throw new IllegalArgumentException("invalid Warranty Details");
+//		}
+//		MasterAsset masterasset = repo.save(asset);
+//
+//		return masterasset != null;
+//	}
+//
+//	@Override
+//	public MasterAsset TakeAssetById(Integer id) {
+//		Optional<MasterAsset> getById = repo.findById(id);
+//		return getById.get();
+//	}
+//
+//	@Override
+//	public List<MasterAsset> SearchByAssetUser(String assetUser) {
+//		return repo.findByAssetUser(assetUser);
+//	}
+//
+//	@Override
+//	public List<MasterAsset> SearchByStatus(String status) {
+//		return repo.findByStatus(status);
+//	}
+//
+//	@Override
+//	public List<MasterAsset> SearchByAssetType(String assetType) {
+//		return repo.findByAssetType(assetType);
+//	}
+//
+//	@Override
+//	public String updateMasterAssetById(MasterAsset masterAsset) {
+//		if (!AssetUtility.checkvalidate(masterAsset.getAssetUser())) {
+//			throw new IllegalArgumentException("invalid Asset User...");
+//		}
+//		if (!AssetUtility.validateName(masterAsset.getAssetName())) {
+//			throw new IllegalArgumentException("invalid Asset Name..");
+//		}
+//		if (!AssetUtility.validateId(masterAsset.getAssetId())) {
+//			throw new IllegalArgumentException("invalid Asset ID ");
+//		}
+//		if (!AssetUtility.validateId(masterAsset.getAssetNo())) {
+//			throw new IllegalArgumentException("invalid Asset Number");
+//		}
+//		if (!AssetUtility.checkvalidate(masterAsset.getAssetType())) {
+//			throw new IllegalArgumentException("invalid Asset Type...");
+//		}
+//		if (!AssetUtility.validateProcessor(masterAsset.getProcessor())) {
+//			throw new IllegalArgumentException("invalid Processor Details");
+//		}
+//		if (!AssetUtility.validateRAM(masterAsset.getRam())) {
+//			throw new IllegalArgumentException("invalid RAM Details");
+//		}
+//		if (!AssetUtility.validateDiskType(masterAsset.getDiskType())) {
+//			throw new IllegalArgumentException("invalid Disc Type Details");
+//		}
+//		if (!AssetUtility.validateProcessor(masterAsset.getOperatingSystem())) {
+//			throw new IllegalArgumentException("invalid Operating System Details");
+//		}
+//		if (!AssetUtility.validateProcessor(masterAsset.getWarrenty())) {
+//			throw new IllegalArgumentException("invalid Warranty Details");
+//		}
+//		MasterAsset dbAsset = repo.findAssetById(masterAsset.getId());
+//		if (dbAsset != null) {
+//			dbAsset.setAssetName(masterAsset.getAssetName());
+//			dbAsset.setAssetNo(masterAsset.getAssetNo());
+//			dbAsset.setAssetType(masterAsset.getAssetType());
+//			dbAsset.setAssetUser(masterAsset.getAssetUser());
+//			dbAsset.setDiskType(masterAsset.getDiskType());
+//			dbAsset.setOperatingSystem(masterAsset.getOperatingSystem());
+//			dbAsset.setProcessor(masterAsset.getProcessor());
+//			dbAsset.setRam(masterAsset.getRam());
+//			dbAsset.setStatus(masterAsset.getStatus());
+//			dbAsset.setWarrenty(masterAsset.getWarrenty());
+//			dbAsset.setPurchesDate(masterAsset.getPurchesDate());
+//			dbAsset.setWarrentyDate(masterAsset.getWarrentyDate());
+//
+//			return repo.save(dbAsset).getAssetId() + " Updated Successfully";
+//		}
+//
+//		return masterAsset.getAssetId() + " Not Updated ";
+//	}
+//
+//	@Override
+//	public List<MasterAsset> findAllMasterAsset() {
+//		return (List<MasterAsset>) repo.findAll();
+//	}
 }
