@@ -25,4 +25,7 @@ public class AssetType {
 
 	@Column(name = "name")
 	private String assetName;
+
+	@Column(name = "asset_abbreviation")
+	private String assetAbbreviation;
 }
