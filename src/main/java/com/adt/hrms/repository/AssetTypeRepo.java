@@ -23,9 +23,4 @@ public interface AssetTypeRepo extends JpaRepository<AssetType, Integer> {
 	@Query(value = "SELECT asset_abbreviation FROM av_schema.asset_type WHERE UPPER(name) = UPPER(?1)", nativeQuery = true)
 	Optional<String> findAbbreviationByAssetName(String assetName);
 
-//	@Query(value = "SELECT * FROM av_schema.asset_type where name=?1", nativeQuery = true)
-//	Optional<AssetType> findByAssetName(String assetName);
-
-//	@Query(value = "SELECT * FROM av_schema.asset_type WHERE asset_abbreviation = ?1", nativeQuery = true)
-//	Optional<AssetType> findByAssetAbbreviation(String assetAbbreviation);
 }

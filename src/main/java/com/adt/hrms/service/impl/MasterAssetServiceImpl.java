@@ -66,7 +66,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		Optional<String> abbreviationOpt = assetTypeRepo.findAbbreviationByAssetName(assetName.toUpperCase());
 
 		if (!abbreviationOpt.isPresent()) {
-			throw new IllegalArgumentException("No abbreviation found for asset name:" + assetName);
+			throw new IllegalArgumentException("No abbreviation found for given asset name");
 		}
 
 		String abbreviation = abbreviationOpt.get().toUpperCase();
@@ -92,14 +92,14 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 			List<AssetType> assetTypesList = assetTypeRepo.findAll();
 
 			if (assetTypesList.isEmpty()) {
-				return buildResponse("NotFound", "No asset type found", null);
+				return buildResponse("NotFound", "AssetType not found", null);
 			} else {
 				return buildResponse("Success", "All asset type fetched successfully", assetTypesList);
 			}
 		} catch (Exception e) {
 			log.error("getAllAssetType Exception : " + e);
 			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
+			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
@@ -108,8 +108,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		log.info("MasterAssetServiceImpl : getAllAssetAttributesByAssetTypeId info level log message");
 		try {
 			if (assetTypeId == 0 || assetTypeId.equals("")) {
-				throw new IllegalArgumentException(
-						"Provide valid AssetTypeId, asset type id should not be 0 or invalid or null");
+				throw new IllegalArgumentException("Provide valid AssetTypeId, it should not be 0 or invalid or null");
 			}
 
 			List<AssetAttribute> assetAttributeList = assetAttributeRepo
@@ -118,9 +117,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 			if (assetAttributeList.isEmpty()) {
 				return buildResponse("NotFound", "No asset attributes found", null);
 			} else {
-				return buildResponse("Success",
-						"AssetAttributes with asset type id:" + assetTypeId + " fetched successfully",
-						assetAttributeList);
+				return buildResponse("Success", "AssetAttributes fetched successfully", assetAttributeList);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("getAllAssetAttributesByAssetTypeId IllegalArgumentException : " + e.getMessage());
@@ -128,7 +125,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		} catch (Exception e) {
 			log.error("getAllAssetAttributesByAssetTypeId Exception : " + e);
 			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
+			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
@@ -138,29 +135,27 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		log.info("MasterAssetServiceImpl:saveAssetInfo info level log message");
 		try {
 			if (assetDTO.getAssetTypeId() == null || assetDTO.getAssetTypeId() == 0) {
-				throw new IllegalArgumentException(
-						"Provide valid AssetTypeId, AssetTypeId should not be 0 or null or invalid");
+				throw new IllegalArgumentException("Provide valid AssetTypeId, it should not be 0 or null or invalid");
 			}
 			if (assetDTO.getAssetAttributeMappingList() == null) {
 				throw new IllegalArgumentException(
-						"Provide valid AssetAttributeId, AssetAttributeId should not be 0 or null or invalid");
+						"Provide valid AssetAttributeId, it should not be 0 or null or invalid");
 			}
 			if (assetDTO.getAssetStatus() == null || assetDTO.getAssetStatus().isBlank()) {
-				throw new IllegalArgumentException(
-						"Provide valid AssetStatus, AssetStatus should not be null or invalid");
+				throw new IllegalArgumentException("Provide valid AssetStatus, it should not be null or invalid");
 			}
 			for (AssetAttributeMapping assetAttributeMapping : assetDTO.getAssetAttributeMappingList()) {
 				if (assetAttributeMapping.getAsset_attribute_id() == 0
 						|| assetAttributeMapping.getAsset_attribute_id().equals("")) {
 					throw new IllegalArgumentException(
-							"Provide valid AssetAttributeId, AssetAttributeId should not be 0 or null or invalid");
+							"Provide valid AssetAttributeId, it should not be 0 or null or invalid");
 				}
 				if ((assetAttributeMapping.getAssetAttributeValue() == null
 						|| assetAttributeMapping.getAssetAttributeValue().equals(""))
 						|| assetAttributeMapping.getAssetAttributeValue().isEmpty()
-						|| (assetAttributeMapping.getAssetAttributeValue().length() > 200)) {
+						|| (assetAttributeMapping.getAssetAttributeValue().length() > 50)) {
 					throw new IllegalArgumentException(
-							"AssetAttributeValue should not be null or invalid, and AssetAttributeValue should not be greater than 200 characters");
+							"AssetAttributeValue should not be null or invalid, and it should not be greater than 50 characters");
 				}
 			}
 
@@ -189,13 +184,12 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 								.setAssetAttributeValue(assetAttributeMapping.getAssetAttributeValue().toUpperCase());
 						assetAttributeMappingRepo.save(assetAttributeMappingSaved);
 					}
-					return buildResponse("Success", "AssetInfo data saved successfully", null);
+					return buildResponse("Success", "AssetInfo saved successfully", null);
 				} else {
-					return buildResponse("NotSaved", "AssetInfo data not saved yet", null);
+					return buildResponse("NotSaved", "AssetInfo not saved yet", null);
 				}
 			} else {
-				return buildResponse("NotFound", "AssetType with id:" + assetDTO.getAssetTypeId() + " data not found",
-						null);
+				return buildResponse("NotFound", "AssetType not found", null);
 			}
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -204,7 +198,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		} catch (Exception e) {
 			log.error("saveAssetInfo Exception : " + e);
 			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
+			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
@@ -214,25 +208,24 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 
 		try {
 			if (assetDTO.getAssetId() == null || assetDTO.getAssetId() == 0 || assetDTO.getAssetId().equals("")) {
-				throw new IllegalArgumentException(
-						"Provide valid AssetInfoId, AssetInfoId should not be 0 or invalid or null");
+				throw new IllegalArgumentException("Provide valid AssetInfoId, it should not be 0 or invalid or null");
 			}
 			if (assetDTO.getAssetAttributeMappingList() == null) {
 				throw new IllegalArgumentException(
-						"Provide valid AssetAttributeId, AssetAttributeId should not be 0 or null or invalid");
+						"Provide valid AssetAttributeId, it should not be 0 or null or invalid");
 			}
 			for (AssetAttributeMapping assetAttributeMapping : assetDTO.getAssetAttributeMappingList()) {
 				if (assetAttributeMapping.getAsset_attribute_id() == 0
 						|| assetAttributeMapping.getAsset_attribute_id().equals("")) {
 					throw new IllegalArgumentException(
-							"Provide valid AssetAttributeId, AssetAttributeId should not be 0 or null or invalid");
+							"Provide valid AssetAttributeId, it should not be 0 or null or invalid");
 				}
 				if ((assetAttributeMapping.getAssetAttributeValue() == null
 						|| assetAttributeMapping.getAssetAttributeValue().equals(""))
 						|| assetAttributeMapping.getAssetAttributeValue().isEmpty()
-						|| (assetAttributeMapping.getAssetAttributeValue().length() > 200)) {
+						|| (assetAttributeMapping.getAssetAttributeValue().length() > 50)) {
 					throw new IllegalArgumentException(
-							"AssetAttributeValue should not be null or invalid, and AssetAttributeValue should not be greater than 200 characters");
+							"AssetAttributeValue should not be null or invalid, and it should not be greater than 50 characters");
 				}
 			}
 
@@ -260,15 +253,11 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 						assetAttributeMappingRepo.save(saveAssetAttributeMapping);
 					}
 
-					return buildResponse("Success",
-							"AssetAttributeMapping is updated successfully with AssetId:" + assetDTO.getAssetId(),
-							null);
+					return buildResponse("Success", "AssetAttributeMapping is updated successfully", null);
 				}
-				return buildResponse("NotUpdated", "AssetInfo is not updated with AssetInfoId:" + assetDTO.getAssetId(),
-						null);
+				return buildResponse("NotUpdated", "AssetInfo not updated yet", null);
 			} else {
-				return buildResponse("NotFound", "AssetInfo is not found with AssetInfoId:" + assetDTO.getAssetId(),
-						null);
+				return buildResponse("NotFound", "AssetInfo not found", null);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("updateAssetAttributeMappingByAssetId IllegalArgumentException: " + e.getMessage());
@@ -277,7 +266,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: updateAssetAttributeMappingByAssetId Exception: " + e);
 			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
+			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
@@ -286,7 +275,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		log.info("MasterAssetServiceImpl:deleteAssetInfoById info level log message");
 		try {
 			if (assetId == 0 || assetId.equals("")) {
-				throw new IllegalArgumentException("Provide valid AssetId, AssetId should not be 0 or invalid or null");
+				throw new IllegalArgumentException("Provide valid AssetId, it should not be 0 or invalid or null");
 			}
 			Optional<AssetInfo> assetInfoExist = assetInfoRepo.findAssetByAssetId(assetId);
 
@@ -304,9 +293,9 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				}
 
 				assetInfoRepo.deleteById(assetId);
-				return buildResponse("Success", "AssetInfo with id:" + assetId + " is deleted successfully", null);
+				return buildResponse("Success", "AssetInfo deleted successfully", null);
 			} else {
-				return buildResponse("NotFound", "AssetInfo with id:" + assetId + " not Found", null);
+				return buildResponse("NotFound", "AssetInfo not found", null);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("deleteAssetInfoById IllegalArgumentException : " + e.getMessage());
@@ -315,7 +304,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: deleteAssetInfoById Exception : " + e);
 			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
+			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
@@ -325,8 +314,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		try {
 
 			if (assetTypeId == 0 || assetTypeId.equals("")) {
-				throw new IllegalArgumentException(
-						"Provide valid AssetTypeId, AssetTypeId should not be 0 or invalid or null");
+				throw new IllegalArgumentException("Provide valid AssetTypeId, it should not be 0 or invalid or null");
 			}
 
 			if (size <= 0 || size > MAX_PAGE_SIZE) {
@@ -358,9 +346,9 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 					}
 					assetDTOList.add(assetDTO);
 				}
-				return buildResponse("Success", "AssetInfoList found for AssetTypeId:" + assetTypeId, assetDTOList);
+				return buildResponse("Success", "AssetInfoList retrieved successfully ", assetDTOList);
 			} else {
-				return buildResponse("NotFound", "AssetInfoList not found for AssetTypeId:" + assetTypeId, null);
+				return buildResponse("NotFound", "AssetInfoList not found ", null);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("getAllAssetInfoByAssetTypeIdAndPagination IllegalArgumentException : " + e.getMessage());
@@ -369,7 +357,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: getAllAssetInfoByAssetTypeIdAndPagination Exception : " + e);
 			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
+			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
@@ -388,34 +376,36 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 			String upperAssetName = assetName.toUpperCase();
 			String upperAssetAbbreviation = assetAbbreviation.toUpperCase();
 
-			if (assetName == null || assetName.trim().isEmpty() || assetName.length() > 200) {
+			if (assetName == null || assetName.trim().isEmpty() || assetName.length() > 50) {
 				throw new IllegalArgumentException(
-						"AssetTypeName should not be null, empty, or greater than 200 characters");
+						"AssetTypeName should not be null, empty, or greater than 50 characters");
 			}
 
-			if (assetAbbreviation == null || assetAbbreviation.trim().isEmpty() || assetAbbreviation.length() > 200) {
+			if (assetAbbreviation == null || assetAbbreviation.trim().isEmpty() || assetAbbreviation.length() < 2
+					|| assetAbbreviation.length() > 10) {
 				throw new IllegalArgumentException(
-						"AssetAbbreviation should not be null, empty, or greater than 200 characters");
+						"AssetAbbreviation should not be null, empty, or it should not be less than 2 or greater than 10 characters");
 			}
 
 			Optional<AssetType> assetTypeExistByName = assetTypeRepo.findByAssetName(upperAssetName);
 			if (assetTypeExistByName.isPresent()) {
-				return buildResponse("AlreadyExist", "This AssetTypeName: " + upperAssetName
-						+ " already exists, please enter a unique asset type name", null);
+				return buildResponse("AlreadyExist",
+						"This AssetTypeName is already exists, please enter a unique asset type name", null);
 			}
 
 			Optional<AssetType> assetTypeExistByAbbreviation = assetTypeRepo
 					.findByAssetAbbreviation(upperAssetAbbreviation);
 			if (assetTypeExistByAbbreviation.isPresent()) {
-				return buildResponse("AlreadyExist", "This AssetAbbreviation: " + upperAssetAbbreviation
-						+ " already exists, please enter a unique asset abbreviation", null);
+				return buildResponse("AlreadyExist",
+						"This AssetAbbreviation is already assigned to another asset type, please enter a unique asset abbreviation",
+						null);
 			}
 
 			assetType.setAssetName(upperAssetName);
 			assetType.setAssetAbbreviation(upperAssetAbbreviation);
 			assetTypeRepo.save(assetType);
 
-			return buildResponse("Success", "AssetType data saved successfully", null);
+			return buildResponse("Success", "AssetType saved successfully", null);
 
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -424,7 +414,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("MasterAssetServiceImpl: addAssetType Exception: ", e);
-			return buildResponse("Failed", e.getMessage(), null);
+			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
@@ -433,17 +423,15 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		log.info("MasterAssetServiceImpl:getAssetTypeById info level log message");
 		try {
 			if (assetTypeId == 0 || assetTypeId.equals("")) {
-				throw new IllegalArgumentException(
-						"Provide valid AssetTypeId, AssetTypeId should not be 0 or invalid or null");
+				throw new IllegalArgumentException("Provide valid AssetTypeId, it should not be 0 or invalid or null");
 			}
 
 			Optional<AssetType> assetType = assetTypeRepo.findAssetByAssetTypeId(assetTypeId);
 
 			if (assetType.isEmpty()) {
-				return buildResponse("NotFound", "No AssetType found with id:" + assetTypeId, null);
+				return buildResponse("NotFound", "AssetType not found", null);
 			} else {
-				return buildResponse("Success", "AssetType with id:" + assetTypeId + " fetched successfully",
-						assetType.get());
+				return buildResponse("Success", "AssetType fetched successfully", assetType.get());
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("getAssetTypeById IllegalArgumentException : " + e.getMessage());
@@ -452,7 +440,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: getAssetTypeById Exception : " + e);
 			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
+			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
@@ -462,21 +450,21 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 
 		try {
 			if (assetTypeId == null || assetTypeId == 0) {
-				throw new IllegalArgumentException("Provide valid AssetTypeId:" + assetTypeId
-						+ " , asset type id should not be 0 or invalid or null");
+				throw new IllegalArgumentException("Provide valid AssetTypeId, it should not be 0 or invalid or null");
 			}
 
 			String assetName = assetType.getAssetName();
 			String assetAbbreviation = assetType.getAssetAbbreviation();
 
-			if (assetName == null || assetName.trim().isEmpty() || assetName.length() > 200) {
+			if (assetName == null || assetName.trim().isEmpty() || assetName.length() > 50) {
 				throw new IllegalArgumentException(
-						"AssetTypeName should not be null, invalid, or greater than 200 characters");
+						"AssetTypeName should not be null, invalid, or greater than 50 characters");
 			}
 
-			if (assetAbbreviation == null || assetAbbreviation.trim().isEmpty() || assetAbbreviation.length() > 200) {
+			if (assetAbbreviation == null || assetAbbreviation.trim().isEmpty() || assetAbbreviation.length() < 2
+					|| assetAbbreviation.length() > 10) {
 				throw new IllegalArgumentException(
-						"AssetAbbreviation should not be null, invalid, or greater than 200 characters");
+						"AssetAbbreviation should not be null, empty, or it should not be less than 2 or greater than 10 characters");
 			}
 
 			Optional<AssetType> existingAssetType = assetTypeRepo.findAssetByAssetTypeId(assetTypeId);
@@ -491,9 +479,9 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				}
 
 				assetTypeRepo.save(assetToUpdate);
-				return buildResponse("Success", "AssetType with id:" + assetTypeId + " is updated successfully", null);
+				return buildResponse("Success", "AssetType updated successfully", null);
 			} else {
-				return buildResponse("NotFound", "No AssetType found with id:" + assetTypeId, null);
+				return buildResponse("NotFound", "AssetType not found", null);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("updateAssetTypeById IllegalArgumentException: " + e.getMessage());
@@ -502,7 +490,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: updateAssetTypeById Exception: ", e);
 			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
+			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
@@ -511,8 +499,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		log.info("MasterAssetServiceImpl:deleteAssetTypeById info level log message");
 		try {
 			if (assetTypeId == 0 || assetTypeId.equals("")) {
-				throw new IllegalArgumentException(
-						"Provide valid AssetTypeId, AssetTypeId should not be 0 or invalid or null");
+				throw new IllegalArgumentException("Provide valid AssetTypeId, it should not be 0 or invalid or null");
 			}
 
 			Optional<List<AssetInfo>> assetInfoListExist = assetInfoRepo.findAssetInfoListByAssetTypeId(assetTypeId);
@@ -522,21 +509,17 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 							.findAssetAttributeMappingListByAssetInfoId(assetInfo.getId());
 					if (assetAttributeMappingListExist.isPresent() && !assetAttributeMappingListExist.get().isEmpty()) {
 
-						return buildResponse("AlreadyAssociated",
-								"This AssetAttributeMapping is already associated with AssetTypeId: " + assetTypeId
-										+ ", we cannot delete",
+						return buildResponse("AlreadyAssociated", "This Asset is already in use, you can't delete this",
 								null);
 					}
 				}
-				return buildResponse("AlreadyAssociated", "This AssetInfo is already associated with AssetTypeId: "
-						+ assetTypeId + ", we cannot delete" + assetTypeId, null);
+				return buildResponse("AlreadyAssociated", "This Asset is already in use, you can't delete this", null);
 			}
 
 			Optional<List<AssetAttribute>> assetAttributeListExist = assetAttributeRepo
 					.findAssetAttributeByAssetTypeId(assetTypeId);
 			if (assetAttributeListExist.isPresent() && !assetAttributeListExist.get().isEmpty()) {
-				return buildResponse("AlreadyAssociated", "This AssetAttribute is already associated with AssetTypeId: "
-						+ assetTypeId + ", we cannot delete", null);
+				return buildResponse("AlreadyAssociated", "This Asset is already in use, you can't delete this", null);
 			}
 
 			Optional<AssetType> assetTypeExist = assetTypeRepo.findAssetByAssetTypeId(assetTypeId);
@@ -552,10 +535,9 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 
 				assetTypeRepo.delete(assetTypeExist.get());
 
-				return buildResponse("Success",
-						"AssetType with id:" + assetTypeId + " is deleted successfully" + assetTypeId, null);
+				return buildResponse("Success", "AssetType deleted successfully", null);
 			} else {
-				return buildResponse("NotFound", "AssetType with AssetTypeId:" + assetTypeId + " is not found", null);
+				return buildResponse("NotFound", "AssetType not found", null);
 			}
 
 		} catch (IllegalArgumentException e) {
@@ -565,7 +547,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: deleteAssetTypeById Exception: " + e);
 			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
+			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
@@ -574,12 +556,11 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		log.info("MasterAssetServiceImpl:addAssetAttributesByAssetTypeId info level log message");
 		try {
 			if (assetTypeId == 0 || assetTypeId.equals("")) {
-				throw new IllegalArgumentException(
-						"Provide valid AssetTypeId, AssetTypeId should not be 0 or invalid or null");
+				throw new IllegalArgumentException("Provide valid AssetTypeId, it should not be 0 or invalid or null");
 			}
-			if ((assetAttributeName == null || assetAttributeName.equals("")) || (assetAttributeName.length() > 200)) {
+			if ((assetAttributeName == null || assetAttributeName.equals("")) || (assetAttributeName.length() > 50)) {
 				throw new IllegalArgumentException(
-						"AssetAttributeName should not be null or invalid, AND AssetAttributeName should not be greater than 200 characters ");
+						"AssetAttributeName should not be null or invalid, it should not be greater than 50 characters ");
 			}
 
 			Optional<AssetType> existingAssetType = assetTypeRepo.findAssetByAssetTypeId(assetTypeId);
@@ -598,7 +579,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 					return buildResponse("NotSaved", "AssetAttribute data not saved yet", null);
 				}
 			} else {
-				return buildResponse("NotFound", "AssetType with id:" + assetTypeId + " not found", null);
+				return buildResponse("NotFound", "AssetType not found", null);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("addAssetAttributesByAssetTypeId IllegalArgumentException : " + e.getMessage());
@@ -607,7 +588,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: addAssetAttributesByAssetTypeId Exception : " + e);
 			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
+			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
@@ -617,16 +598,15 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		log.info("MasterAssetServiceImpl:updateAssetAttributeById info level log message");
 		try {
 			if (assetTypeId == 0 || assetTypeId.equals("")) {
-				throw new IllegalArgumentException(
-						"Provide valid AssetTypeId, AssetTypeId should not be 0 or invalid or null");
+				throw new IllegalArgumentException("Provide valid AssetTypeId, it should not be 0 or invalid or null");
 			}
 			if (assetAttributeId == 0 || assetAttributeId.equals("")) {
 				throw new IllegalArgumentException(
-						"Provide valid AssetAttributeId, AssetAttributeId should not be 0 or invalid or null");
+						"Provide valid AssetAttributeId, it should not be 0 or invalid or null");
 			}
-			if ((assetAttributeName == null || assetAttributeName.equals("")) || (assetAttributeName.length() > 200)) {
+			if ((assetAttributeName == null || assetAttributeName.equals("")) || (assetAttributeName.length() > 50)) {
 				throw new IllegalArgumentException(
-						"AssetAttributeName should not be null or invalid, and AssetAttributeName should not be greater than 200 characters ");
+						"AssetAttributeName should not be null or invalid, and it should not be greater than 50 characters ");
 			}
 
 			Optional<AssetAttribute> assetAttributeExist = assetAttributeRepo.findById(assetAttributeId);
@@ -637,10 +617,9 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				assetAttributeExist.get().getAssetType();
 				assetAttributeExist.get().setAsset_type_id(assetTypeId);
 				assetAttributeRepo.save(assetAttributeExist.get());
-				return buildResponse("Success", "AssetAttribute with id: " + assetAttributeId + " updated successfully",
-						null);
+				return buildResponse("Success", "AssetAttribute updated successfully", null);
 			} else {
-				return buildResponse("NotFound", "No AssetAttribute found with id:" + assetAttributeId, null);
+				return buildResponse("NotFound", "AssetAttribute not found ", null);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("updateAssetAttributeById IllegalArgumentException : " + e.getMessage());
@@ -649,7 +628,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: updateAssetAttributeById Exception : " + e);
 			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
+			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
@@ -659,19 +638,25 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		try {
 			if (assetAttributeId == 0 || assetAttributeId.equals("")) {
 				throw new IllegalArgumentException(
-						"Provide valid AssetAttributeId,AssetAttributeId should not be 0 or invalid or null");
+						"Provide valid AssetAttributeId,it should not be 0 or invalid or null");
 			}
 
 			Optional<AssetAttribute> assetAttributeExist = assetAttributeRepo.findById(assetAttributeId);
 
 			if (assetAttributeExist.isPresent()) {
 
+				Optional<List<AssetAttributeMapping>> mappingListExist = assetAttributeMappingRepo
+						.findMappingListByAtrributeId(assetAttributeId);
+
+				if (mappingListExist.isPresent()) {
+					return buildResponse("AlreadyAssociated",
+							"AssetAttribute is already created using this attribute, you can't delete this", null);
+				}
 				assetAttributeRepo.deleteById(assetAttributeId);
 
-				return buildResponse("Success", "AssetAttribute with id:" + assetAttributeId + " deleted successfully",
-						null);
+				return buildResponse("Success", "AssetAttribute deleted successfully", null);
 			} else {
-				return buildResponse("NotFound", "No AssetAttribute found with id:" + assetAttributeId, null);
+				return buildResponse("NotFound", "AssetAttribute not found ", null);
 			}
 		} catch (IllegalArgumentException e) {
 			log.error("deleteAssetAttributeById IllegalArgumentException : " + e.getMessage());
@@ -680,7 +665,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		} catch (Exception e) {
 			log.error("MasterAssetServiceImpl: deleteAssetAttributeById Exception : " + e);
 			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
+			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
