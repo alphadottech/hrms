@@ -1,6 +1,7 @@
 package com.adt.hrms.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -573,10 +574,10 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 					assetAttributeSave.setAsset_type_id(assetTypeId);
 
 					assetAttributeRepo.save(assetAttributeSave);
-					return buildResponse("Success", "AssetAttribute data saved successfully", null);
+					return buildResponse("Success", "AssetAttribute saved successfully", null);
 
 				} else {
-					return buildResponse("NotSaved", "AssetAttribute data not saved yet", null);
+					return buildResponse("NotSaved", "AssetAttribute not saved yet", null);
 				}
 			} else {
 				return buildResponse("NotFound", "AssetType not found", null);
@@ -645,16 +646,15 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 
 			if (assetAttributeExist.isPresent()) {
 
-				Optional<List<AssetAttributeMapping>> mappingListExist = assetAttributeMappingRepo
-						.findMappingListByAtrributeId(assetAttributeId);
-
-				if (mappingListExist.isPresent()) {
+				List<AssetAttributeMapping> mappingListExist = assetAttributeMappingRepo
+						.findMappingListByAtrributeId(assetAttributeId).orElse(Collections.emptyList());
+				if (!mappingListExist.isEmpty()) {
 					return buildResponse("AlreadyAssociated",
-							"AssetAttribute is already created using this attribute, you can't delete this", null);
+							"Asset is already created using this attribute, you can't delete this", null);
 				}
 				assetAttributeRepo.deleteById(assetAttributeId);
-
 				return buildResponse("Success", "AssetAttribute deleted successfully", null);
+
 			} else {
 				return buildResponse("NotFound", "AssetAttribute not found ", null);
 			}
