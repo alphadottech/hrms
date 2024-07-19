@@ -30,4 +30,9 @@ public class AssetInfo {
 	private AssetType assetType;
 	private Integer asset_type_id;
 
+	@Column(name = "asset_adt_id")
+	private String assetADT_ID;
+
+	@Column(name = "asset_status")
+	private String assetStatus;
 }

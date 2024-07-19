@@ -65,21 +65,22 @@ public class EmployeeServiceImplTest  {
         assertEquals(employee.getEmployeeId() + " Employee is Saved",employeeService.saveEmp(employee));
     }
 
-//    @Test
-//    public void deleteEmployeeById() {
-//        Employee employee = givenEmployee();
-//        when(employeeRepo.findById(employee.getEmployeeId())).thenReturn(Optional.of(employee));
-//        doNothing().when(employeeRepo).deleteById(ID);
-//        assertEquals(employee.getEmployeeId()+ " has been Deleted", employeeService.deleteEmpById(ID));
-//    }
+    @Test
+    public void deleteEmployeeById() {
+        Employee employee = givenEmployee();
+        when(employeeRepo.findById(employee.getEmployeeId())).thenReturn(Optional.of(employee));
+        doNothing().when(employeeRepo).deleteById(ID);
+        assertEquals(employee.getEmployeeId()+ " has been Deleted", employeeService.deleteEmpById(ID));
+    }
 
-//    @Test
-//    public void returnNullDeleteEmployeeById() {
-//        Employee employee = givenEmployee();
-//        when(employeeRepo.findById(employee.getEmployeeId())).thenReturn(Optional.empty());
-//        doNothing().when(employeeRepo).deleteById(ID);
-//        assertEquals("Invalid Employe Id :: " +employee.getEmployeeId(), employeeService.deleteEmpById(ID));
-//    }
+	
+	  @Test public void returnNullDeleteEmployeeById() { Employee employee =
+	  givenEmployee();
+	  when(employeeRepo.findById(employee.getEmployeeId())).thenReturn(Optional.
+	  empty()); doNothing().when(employeeRepo).deleteById(ID);
+	  assertEquals("Invalid Employe Id :: " +employee.getEmployeeId(),
+	  employeeService.deleteEmpById(ID)); }
+	 
 
 //    @Test
 //    public void searchEmployeeByEmail(){

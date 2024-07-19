@@ -38,4 +38,8 @@ public class AssetAttributeMapping {
 	@Column(name = "asset_attribute_value")
 	private String assetAttributeValue;
 
+//	@ManyToOne
+//	@JoinColumn(name = "assetADT_ID", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+//	private AssetInfo assetInfo;
+//	private String assetADT_ID;
 }
