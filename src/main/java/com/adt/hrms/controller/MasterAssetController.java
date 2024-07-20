@@ -114,7 +114,6 @@ public class MasterAssetController {
 			@RequestBody AssetType assetType) {
 		LOGGER.info("MasterAssetController:masterAsset:updateAssetTypeById info level log message");
 		ResponseDTO responseDTO = service.updateAssetTypeById(assetTypeId, assetType);
-
 		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
 		return new ResponseEntity<>(responseDTO, status);
 	}
