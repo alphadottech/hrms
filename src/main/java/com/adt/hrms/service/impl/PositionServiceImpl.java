@@ -27,8 +27,6 @@ public class PositionServiceImpl implements PositionService {
 	@Autowired
 	private PositionRepo positionRepo;
 
-	
-
 	@Override
 	public List<PositionModel> getAllPosition() {
 		List<PositionModel> list = positionRepo.findAll();
@@ -43,7 +41,6 @@ public class PositionServiceImpl implements PositionService {
 		else
 			return null;
 	}
-
 
 	@Override
 	public List<PositionUIModel> getAllUIPosition() {
@@ -88,9 +85,9 @@ public class PositionServiceImpl implements PositionService {
 		pm.setTechStack(techlist);
 		pm.setPositionName(pdc.getPositionName());
 
-	    SimpleDateFormat sdfForTime = new SimpleDateFormat("HH.mm.ss");
+		SimpleDateFormat sdfForTime = new SimpleDateFormat("HH.mm.ss");
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		String str =  pdc.getPositionCloseDate() + " " + sdfForTime.format(timestamp);
+		String str = pdc.getPositionCloseDate() + " " + sdfForTime.format(timestamp);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm.ss");
 		LocalDateTime posititonCloseDate = LocalDateTime.parse(str, formatter);
 		pm.setPositionCloseDate(posititonCloseDate);
@@ -128,7 +125,6 @@ public class PositionServiceImpl implements PositionService {
 	public List<PositionDateConverter> getAllPositionNew() {
 		List<PositionModel> pmlist = getAllPosition();
 		List<PositionDateConverter> pdclist = new ArrayList<PositionDateConverter>();
-		
 
 		for (int i = 0; i < pmlist.size(); i++) {
 			PositionModel pm = pmlist.get(i);
@@ -143,16 +139,16 @@ public class PositionServiceImpl implements PositionService {
 			obj.setVacancy(pm.getVacancy());
 
 			LocalDate positionOpenDate = null;
-            if (pm.getPositionOpenDate() != null) {
-                positionOpenDate = pm.getPositionOpenDate().toLocalDate();
-            }
-            obj.setPositionOpenDate(positionOpenDate != null ? positionOpenDate.toString() : "null");
+			if (pm.getPositionOpenDate() != null) {
+				positionOpenDate = pm.getPositionOpenDate().toLocalDate();
+			}
+			obj.setPositionOpenDate(positionOpenDate != null ? positionOpenDate.toString() : "null");
 
-            LocalDate positionCloseDate = null;
-            if (pm.getPositionCloseDate() != null) {
-                positionCloseDate = pm.getPositionCloseDate().toLocalDate();
-            }
-            obj.setPositionCloseDate(positionCloseDate != null ? positionCloseDate.toString() : "null");
+			LocalDate positionCloseDate = null;
+			if (pm.getPositionCloseDate() != null) {
+				positionCloseDate = pm.getPositionCloseDate().toLocalDate();
+			}
+			obj.setPositionCloseDate(positionCloseDate != null ? positionCloseDate.toString() : "null");
 
 			pdclist.add(obj);
 		}
@@ -222,11 +218,10 @@ public class PositionServiceImpl implements PositionService {
 
 		}
 	}
-	
-	
+
 	@Override
 	public String updatePositionNew(PositionDateConverter pdc) {
-		
+
 		PositionModel pm = new PositionModel();
 		Optional<PositionModel> opt = positionRepo.findById(pdc.getPositionId());
 		if (!opt.isPresent())
@@ -243,15 +238,14 @@ public class PositionServiceImpl implements PositionService {
 
 		}
 		opt.get().setTechStack(techlist);
-		
+
 		SimpleDateFormat sdfForTime1 = new SimpleDateFormat("HH.mm.ss");
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-		String str =  pdc.getPositionCloseDate() + " " + sdfForTime1.format(timestamp);
+		String str = pdc.getPositionCloseDate() + " " + sdfForTime1.format(timestamp);
 		DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH.mm.ss");
 		LocalDateTime posititonCloseDate = LocalDateTime.parse(str, formatter1);
 		pm.setPositionCloseDate(posititonCloseDate);
 
-		
 		SimpleDateFormat sdfForTime2 = new SimpleDateFormat("HH.mm.ss");
 		Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
 		String str1 = pdc.getPositionOpenDate() + " " + sdfForTime2.format(timestamp1);

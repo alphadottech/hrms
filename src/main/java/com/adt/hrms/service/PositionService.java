@@ -20,7 +20,7 @@ public interface PositionService {
 	public List<PositionDateConverter> getAllPositionNew();
 
 	public String deletePositionNew(Integer positionId);
-	
+
 	public String updatePositionNew(PositionDateConverter pdc);
 
 }

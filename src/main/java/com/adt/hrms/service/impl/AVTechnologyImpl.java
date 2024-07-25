@@ -29,11 +29,13 @@ public class AVTechnologyImpl implements AVTechnologyService {
 		AVTechnology savedTech = avTechnologyRepo.save(tc);
 		return savedTech.getTechId() + " Technology is Saved";
 	}
+
 	@Override
 	public List<AVTechnology> getAllTechnology() {
 		List<AVTechnology> tech = avTechnologyRepo.findAll();
 		return tech;
 	}
+
 	@Override
 	public AVTechnology getTechnology(Integer techId) {
 		Optional<AVTechnology> opt = avTechnologyRepo.findById(techId);
@@ -53,15 +55,16 @@ public class AVTechnologyImpl implements AVTechnologyService {
 		avTechnologyRepo.save(AVTechnology);
 		return "Technology updated successfully";
 	}
+
 	@Override
-	public String deleteAVTechnologyById(Integer techId){
+	public String deleteAVTechnologyById(Integer techId) {
 		AVTechnology technology = avTechnologyRepo.findById(techId).orElse(null);
 		if (technology == null) {
 			return "Technology not found";
-			}
-			avTechnologyRepo.delete(technology);
-			return "Technology deleted successfully";
 		}
+		avTechnologyRepo.delete(technology);
+		return "Technology deleted successfully";
+	}
 
 	@Override
 	public AVTechnology getAVTechnologyById(Integer id) {
@@ -72,5 +75,10 @@ public class AVTechnologyImpl implements AVTechnologyService {
 			throw new NoSuchElementException("Technology with id " + id + " not found");
 		}
 	}
-}
 
+	@Override
+	public List<AVTechnology> searchTechnologiesByName(String technologyName) {
+		List<AVTechnology> technologyList = avTechnologyRepo.findAllTechnologiesByName(technologyName);
+		return technologyList;
+	}
+}
