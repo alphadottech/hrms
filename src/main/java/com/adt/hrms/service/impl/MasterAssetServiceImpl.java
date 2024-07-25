@@ -123,7 +123,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		} catch (IllegalArgumentException e) {
 			log.error("getAllAssetAttributesByAssetTypeId IllegalArgumentException : " + e.getMessage());
 			return buildResponse("Failed", e.getMessage(), null);
-		} catch (Exception e) {
+		} catch (Exception e) {   
 			log.error("getAllAssetAttributesByAssetTypeId Exception : " + e);
 			e.printStackTrace();
 			return buildResponse("Failed", "Internal server error occured", null);
