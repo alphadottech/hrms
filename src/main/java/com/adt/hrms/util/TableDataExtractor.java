@@ -10,15 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class TableDataExtractor {
 
-    private final JdbcTemplate jdbcTemplate;
+	private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public TableDataExtractor(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+	@Autowired
+	public TableDataExtractor(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
-    public List<Map<String, Object>> extractDataFromTable(String sql) {
+	public List<Map<String, Object>> extractDataFromTable(String sql) {
 
-        return jdbcTemplate.queryForList(sql);
-    }
+		return jdbcTemplate.queryForList(sql);
+	}
 }

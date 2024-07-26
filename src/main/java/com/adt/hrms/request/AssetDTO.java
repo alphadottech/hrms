@@ -13,8 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AssetDTO {
 
-	private Integer assetId;
+	private String assetId;
 	private Integer assetTypeId;
+	private String assetStatus;
 
 	private List<AssetAttributeMapping> assetAttributeMappingList;
 

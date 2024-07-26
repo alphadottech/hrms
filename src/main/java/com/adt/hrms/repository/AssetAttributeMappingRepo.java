@@ -30,4 +30,7 @@ public interface AssetAttributeMappingRepo extends JpaRepository<AssetAttributeM
 	@Query(value = "SELECT * FROM employee_schema.asset_attribute_mapping WHERE asset_id = ?1", nativeQuery = true)
 	List<AssetAttributeMapping> findAssetMappingListByAssetId(Integer assetId);
 
+	@Query(value = "SELECT * FROM employee_schema.asset_attribute_mapping WHERE asset_attribute_id=?1", nativeQuery = true)
+	Optional<List<AssetAttributeMapping>> findMappingListByAtrributeId(Integer assetAttributeId);
+
 }

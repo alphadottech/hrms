@@ -1,7 +1,5 @@
 package com.adt.hrms.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adt.hrms.model.AssetType;
-import com.adt.hrms.model.MasterAsset;
 import com.adt.hrms.request.AssetDTO;
 import com.adt.hrms.request.ResponseDTO;
 import com.adt.hrms.service.MasterAssetService;
+import com.adt.hrms.util.HttpStatusMapper;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -35,74 +33,13 @@ public class MasterAssetController {
 	@Autowired
 	private MasterAssetService service;
 
-	@PreAuthorize("@auth.allow('SAVE_NEW_MASTER_ASSET')")
-	@PostMapping("/insertAssets")
-	public ResponseEntity<String> insertAsset(@RequestBody MasterAsset asset) {
-		LOGGER.info("MasterAssetController:masterAsset:saveMasterAsset info level log message");
-		String result = null;
-		if (service.saveMasterAsset(asset)) {
-			result = "Asset saved successfully !";
-		} else {
-			result = "Asset Not saved !";
-		}
-		return new ResponseEntity<String>(result, HttpStatus.OK);
-	}
-
-	@PreAuthorize("@auth.allow('GET_MASTER_ASSET_DETAILS_BY_ID')")
-	@GetMapping("/GetAssetById/{id}")
-	public ResponseEntity<MasterAsset> GetAssetById(@PathVariable Integer id) {
-		LOGGER.info("MasterAssetController:masterAsset:TakeAssetById info level log message");
-		return ResponseEntity.ok(service.TakeAssetById(id));
-	}
-
-	@PreAuthorize("@auth.allow('SEARCH_MASTER_ASSET_DETAILS_BY_USER')")
-	@GetMapping("/searchByAssetUser")
-	public ResponseEntity<List<MasterAsset>> SearchAssetUser(@RequestParam("query") String query) {
-		LOGGER.info("MasterAssetController:masterAsset:SearchByAssetUser info level log message");
-		return ResponseEntity.ok(service.SearchByAssetUser(query));
-	}
-
-	@PreAuthorize("@auth.allow('SEARCH_MASTER_ASSET_BY_STATUS')")
-	@GetMapping("/searchByStatus")
-	public ResponseEntity<List<MasterAsset>> SearchByStatus(@RequestParam("query") String query) {
-		LOGGER.info("MasterAssetController:masterAsset:SearchByStatus info level log message");
-		return ResponseEntity.ok(service.SearchByStatus(query));
-	}
-
-	@PreAuthorize("@auth.allow('SEARCH_MASTER_ASSET_BY_ASSET_TYPE')")
-	@GetMapping("/searchByAssetType")
-	public ResponseEntity<List<MasterAsset>> SearchByAssetType(@RequestParam("query") String query) {
-		LOGGER.info("MasterAssetController:masterAsset:SearchByAssetType info level log message");
-		return ResponseEntity.ok(service.SearchByAssetType(query));
-	}
-
-	@PreAuthorize("@auth.allow('UPDATE_MASTER_ASSET_BY_ASSET_ID')")
-	@CrossOrigin(origins = "*")
-	@PutMapping("/updateMasterAssetbyid")
-	public ResponseEntity<String> updateMasterAssetbyid(@RequestBody MasterAsset asset) {
-		LOGGER.info("MasterAssetController:masterAsset:updateMasterAssetById info level log message");
-		return new ResponseEntity<String>(service.updateMasterAssetById(asset), HttpStatus.OK);
-	}
-
-	@PreAuthorize("@auth.allow('GET_ALL_MASTER_ASSET_DETAILS')")
-	@GetMapping("/getAllMasterAsset")
-	public ResponseEntity<List<MasterAsset>> findAllAssets() {
-		LOGGER.info("MasterAssetController:masterAsset:findAllMasterAsset info level log message");
-		return new ResponseEntity<List<MasterAsset>>(service.findAllMasterAsset(), HttpStatus.OK);
-	}
-
 	@PreAuthorize("@auth.allow('GET_ALL_ASSET_TYPE')")
 	@GetMapping(value = "/getAllAssetType")
 	public ResponseEntity<Object> getAllAssetType() {
 		LOGGER.info("MasterAssetController:masterAsset:getAllAssetType info level log message");
 		ResponseDTO responseDTO = service.getAllAssetType();
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
 	}
 
 	@PreAuthorize("@auth.allow('GET_ALL_ASSET_ATTRIBUTES_BY_ASSET_TYPE_ID')")
@@ -110,13 +47,8 @@ public class MasterAssetController {
 	public ResponseEntity<Object> getAllAssetAttributesByAssetTypeId(@PathVariable Integer assetTypeId) {
 		LOGGER.info("MasterAssetController:masterAsset:getAllAssetAttributesByAssetTypeId info level log message");
 		ResponseDTO responseDTO = service.getAllAssetAttributesByAssetTypeId(assetTypeId);
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
 	}
 
 	@PreAuthorize("@auth.allow('SAVE_ASSET_INFO')")
@@ -124,13 +56,8 @@ public class MasterAssetController {
 	public ResponseEntity<Object> saveAssetInfo(@RequestBody AssetDTO assetDTO) {
 		LOGGER.info("MasterAssetController:masterAsset:saveAssetInfo info level log message");
 		ResponseDTO responseDTO = service.saveAssetInfo(assetDTO);
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotSaved")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.BAD_REQUEST);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
 	}
 
 	@PreAuthorize("@auth.allow('DELETE_ASSET_INFO_BY_ID')")
@@ -138,13 +65,8 @@ public class MasterAssetController {
 	public ResponseEntity<Object> deleteAssetInfoById(@PathVariable Integer assetId) {
 		LOGGER.info("MasterAssetController:masterAsset:deleteAssetInfoById info level log message");
 		ResponseDTO responseDTO = service.deleteAssetInfoById(assetId);
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
 	}
 
 	@PreAuthorize("@auth.allow('GET_ALL_ASSET_INFO_BY_ASSET_TYPE_ID_AND_PAGINATION')")
@@ -155,13 +77,8 @@ public class MasterAssetController {
 		LOGGER.info(
 				"MasterAssetController:masterAsset:getAllAssetInfoByAssetTypeIdAndPagination info level log message");
 		ResponseDTO responseDTO = service.getAllAssetInfoByAssetTypeIdAndPagination(assetTypeId, page, size);
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
 	}
 
 	@PreAuthorize("@auth.allow('UPDATE_ASSET_ATTRIBUTE_MAPPING_BY_ASSET_ID')")
@@ -169,29 +86,17 @@ public class MasterAssetController {
 	public ResponseEntity<Object> updateAssetAttributeMappingByAssetId(@RequestBody AssetDTO assetDTO) {
 		LOGGER.info("MasterAssetController:masterAsset:updateAssetAttributeMappingByAssetId info level log message");
 		ResponseDTO responseDTO = service.updateAssetAttributeMappingByAssetId(assetDTO);
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotUpdated")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.BAD_REQUEST);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
 	}
 
 	@PreAuthorize("@auth.allow('ADD_ASSET_TYPE')")
 	@PostMapping(value = "/addAssetType")
-	public ResponseEntity<Object> addAssetType(@RequestBody AssetType assetType) {
-		LOGGER.info("MasterAssetController:masterAsset:addAssetType info level log message");
+	public ResponseEntity<ResponseDTO> addAssetType(@RequestBody AssetType assetType) {
+		LOGGER.info("MasterAssetController: addAssetType info level log message");
 		ResponseDTO responseDTO = service.addAssetType(assetType);
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotSaved")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.BAD_REQUEST);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
 	}
 
 	@PreAuthorize("@auth.allow('GET_ASSET_TYPE_BY_ID')")
@@ -199,28 +104,18 @@ public class MasterAssetController {
 	public ResponseEntity<Object> getAssetTypeById(@PathVariable Integer assetTypeId) {
 		LOGGER.info("MasterAssetController:masterAsset:getAssetTypeById info level log message");
 		ResponseDTO responseDTO = service.getAssetTypeById(assetTypeId);
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
 	}
 
 	@PreAuthorize("@auth.allow('UPDATE_ASSET_TYPE_BY_ID')")
 	@PutMapping(value = "/updateAssetTypeById/{assetTypeId}")
 	public ResponseEntity<Object> updateAssetTypeById(@PathVariable Integer assetTypeId,
-			@RequestParam("assetTypeName") String assetTypeName) {
+			@RequestBody AssetType assetType) {
 		LOGGER.info("MasterAssetController:masterAsset:updateAssetTypeById info level log message");
-		ResponseDTO responseDTO = service.updateAssetTypeById(assetTypeId, assetTypeName);
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		ResponseDTO responseDTO = service.updateAssetTypeById(assetTypeId, assetType);
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
 	}
 
 	@PreAuthorize("@auth.allow('DELETE_ASSET_TYPE_BY_ID')")
@@ -228,15 +123,8 @@ public class MasterAssetController {
 	public ResponseEntity<Object> deleteAssetTypeById(@PathVariable Integer assetTypeId) {
 		LOGGER.info("MasterAssetController:masterAsset:deleteAssetTypeById info level log message");
 		ResponseDTO responseDTO = service.deleteAssetTypeById(assetTypeId);
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("AlreadyAssociated")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
 	}
 
 	@PreAuthorize("@auth.allow('ADD_ASSET_ATTRIBUTE_BY_ASSET_TYPE_ID')")
@@ -245,13 +133,8 @@ public class MasterAssetController {
 			@RequestParam("assetAttributeName") String assetAttributeName) {
 		LOGGER.info("MasterAssetController:masterAsset:addAssetAttributeByAssetTypeId info level log message");
 		ResponseDTO responseDTO = service.addAssetAttributesByAssetTypeId(assetTypeId, assetAttributeName);
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotSaved")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.BAD_REQUEST);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
 	}
 
 	@PreAuthorize("@auth.allow('UPDATE_ASSET_ATTRIBUTE_BY_ID')")
@@ -261,13 +144,8 @@ public class MasterAssetController {
 			@RequestParam("assetAttributeName") String assetAttributeName) {
 		LOGGER.info("MasterAssetController:masterAsset:updateAssetAttributeById info level log message");
 		ResponseDTO responseDTO = service.updateAssetAttributeById(assetAttributeId, assetTypeId, assetAttributeName);
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
 	}
 
 	@PreAuthorize("@auth.allow('DELETE_ASSET_ATTRIBUTE_BY_ID')")
@@ -275,13 +153,8 @@ public class MasterAssetController {
 	public ResponseEntity<Object> deleteAssetAttributeById(@PathVariable Integer assetAttributeId) {
 		LOGGER.info("MasterAssetController:masterAsset:deleteAssetAttributeById info level log message");
 		ResponseDTO responseDTO = service.deleteAssetAttributeById(assetAttributeId);
-		if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-		} else if (responseDTO.getStatus().equalsIgnoreCase("NotFound")) {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
 	}
 
 //@PreAuthorize("@auth.allow('SAVE_ASSET_DETAILS_WITH_ATTRIBUTES')")
@@ -295,5 +168,61 @@ public class MasterAssetController {
 //		return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
 //	}
 //}
+
+//	@PreAuthorize("@auth.allow('SAVE_NEW_MASTER_ASSET')")
+//	@PostMapping("/insertAssets")
+//	public ResponseEntity<String> insertAsset(@RequestBody MasterAsset asset) {
+//		LOGGER.info("MasterAssetController:masterAsset:saveMasterAsset info level log message");
+//		String result = null;
+//		if (service.saveMasterAsset(asset)) {
+//			result = "Asset saved successfully !";
+//		} else {
+//			result = "Asset Not saved !";
+//		}
+//		return new ResponseEntity<String>(result, HttpStatus.OK);
+//	}
+//
+//	@PreAuthorize("@auth.allow('GET_MASTER_ASSET_DETAILS_BY_ID')")
+//	@GetMapping("/GetAssetById/{id}")
+//	public ResponseEntity<MasterAsset> GetAssetById(@PathVariable Integer id) {
+//		LOGGER.info("MasterAssetController:masterAsset:TakeAssetById info level log message");
+//		return ResponseEntity.ok(service.TakeAssetById(id));
+//	}
+//
+//	@PreAuthorize("@auth.allow('SEARCH_MASTER_ASSET_DETAILS_BY_USER')")
+//	@GetMapping("/searchByAssetUser")
+//	public ResponseEntity<List<MasterAsset>> SearchAssetUser(@RequestParam("query") String query) {
+//		LOGGER.info("MasterAssetController:masterAsset:SearchByAssetUser info level log message");
+//		return ResponseEntity.ok(service.SearchByAssetUser(query));
+//	}
+//
+//	@PreAuthorize("@auth.allow('SEARCH_MASTER_ASSET_BY_STATUS')")
+//	@GetMapping("/searchByStatus")
+//	public ResponseEntity<List<MasterAsset>> SearchByStatus(@RequestParam("query") String query) {
+//		LOGGER.info("MasterAssetController:masterAsset:SearchByStatus info level log message");
+//		return ResponseEntity.ok(service.SearchByStatus(query));
+//	}
+//
+//	@PreAuthorize("@auth.allow('SEARCH_MASTER_ASSET_BY_ASSET_TYPE')")
+//	@GetMapping("/searchByAssetType")
+//	public ResponseEntity<List<MasterAsset>> SearchByAssetType(@RequestParam("query") String query) {
+//		LOGGER.info("MasterAssetController:masterAsset:SearchByAssetType info level log message");
+//		return ResponseEntity.ok(service.SearchByAssetType(query));
+//	}
+//
+//	@PreAuthorize("@auth.allow('UPDATE_MASTER_ASSET_BY_ASSET_ID')")
+//	@CrossOrigin(origins = "*")
+//	@PutMapping("/updateMasterAssetbyid")
+//	public ResponseEntity<String> updateMasterAssetbyid(@RequestBody MasterAsset asset) {
+//		LOGGER.info("MasterAssetController:masterAsset:updateMasterAssetById info level log message");
+//		return new ResponseEntity<String>(service.updateMasterAssetById(asset), HttpStatus.OK);
+//	}
+//
+//	@PreAuthorize("@auth.allow('GET_ALL_MASTER_ASSET_DETAILS')")
+//	@GetMapping("/getAllMasterAsset")
+//	public ResponseEntity<List<MasterAsset>> findAllAssets() {
+//		LOGGER.info("MasterAssetController:masterAsset:findAllMasterAsset info level log message");
+//		return new ResponseEntity<List<MasterAsset>>(service.findAllMasterAsset(), HttpStatus.OK);
+//	}
 
 }

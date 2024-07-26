@@ -37,5 +37,4 @@ public class AssetAttributeMapping {
 
 	@Column(name = "asset_attribute_value")
 	private String assetAttributeValue;
-
 }

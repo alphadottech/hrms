@@ -15,9 +15,6 @@ public interface AssetAttributeRepo extends JpaRepository<AssetAttribute, Intege
 	@Query(value = "SELECT * FROM av_schema.asset_attribute where asset_type_id=?1", nativeQuery = true)
 	List<AssetAttribute> findAllAssetAttributesByAssetTypeId(Integer assetTypeId);
 
-	@Query(value = "SELECT * FROM av_schema.asset_attribute where name=?1 and asset_type_id=?2", nativeQuery = true)
-	Optional<AssetAttribute> findByAssetAttributeName(String name, Integer asset_type_id);
-
 	@Query(value = "DELETE FROM av_schema.asset_attribute WHERE asset_type_id=?1", nativeQuery = true)
 	void deleteByAssetTypeId(Integer assetTypeId);
 
