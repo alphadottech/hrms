@@ -233,12 +233,10 @@ public class InterviewServiceImpl implements InterviewService {
 				LocalDate currentDate = LocalDate.now();
 				if (beforeThreeMonthDate.isBefore(currentDate) || beforeThreeMonthDate.isEqual(currentDate)) {
 					LOGGER.info("update candidate details:"+beforeThreeMonthDate);
-					intwDTO.setInterviewId(interviewCan.get().getInterviewId());
-					intwDTO.setCandidateName(interviewCan.get().getCandidateName());
-					saveDataInInterviewHistory(intwDTO);
 					Interview detailsip = interviewCan.get();
-					detailsip.setClientName(intwDTO.getClientName());
+					saveDataInInterviewHistory(detailsip);
 					detailsip.setCommunication(intwDTO.getCommunication());
+					detailsip.setClientName(intwDTO.getClientName());
 					detailsip.setDate(localDate);
 					detailsip.setEnthusiasm(intwDTO.getEnthusiasm());
 					detailsip.setInterviewerName(intwDTO.getInterviewerName());
@@ -250,7 +248,6 @@ public class InterviewServiceImpl implements InterviewService {
 					detailsip.setSource(intwDTO.getSource());
 					detailsip.setType(intwDTO.getType());
 					detailsip.setWorkExInYears(intwDTO.getWorkExInYears());
-					detailsip.setCandidateName(intwDTO.getCandidateName());
 					detailsip.setTech_id(techDetails.get());
 					detailsip.setPosition_id(posDetails.get());
 					interviewRepository.save(detailsip);
@@ -325,30 +322,28 @@ public class InterviewServiceImpl implements InterviewService {
 		return null;
 	}
 	
-	public void saveDataInInterviewHistory(InterviewModelDTO intwDTO) {
+	public void saveDataInInterviewHistory(Interview interview) {
 		LOGGER.info("save inverview data in history table");
 		InterviewHistory interviewHistory =new InterviewHistory();
-		String date = intwDTO.getDate();
-		LocalDate localDate = LocalDate.parse(date);
-		interviewHistory.setCandidateId(intwDTO.getCandidate_id());
-		interviewHistory.setInterviewId(intwDTO.getInterviewId());
-		interviewHistory.setRounds(intwDTO.getRounds());
-		interviewHistory.setClientName(intwDTO.getClientName());
-		interviewHistory.setCommunication(intwDTO.getCommunication());
-		interviewHistory.setDate(localDate);
-		interviewHistory.setEnthusiasm(intwDTO.getEnthusiasm());
-		interviewHistory.setInterviewerName(intwDTO.getInterviewerName());
-		interviewHistory.setMarks(intwDTO.getMarks());
-		interviewHistory.setNotes(intwDTO.getNotes());
-		interviewHistory.setOfferAccepted(intwDTO.getOfferAccepted());
-		interviewHistory.setOfferReleased(intwDTO.getOfferReleased());	
-		interviewHistory.setStatus(intwDTO.getStatus());
-		interviewHistory.setSource(intwDTO.getSource());
-		interviewHistory.setType(intwDTO.getType());
-		interviewHistory.setWorkexInYears(intwDTO.getWorkExInYears());
-		interviewHistory.setCandidateName(intwDTO.getCandidateName());
-		interviewHistory.setTechId(intwDTO.getTech_id());
-		interviewHistory.setPositionId(intwDTO.getPosition_id());	
+		interviewHistory.setCandidateId(interview.getCandidate_id().getCandidateId());
+		interviewHistory.setInterviewId(interview.getInterviewId());
+		interviewHistory.setRounds(interview.getRounds());
+		interviewHistory.setClientName(interview.getClientName());
+		interviewHistory.setCommunication(interview.getCommunication());
+		interviewHistory.setDate(interview.getDate());
+		interviewHistory.setEnthusiasm(interview.getEnthusiasm());
+		interviewHistory.setInterviewerName(interview.getInterviewerName());
+		interviewHistory.setMarks(interview.getMarks());
+		interviewHistory.setNotes(interview.getNotes());
+		interviewHistory.setOfferAccepted(interview.getOfferAccepted());
+		interviewHistory.setOfferReleased(interview.getOfferReleased());	
+		interviewHistory.setStatus(interview.getStatus());
+		interviewHistory.setSource(interview.getSource());
+		interviewHistory.setType(interview.getType());
+		interviewHistory.setWorkexInYears(interview.getWorkExInYears());
+		interviewHistory.setCandidateName(interview.getCandidateName());
+		interviewHistory.setTechId(interview.getTech_id().getTechId());
+		interviewHistory.setPositionId(interview.getPosition_id().getPositionId());	
 		interviewHistoryRepo.save(interviewHistory);
 		
 	}
