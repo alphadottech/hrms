@@ -134,7 +134,7 @@ public class InterviewController {
         LOGGER.info("EmployeeService:InterviewController:saveInterviewNew info level log message");
         String status = interviewService.saveInterviewNew(intwDto);
         if (status != null) {
-            return ResponseEntity.ok("Interview record saved successfully...");
+            return ResponseEntity.ok(status);
         }
         return new ResponseEntity<String>("Record already present", HttpStatus.BAD_REQUEST);
     }

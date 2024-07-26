@@ -28,4 +28,8 @@ public interface InterviewRepository extends JpaRepository<Interview, Serializab
 	@Query(value = "SELECT i FROM Interview i WHERE i.clientName like %:search%")
 	public List<Interview> findByClientName(@Param("search") String clientName);
 	//HRMS-92 ->END
+	
+	@Query(value = "select * from employee_schema.interview where candidate_id =?1 and rounds =?2",nativeQuery= true)
+	public Optional<Interview>   findByCandidate(int candidateid, int round);
+	
 }
