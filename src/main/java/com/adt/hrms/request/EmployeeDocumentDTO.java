@@ -14,4 +14,5 @@ public class EmployeeDocumentDTO {
     private int id;
     private int empId;
     private int docTypeId;
+    private String documentCategoryType;
 }

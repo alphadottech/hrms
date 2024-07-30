@@ -16,6 +16,9 @@ public interface EmployeeDocumentRepo  extends JpaRepository<EmployeeDocument,In
     @Query(value = "SELECT * FROM employee_schema.employee_document where emp_id = ?1 and doc_type_id= ?2", nativeQuery = true)
     Optional<EmployeeDocument> findDocumentByDocTypeIdAndEmployeeId(int employeeId, int documentTypeId);
 
+    @Query(value = "SELECT * FROM employee_schema.employee_document where emp_id = ?1 and doc_type_id= ?2 and document_category_type= ?3", nativeQuery = true)
+    Optional<EmployeeDocument> findDocumentByDocTypeIdAndEmployeeIdAndDocumentCategoryType(int employeeId, int documentTypeId,String documentCategoryType);
+    
     @Query(value = "SELECT * FROM employee_schema.employee_document",
             countQuery = "SELECT count(*) FROM employee_schema.employee_document",
             nativeQuery = true)

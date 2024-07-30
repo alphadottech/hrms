@@ -33,7 +33,7 @@ public class DocumentReminderService {
     @Scheduled(cron = "0 0 12 */3 * ?")
     public void sendDocumentReminders() {
         List<Employee> employees = employeeRepo.findAll();
-        List<DocumentType> documentTypes = documentTypeRepo.findAll();
+        List<DocumentType> documentTypes = documentTypeRepo.getByDocumentTypeData();
         for (Employee employee : employees) {
             List<String> missingDocuments = new ArrayList<>();
             for (DocumentType documentType : documentTypes) {
@@ -49,7 +49,7 @@ public class DocumentReminderService {
     }
 
     public boolean isDocumentUploaded(int empId, int docTypeId) {
-        Optional<EmployeeDocument> document = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId( empId,docTypeId);
+        Optional<EmployeeDocument> document = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId(empId, docTypeId);
         return document.isPresent();
     }
 
