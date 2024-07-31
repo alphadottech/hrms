@@ -17,7 +17,7 @@ import java.util.List;
 
 public interface EmployeeDocumentService {
 
-    String getEmployeeDocumentById(int employeeId, int documentTypeId, HttpServletResponse resp);
+    String getEmployeeDocumentById(int employeeId, int documentTypeId,String documentCategoryType, HttpServletResponse resp);
 
     String saveDocument(EmployeeDocumentDTO documentRequest, MultipartFile doc) throws IOException, TikaException, SAXException, GeneralSecurityException;
 
@@ -25,11 +25,11 @@ public interface EmployeeDocumentService {
 
     String uploadFileToDrive(File file, String mimeType, String folderId, String originalFilename, Drive drive);
 
-    List<String> createFolder(String folderName, Drive service) throws GeneralSecurityException, IOException;
+    List<String> createFolder(String documentCategoryType,String folderName, Drive service) throws GeneralSecurityException, IOException;
 
     List<EmployeeDocument> getAllDocumentDetailsByEmpId(int empId);
 
-    String deleteDocument(int empId, int docTypeId);
+    String deleteDocument(int empId, int docTypeId,String documentCategoryType);
 
     int getDocumentTypeId(String documentTypeName);
 }

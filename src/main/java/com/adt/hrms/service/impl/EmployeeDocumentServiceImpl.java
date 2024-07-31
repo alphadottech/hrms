@@ -99,7 +99,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
         }
 
         Optional<Employee> employee = employeeRepo.findById(employeeDocumentDTO.getEmpId());
-        Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId(employeeDocumentDTO.getEmpId(), employeeDocumentDTO.getDocTypeId());
+        Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeIdAndDocumentCategoryType(employeeDocumentDTO.getEmpId(), employeeDocumentDTO.getDocTypeId(),employeeDocumentDTO.getDocumentCategoryType());
         Optional<DriveDetails> driveDetails=driveDetailsRepository.findByStatus(true);
         Optional<DocumentType> documentType = documentTypeRepo.findById(employeeDocumentDTO.getDocTypeId());
         if (opt.isEmpty()) {
@@ -123,7 +123,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
                         }
 
                         Drive driveService = createDriveService(driveDetails.get().getConfig());
-                        List<String> list = createFolder(String.valueOf(employeeDocumentDTO.getEmpId()), driveService);
+                        List<String> list = createFolder(employeeDocumentDTO.getDocumentCategoryType(),String.valueOf(employeeDocumentDTO.getEmpId()), driveService);
                         String empFolderId = list.get(0);
                         File tempFile = File.createTempFile("temp", null);
                         document.transferTo(tempFile);
@@ -135,6 +135,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
                             employeeDocument.setDocTypeId(employeeDocumentDTO.getDocTypeId());
                             employeeDocument.setDriveDetailsId(driveDetails.get().getId());
                             employeeDocument.setFileId(fileId);
+                            employeeDocument.setDocumentCategoryType(employeeDocumentDTO.getDocumentCategoryType());
                             employeeDocumentRepo.save(employeeDocument);
                             return "Document saved successfully";
                         }
@@ -151,8 +152,8 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
 
 
     @Override
-    public String getEmployeeDocumentById(int employeeId, int documentTypeId, HttpServletResponse response) {
-        Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId(employeeId, documentTypeId);
+    public String getEmployeeDocumentById(int employeeId, int documentTypeId, String documentCategoryType,HttpServletResponse response) {
+        Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeIdAndDocumentCategoryType(employeeId, documentTypeId,documentCategoryType);
         Optional<DriveDetails> driveDetails=driveDetailsRepository.findByStatus(true);
 
         try {
@@ -205,13 +206,13 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     }
 
     @Override
-    public String deleteDocument(int empId, int docTypeId) {
+    public String deleteDocument(int empId, int docTypeId,String documentCategoryType) {
         try {
             Optional<Employee> employee = employeeRepo.findById(empId);
             if (employee.isPresent()) {
                 Optional<DocumentType> documentType = documentTypeRepo.findById(docTypeId);
                 if (documentType.isPresent()) {
-                    Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeId(empId, docTypeId);
+                    Optional<EmployeeDocument> opt = employeeDocumentRepo.findDocumentByDocTypeIdAndEmployeeIdAndDocumentCategoryType(empId, docTypeId,documentCategoryType);
                     Optional<DriveDetails> driveDetails=driveDetailsRepository.findByStatus(true);
                     if (opt.isPresent()&&driveDetails.isPresent()) {
                         Drive driveService = createDriveService(opt.get().getDriveDetails().getConfig());
@@ -230,7 +231,7 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     }
 
     @Override
-    public List<String> createFolder(String folderName, Drive service) throws IOException {
+    public List<String> createFolder(String documentCategoryType,String folderName, Drive service) throws IOException {
 
         String folderId = null;
         List<String> result = new LinkedList<>();
@@ -247,9 +248,27 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
             }
             if (activeProfile.equalsIgnoreCase("sit")) {
                 folderId = createOrCheckSubfolder("sit", parentFolderId, service);
+                folderId= createOrCheckSubfolder("document", folderId, service);
+                
             } else {
                 folderId = createOrCheckSubfolder("production", parentFolderId, service);
+                folderId= createOrCheckSubfolder("document", folderId, service);
             }
+            switch(documentCategoryType){  
+            
+            case "kyc_document": 
+            	folderId= createOrCheckSubfolder("kyc_document", folderId, service); 
+            break;  
+            case "personal_document":
+            	folderId= createOrCheckSubfolder("personal_document", folderId, service);  
+            break;  
+            case "professional_document":
+            	folderId= createOrCheckSubfolder("professional_document", folderId, service);  
+            break; 
+            case "academic_document":
+            	folderId= createOrCheckSubfolder("academic_document", folderId, service);  
+            break;  
+          }
             result.add(createOrCheckSubfolder(folderName, folderId, service));
         }catch (GoogleJsonResponseException e) {
             System.err.println("Google Drive API error: " + e.getDetails().getMessage());

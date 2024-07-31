@@ -39,4 +39,9 @@ public class EmployeeDocument {
 
     @Column(name = "fileId")
     private String fileId;
+    
+    @Column(name = "document_category_type")
+    private String documentCategoryType;
+    
+    
 }
