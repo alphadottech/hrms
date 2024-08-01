@@ -1,5 +1,6 @@
 package com.adt.hrms.service;
 
+import com.adt.hrms.model.DocumentType;
 import com.adt.hrms.model.EmployeeDocument;
 import com.adt.hrms.request.EmployeeDocumentDTO;
 import com.google.api.services.drive.Drive;
@@ -32,4 +33,6 @@ public interface EmployeeDocumentService {
     String deleteDocument(int empId, int docTypeId,String documentCategoryType);
 
     int getDocumentTypeId(String documentTypeName);
+    
+    List<DocumentType> getDocumentByCategoryType(String documentCategoryType) ;
 }

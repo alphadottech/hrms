@@ -17,4 +17,7 @@ public interface DocumentTypeRepo extends JpaRepository<DocumentType,Integer> {
    
     @Query(value =" SELECT  * FROM av_schema.document_type where is_mandartory=true",nativeQuery = true)
     List<DocumentType> getByDocumentTypeData();
+    
+    @Query(value ="SELECT * FROM av_schema.document_type WHERE category_type= ?1",nativeQuery = true)
+    List<DocumentType> getByDocumentCategoryType(@Param("categoryType") String categoryType);
 }

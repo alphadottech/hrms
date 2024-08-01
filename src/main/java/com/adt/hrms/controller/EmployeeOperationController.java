@@ -264,5 +264,16 @@ public class EmployeeOperationController {
 		LOGGER.info("Deleted employee with id: {}", employeeId);
 		return new ResponseEntity<String>(employeeService.deleteEmpById(employeeId), HttpStatus.OK);
 	}
+	
+	@PreAuthorize("@auth.allow('GET_ALL_BY_CATEGORY_TYPE')")
+	@GetMapping("/getDocumentByCategory")
+	public ResponseEntity <List<DocumentType>> getDocumentByCategory(@RequestParam("documentCategoryType") String documentCategoryType,HttpServletResponse resp) {
+		LOGGER.info("execute getDocumentByCategory Api");
+		try {
+			return ResponseEntity.ok(employeeDocumentService.getDocumentByCategoryType(documentCategoryType));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
 
 }

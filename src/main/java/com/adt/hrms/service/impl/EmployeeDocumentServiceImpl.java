@@ -78,6 +78,8 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     private final String folderMimeType = "application/vnd.google-apps.folder";
     @Autowired
     private DriveDetailsRepository driveDetailsRepository;
+    
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private Drive createDriveService(String serviceAccountKeyJson) throws GeneralSecurityException, IOException {
 
@@ -359,6 +361,16 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
         } else {
             throw new NoSuchElementException("Document type not found: " + documentTypeName);
         }
+    }
+    
+    
+    @Override
+    public List<DocumentType> getDocumentByCategoryType(String documentCategoryType) {
+    	LOGGER.info("get all category data");       
+    	List<DocumentType> opt = documentTypeRepo.getByDocumentCategoryType(documentCategoryType);
+    	LOGGER.info("category data:"+opt); 
+        return opt;
+  
     }
 
 }

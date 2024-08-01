@@ -28,4 +28,7 @@ public class DocumentType {
     
     @Column(name = "is_mandartory")
     private String isMandatory;
+    
+    @Column(name = "category_type")
+    private String categoryType;
 }
