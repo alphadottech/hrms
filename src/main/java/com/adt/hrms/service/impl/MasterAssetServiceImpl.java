@@ -400,7 +400,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				Optional<AssetInfo> assetInfoOptional = assetInfoRepo.findById(empMapping.getAsset_id());
 
 				if (assetInfoOptional.isEmpty()) {
-					return buildResponse("NotFound", "Asset not found for asset ID: " + empMapping.getAsset_id(), null);
+					return buildResponse("NotFound", "Asset not found", null);
 				}
 				assetADTIds.add(assetInfoOptional.get().getAssetADT_ID());
 			}
