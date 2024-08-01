@@ -1,5 +1,6 @@
 package com.adt.hrms.service;
 
+import com.adt.hrms.model.AssetEmployeeMapping;
 import com.adt.hrms.model.AssetType;
 import com.adt.hrms.request.AssetDTO;
 import com.adt.hrms.request.ResponseDTO;
@@ -15,6 +16,12 @@ public interface MasterAssetService {
 	public ResponseDTO deleteAssetInfoById(Integer assetId);
 
 	public ResponseDTO getAllAssetInfoByAssetTypeIdAndPagination(Integer assetTypeId, int page, int size);
+
+	public ResponseDTO getAllAssignedAssetsToEmpById(String empId);
+
+	public ResponseDTO getAssetInfoById(Integer assetId);
+
+	public ResponseDTO assignAssetToEmp(AssetEmployeeMapping assetEmployeeMapping);
 
 	public ResponseDTO updateAssetAttributeMappingByAssetId(AssetDTO assetDTO);
 
@@ -34,7 +41,6 @@ public interface MasterAssetService {
 	public ResponseDTO deleteAssetAttributeById(Integer assetAttributeId);
 
 //	public ResponseDTO saveAssetDetailsWithAttributes(CreateAssetDTO createAssetDTO);
-
 //	public boolean saveMasterAsset(MasterAsset asset);
 //	public MasterAsset TakeAssetById(Integer id);
 //	public List<MasterAsset> SearchByAssetUser(String assetUser);

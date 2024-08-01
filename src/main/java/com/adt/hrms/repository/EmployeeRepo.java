@@ -24,4 +24,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 
 	Page<Employee> findByIsActiveTrue(Pageable pageable);
 
+	@Query(value = "SELECT * FROM user_schema._employee where employee_id=?1", nativeQuery = true)
+	Optional<Employee> findEmployeeById(Integer empId);
+
 }
