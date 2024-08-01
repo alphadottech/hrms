@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adt.hrms.model.AssetEmployeeMapping;
 import com.adt.hrms.model.AssetType;
 import com.adt.hrms.request.AssetDTO;
 import com.adt.hrms.request.ResponseDTO;
@@ -77,6 +78,33 @@ public class MasterAssetController {
 		LOGGER.info(
 				"MasterAssetController:masterAsset:getAllAssetInfoByAssetTypeIdAndPagination info level log message");
 		ResponseDTO responseDTO = service.getAllAssetInfoByAssetTypeIdAndPagination(assetTypeId, page, size);
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
+	}
+
+	@PreAuthorize("@auth.allow('GET_ALL_ASSIGNED_ASSETS_TO_EMPLOYEE_BY_ID')")
+	@GetMapping("/getAllAssignedAssetsToEmpById")
+	public ResponseEntity<Object> getAllAssignedAssetsToEmpById(@RequestParam(value = "empId") String empId) {
+		LOGGER.info("MasterAssetController:masterAsset:getAllAssignedAssetsToEmpById info level log message");
+		ResponseDTO responseDTO = service.getAllAssignedAssetsToEmpById(empId);
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
+	}
+
+	@PreAuthorize("@auth.allow('GET_ASSET_INFO_BY_ID')")
+	@GetMapping(value = "/getAssetInfoById/{assetId}")
+	public ResponseEntity<Object> getAssetInfoById(@PathVariable Integer assetId) {
+		LOGGER.info("MasterAssetController:masterAsset:getAssetInfoById info level log message");
+		ResponseDTO responseDTO = service.getAssetInfoById(assetId);
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
+	}
+
+	@PreAuthorize("@auth.allow('ASSIGN_ASSET_TO_EMPLOYEE')")
+	@PostMapping(value = "/assignAssetToEmp")
+	public ResponseEntity<Object> assignAssetToEmp(@RequestBody AssetEmployeeMapping assetEmployeeMapping) {
+		LOGGER.info("MasterAssetController:masterAsset:assignAssetToEmp info level log message");
+		ResponseDTO responseDTO = service.assignAssetToEmp(assetEmployeeMapping);
 		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
 		return new ResponseEntity<>(responseDTO, status);
 	}
@@ -168,7 +196,7 @@ public class MasterAssetController {
 //		return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
 //	}
 //}
-
+//
 //	@PreAuthorize("@auth.allow('SAVE_NEW_MASTER_ASSET')")
 //	@PostMapping("/insertAssets")
 //	public ResponseEntity<String> insertAsset(@RequestBody MasterAsset asset) {
