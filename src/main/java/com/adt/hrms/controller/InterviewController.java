@@ -4,7 +4,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import com.adt.hrms.model.MasterAsset;
+import com.adt.hrms.model.*;
+import com.adt.hrms.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.adt.hrms.model.AVTechnology;
-import com.adt.hrms.model.Interview;
-import com.adt.hrms.model.PositionModel;
-import com.adt.hrms.service.AVTechnologyService;
-import com.adt.hrms.service.InterviewCandidateService;
-import com.adt.hrms.service.InterviewService;
-import com.adt.hrms.service.PositionService;
 import com.adt.hrms.ui.InterviewModelDTO;
 import com.adt.hrms.ui.PositionDateConverter;
 import com.adt.hrms.ui.PositionUIModel;
@@ -44,6 +38,9 @@ public class InterviewController {
 
 	@Autowired
 	private AVTechnologyService avTechnologyService;
+
+	@Autowired
+	private InterviewHistoryService interviewHistoryService;
 
 	@PreAuthorize("@auth.allow('GET_ALL_INTERVIEW_POSITION_DETAILS')")
 	@GetMapping("/getAllPosition")
@@ -223,10 +220,16 @@ public class InterviewController {
 
 	@PreAuthorize("@auth.allow('SEARCH_TECHNOLOGIES_BY_NAME')")
 	@GetMapping("/searchTechnologiesByName")
-	public ResponseEntity<List<AVTechnology>> searchTechnologiesByName(
-			@RequestParam("technologyName") String technologyName) {
+	public ResponseEntity<List<AVTechnology>> searchTechnologiesByName(@RequestParam("technologyName") String technologyName) {
 		LOGGER.info("EmployeeService:InterviewController:searchTechnologiesByName info level log message");
 		return new ResponseEntity<List<AVTechnology>>(avTechnologyService.searchTechnologiesByName(technologyName),
 				HttpStatus.OK);
+	}
+
+	@PreAuthorize("@auth.allow('GET_ALL_INTERVIEW_HISTORY_DETAILS_BY_INTERVIEW_ID')")
+	@GetMapping("/getAllInterviewHistoryByInterviewId/{interviewId}")
+	public ResponseEntity<List<InterviewHistory>> getAllInterviewHistoryByInterviewId(@PathVariable Integer interviewId) {
+		List<InterviewHistory> interviewHistories = interviewHistoryService.getAllInterviewHistoryByInterviewId(interviewId);
+		return ResponseEntity.ok(interviewHistories);
 	}
 }
