@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.adt.hrms.service.InterviewHistoryService;
 import com.adt.hrms.util.ProjectEngagementUtility;
 import com.adt.hrms.util.TableDataExtractor;
 
@@ -35,13 +36,17 @@ import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Service
-public class InterviewServiceImpl implements InterviewService {
+public class InterviewServiceImpl implements InterviewService, InterviewHistoryService {
 
 	@Autowired
 	private InterviewRepository interviewRepository;
 
 	@Autowired
 	private InterviewCandidateRepo interviewCandidateRepo;
+
+	@Autowired
+	private InterviewHistoryRepo interviewHistoryRepo;
+
 
 	@Autowired
 	private PositionRepo posRepo;
@@ -52,8 +57,7 @@ public class InterviewServiceImpl implements InterviewService {
 	@Autowired
 	private TableDataExtractor dataExtractor;
 	
-	@Autowired
-	InterviewHistoryRepo interviewHistoryRepo;
+
 	
   private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -475,6 +479,11 @@ public class InterviewServiceImpl implements InterviewService {
 		workbook.write(ops);
 		workbook.close();
 		ops.close();
+	}
+
+    @Override
+	public List<InterviewHistory> getAllInterviewHistoryByInterviewId(Integer interviewId) {
+		return interviewHistoryRepo.findByInterviewId(interviewId);
 	}
 
 }

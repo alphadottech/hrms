@@ -56,6 +56,12 @@ public class InterviewCandidateDetails {
 	@Column(name = "last_ctc")
 	private double lastCTC;
 
+	@Column(name = "expected_ctc")
+	private double expectedCTC;
+
+	@Column(name = "passing_year")
+	private String passingYear;
+
 	@Column(name = "notice_period")
 	private Integer noticePeriod;
 
