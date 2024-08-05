@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adt.hrms.model.AssetEmployeeMapping;
 import com.adt.hrms.model.AssetType;
 import com.adt.hrms.request.AssetDTO;
+import com.adt.hrms.request.AssignAssetsDTO;
 import com.adt.hrms.request.ResponseDTO;
 import com.adt.hrms.service.MasterAssetService;
 import com.adt.hrms.util.HttpStatusMapper;
@@ -78,33 +78,6 @@ public class MasterAssetController {
 		LOGGER.info(
 				"MasterAssetController:masterAsset:getAllAssetInfoByAssetTypeIdAndPagination info level log message");
 		ResponseDTO responseDTO = service.getAllAssetInfoByAssetTypeIdAndPagination(assetTypeId, page, size);
-		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
-		return new ResponseEntity<>(responseDTO, status);
-	}
-
-	@PreAuthorize("@auth.allow('GET_ALL_ASSIGNED_ASSETS_TO_EMPLOYEE_BY_ID')")
-	@GetMapping("/getAllAssignedAssetsToEmpById")
-	public ResponseEntity<Object> getAllAssignedAssetsToEmpById(@RequestParam(value = "empId") String empId) {
-		LOGGER.info("MasterAssetController:masterAsset:getAllAssignedAssetsToEmpById info level log message");
-		ResponseDTO responseDTO = service.getAllAssignedAssetsToEmpById(empId);
-		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
-		return new ResponseEntity<>(responseDTO, status);
-	}
-
-	@PreAuthorize("@auth.allow('GET_ASSET_INFO_BY_ID')")
-	@GetMapping(value = "/getAssetInfoById/{assetId}")
-	public ResponseEntity<Object> getAssetInfoById(@PathVariable Integer assetId) {
-		LOGGER.info("MasterAssetController:masterAsset:getAssetInfoById info level log message");
-		ResponseDTO responseDTO = service.getAssetInfoById(assetId);
-		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
-		return new ResponseEntity<>(responseDTO, status);
-	}
-
-	@PreAuthorize("@auth.allow('ASSIGN_ASSET_TO_EMPLOYEE')")
-	@PostMapping(value = "/assignAssetToEmp")
-	public ResponseEntity<Object> assignAssetToEmp(@RequestBody AssetEmployeeMapping assetEmployeeMapping) {
-		LOGGER.info("MasterAssetController:masterAsset:assignAssetToEmp info level log message");
-		ResponseDTO responseDTO = service.assignAssetToEmp(assetEmployeeMapping);
 		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
 		return new ResponseEntity<>(responseDTO, status);
 	}
@@ -185,72 +158,46 @@ public class MasterAssetController {
 		return new ResponseEntity<>(responseDTO, status);
 	}
 
-//@PreAuthorize("@auth.allow('SAVE_ASSET_DETAILS_WITH_ATTRIBUTES')")
-//@PostMapping(value = "/saveAssetDetailsWithAttributes")
-//public ResponseEntity<Object> saveAssetDetailsWithAttributes(@RequestBody CreateAssetDTO createAssetDTO) {
-//	LOGGER.info("MasterAssetController:masterAsset:saveAssetDetailsWithAttributes info level log message");
-//	ResponseDTO responseDTO = service.saveAssetDetailsWithAttributes(createAssetDTO);
-//	if (responseDTO.getStatus().equalsIgnoreCase("Success")) {
-//		return new ResponseEntity<Object>(responseDTO, HttpStatus.OK);
-//	} else {
-//		return new ResponseEntity<Object>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-//	}
-//}
-//
-//	@PreAuthorize("@auth.allow('SAVE_NEW_MASTER_ASSET')")
-//	@PostMapping("/insertAssets")
-//	public ResponseEntity<String> insertAsset(@RequestBody MasterAsset asset) {
-//		LOGGER.info("MasterAssetController:masterAsset:saveMasterAsset info level log message");
-//		String result = null;
-//		if (service.saveMasterAsset(asset)) {
-//			result = "Asset saved successfully !";
-//		} else {
-//			result = "Asset Not saved !";
-//		}
-//		return new ResponseEntity<String>(result, HttpStatus.OK);
-//	}
-//
-//	@PreAuthorize("@auth.allow('GET_MASTER_ASSET_DETAILS_BY_ID')")
-//	@GetMapping("/GetAssetById/{id}")
-//	public ResponseEntity<MasterAsset> GetAssetById(@PathVariable Integer id) {
-//		LOGGER.info("MasterAssetController:masterAsset:TakeAssetById info level log message");
-//		return ResponseEntity.ok(service.TakeAssetById(id));
-//	}
-//
-//	@PreAuthorize("@auth.allow('SEARCH_MASTER_ASSET_DETAILS_BY_USER')")
-//	@GetMapping("/searchByAssetUser")
-//	public ResponseEntity<List<MasterAsset>> SearchAssetUser(@RequestParam("query") String query) {
-//		LOGGER.info("MasterAssetController:masterAsset:SearchByAssetUser info level log message");
-//		return ResponseEntity.ok(service.SearchByAssetUser(query));
-//	}
-//
-//	@PreAuthorize("@auth.allow('SEARCH_MASTER_ASSET_BY_STATUS')")
-//	@GetMapping("/searchByStatus")
-//	public ResponseEntity<List<MasterAsset>> SearchByStatus(@RequestParam("query") String query) {
-//		LOGGER.info("MasterAssetController:masterAsset:SearchByStatus info level log message");
-//		return ResponseEntity.ok(service.SearchByStatus(query));
-//	}
-//
-//	@PreAuthorize("@auth.allow('SEARCH_MASTER_ASSET_BY_ASSET_TYPE')")
-//	@GetMapping("/searchByAssetType")
-//	public ResponseEntity<List<MasterAsset>> SearchByAssetType(@RequestParam("query") String query) {
-//		LOGGER.info("MasterAssetController:masterAsset:SearchByAssetType info level log message");
-//		return ResponseEntity.ok(service.SearchByAssetType(query));
-//	}
-//
-//	@PreAuthorize("@auth.allow('UPDATE_MASTER_ASSET_BY_ASSET_ID')")
-//	@CrossOrigin(origins = "*")
-//	@PutMapping("/updateMasterAssetbyid")
-//	public ResponseEntity<String> updateMasterAssetbyid(@RequestBody MasterAsset asset) {
-//		LOGGER.info("MasterAssetController:masterAsset:updateMasterAssetById info level log message");
-//		return new ResponseEntity<String>(service.updateMasterAssetById(asset), HttpStatus.OK);
-//	}
-//
-//	@PreAuthorize("@auth.allow('GET_ALL_MASTER_ASSET_DETAILS')")
-//	@GetMapping("/getAllMasterAsset")
-//	public ResponseEntity<List<MasterAsset>> findAllAssets() {
-//		LOGGER.info("MasterAssetController:masterAsset:findAllMasterAsset info level log message");
-//		return new ResponseEntity<List<MasterAsset>>(service.findAllMasterAsset(), HttpStatus.OK);
-//	}
+	@PreAuthorize("@auth.allow('GET_ALL_ASSIGNED_ASSETS_BY_EMPLOYEE_ADT_ID')")
+	@GetMapping("/getAllAssignedAssetsByEmpADTId")
+	public ResponseEntity<Object> getAllAssignedAssetsByEmpADTId(@RequestParam(value = "empADTId") String empADTId) {
+		LOGGER.info("MasterAssetController:masterAsset:getAllAssignedAssetsByEmpADTId info level log message");
+		ResponseDTO responseDTO = service.getAllAssignedAssetsByEmpADTId(empADTId);
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
+	}
+
+	@PreAuthorize("@auth.allow('SEARCH_EMPLOYEE_DETAILS')")
+	@GetMapping("/searchEmployeeDetails")
+	public ResponseEntity<Object> searchEmployeeDetails(
+			@RequestParam(value = "firstName", required = false) String firstName,
+			@RequestParam(value = "lastName", required = false) String lastName,
+			@RequestParam(value = "empAdtId", required = false) String empAdtId,
+			@RequestParam(value = "firstLetter", required = false) String firstLetter,
+			@RequestParam(value = "page", defaultValue = "0") int page,
+			@RequestParam(value = "size", defaultValue = "10") int size) {
+		LOGGER.info("MasterAssetController:masterAsset:searchEmployeeDetails info level log message");
+		ResponseDTO responseDTO = service.searchEmployeeDetails(firstName, lastName, empAdtId, firstLetter, page, size);
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
+	}
+
+	@PreAuthorize("@auth.allow('GET_ASSET_INFO_BY_ASSET_ADT_ID')")
+	@GetMapping(value = "/getAssetInfoByAssetAdtId")
+	public ResponseEntity<Object> getAssetInfoByAssetAdtId(@RequestParam(value = "assetAdtId") String assetAdtId) {
+		LOGGER.info("MasterAssetController:masterAsset:getAssetInfoByAssetAdtId info level log message");
+		ResponseDTO responseDTO = service.getAssetInfoByAssetAdtId(assetAdtId);
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
+	}
+
+	@PreAuthorize("@auth.allow('ASSIGN_ALL_ASSETS_TO_EMPLOYEE')")
+	@PutMapping(value = "/assignAllAssetsToEmp")
+	public ResponseEntity<Object> assignAllAssetsToEmp(@RequestBody AssignAssetsDTO assignAssetsDTO) {
+		LOGGER.info("MasterAssetController:masterAsset:assignAllAssetsToEmp info level log message");
+		ResponseDTO responseDTO = service.assignAllAssetsToEmp(assignAssetsDTO);
+		HttpStatus status = HttpStatusMapper.mapToHttpStatus(responseDTO.getStatus());
+		return new ResponseEntity<>(responseDTO, status);
+	}
 
 }

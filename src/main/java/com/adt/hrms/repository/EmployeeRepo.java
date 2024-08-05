@@ -27,4 +27,7 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 	@Query(value = "SELECT * FROM user_schema._employee where employee_id=?1", nativeQuery = true)
 	Optional<Employee> findEmployeeById(Integer empId);
 
+	@Query(value = "SELECT * FROM user_schema._employee where adt_id=?1", nativeQuery = true)
+	Optional<Employee> findEmpByAdtId(String empAdtId);
+
 }

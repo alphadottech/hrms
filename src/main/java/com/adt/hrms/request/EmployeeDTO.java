@@ -11,12 +11,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AssetDTO {
+public class EmployeeDTO {
 
-	private Integer empId;
-	private String asset_Id;
-	private Integer assetTypeId;
-	private String assetStatus;
+	private String empAdtId;
+	private String firstName;
+	private String lastName;
 
-	private List<AssetAttributeMapping> assetAttributeMappingList;
 }

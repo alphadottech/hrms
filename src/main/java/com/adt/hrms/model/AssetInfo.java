@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -35,4 +36,9 @@ public class AssetInfo {
 
 	@Column(name = "asset_status")
 	private String assetStatus;
+
+	@ManyToOne
+	@JoinColumn(name = "emp_id", referencedColumnName = "EMPLOYEE_ID", nullable = true, insertable = false, updatable = false)
+	private Employee employee;
+	private Integer emp_id;
 }
