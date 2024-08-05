@@ -52,7 +52,7 @@ public class MasterAssetController {
 		return new ResponseEntity<>(responseDTO, status);
 	}
 
-//	@PreAuthorize("@auth.allow('SAVE_ASSET_INFO')")
+	@PreAuthorize("@auth.allow('SAVE_ASSET_INFO')")
 	@PostMapping(value = "/saveAssetInfo")
 	public ResponseEntity<Object> saveAssetInfo(@RequestBody AssetDTO assetDTO) {
 		LOGGER.info("MasterAssetController:masterAsset:saveAssetInfo info level log message");
