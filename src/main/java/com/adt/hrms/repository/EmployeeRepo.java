@@ -18,9 +18,16 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 	Page<Employee> SearchByName(@Param("query") String name, Pageable pageable);
 
 	@Query("FROM Employee e WHERE lower(e.email) like lower(concat('%', :query,'%'))")
-	Page<Employee> SearchByEmail(@Param("query") String email,Pageable pageable);
+	Page<Employee> SearchByEmail(@Param("query") String email, Pageable pageable);
 
 	Page<Employee> findAll(Specification<Employee> sp, Pageable pageable);
+
 	Page<Employee> findByIsActiveTrue(Pageable pageable);
+
+	@Query(value = "SELECT * FROM user_schema._employee where employee_id=?1", nativeQuery = true)
+	Optional<Employee> findEmployeeById(Integer empId);
+
+	@Query(value = "SELECT * FROM user_schema._employee where adt_id=?1", nativeQuery = true)
+	Optional<Employee> findEmpByAdtId(String empAdtId);
 
 }

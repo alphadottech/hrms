@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import com.adt.hrms.util.AssetUtility;
 import com.adt.hrms.util.ProjectEngagementUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,6 +57,12 @@ public class InterviewCandidateServiceImpl implements InterviewCandidateService 
 		if(!ProjectEngagementUtility.validateCTC(interviewCandidateDetails.getLastCTC())){
 			throw new IllegalArgumentException("Invalid CTC Details");
 		}
+		if(!AssetUtility.validateYear(interviewCandidateDetails.getPassingYear())){
+			throw new IllegalArgumentException("Invalid Passing Year Details");
+		}
+		if(!ProjectEngagementUtility.validateCTC(interviewCandidateDetails.getExpectedCTC())){
+			throw new IllegalArgumentException("Invalid Expected CTC Details");
+		}
 		if(!ProjectEngagementUtility.validateNoticePeriod(interviewCandidateDetails.getNoticePeriod())){
 			throw new IllegalArgumentException("Invalid Notice Period");
 		}
@@ -102,6 +109,12 @@ public class InterviewCandidateServiceImpl implements InterviewCandidateService 
 		if(!ProjectEngagementUtility.validateCTC(interviewCandidateDetails.getLastCTC())){
 			throw new IllegalArgumentException("Invalid CTC Details");
 		}
+		if(!ProjectEngagementUtility.validateCTC(interviewCandidateDetails.getExpectedCTC())){
+			throw new IllegalArgumentException("Invalid Expected CTC Details");
+		}
+		if(!AssetUtility.validateYear(interviewCandidateDetails.getPassingYear())){
+			throw new IllegalArgumentException("Invalid Passing Year Details");
+		}
 		if(!ProjectEngagementUtility.validateNoticePeriod(interviewCandidateDetails.getNoticePeriod())){
 			throw new IllegalArgumentException("Invalid Notice Period");
 		}
@@ -116,6 +129,8 @@ public class InterviewCandidateServiceImpl implements InterviewCandidateService 
 		candidateDetails.get().setAddress(interviewCandidateDetails.getAddress());
 		candidateDetails.get().setCvShortlisted(interviewCandidateDetails.isCvShortlisted());
 		candidateDetails.get().setLastCTC(interviewCandidateDetails.getLastCTC());
+		candidateDetails.get().setExpectedCTC(interviewCandidateDetails.getExpectedCTC());
+		candidateDetails.get().setPassingYear(interviewCandidateDetails.getPassingYear());
 		candidateDetails.get().setHighestQualification(interviewCandidateDetails.getHighestQualification());
 		candidateDetails.get().setNoticePeriod(interviewCandidateDetails.getNoticePeriod());
 		candidateDetails.get().setTechnicalStack(interviewCandidateDetails.getTechnicalStack());

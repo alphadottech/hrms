@@ -2,8 +2,6 @@ package com.adt.hrms.request;
 
 import java.util.List;
 
-import com.adt.hrms.model.AssetAttributeMapping;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AssetDTO {
+public class AssetInfoDTO {
 
-	private Integer empId;
-	private String asset_Id;
-	private Integer assetTypeId;
+	private String empADTId; // emp ADT ID
+	private String assetADTId; // asset_id
+	private String assetType;
 	private String assetStatus;
 
-	private List<AssetAttributeMapping> assetAttributeMappingList;
+	List<AssetAttributeMappingDTO> assetAttributeMappingList;
+
 }

@@ -2,25 +2,31 @@ package com.adt.hrms.service.impl;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.adt.hrms.service.InterviewHistoryService;
 import com.adt.hrms.util.ProjectEngagementUtility;
 import com.adt.hrms.util.TableDataExtractor;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adt.hrms.model.AVTechnology;
 import com.adt.hrms.model.Interview;
 import com.adt.hrms.model.InterviewCandidateDetails;
+import com.adt.hrms.model.InterviewHistory;
 import com.adt.hrms.model.PositionModel;
 import com.adt.hrms.repository.AVTechnologyRepo;
 import com.adt.hrms.repository.InterviewCandidateRepo;
+import com.adt.hrms.repository.InterviewHistoryRepo;
 import com.adt.hrms.repository.InterviewRepository;
 import com.adt.hrms.repository.PositionRepo;
 import com.adt.hrms.service.InterviewService;
@@ -30,13 +36,17 @@ import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Service
-public class InterviewServiceImpl implements InterviewService {
+public class InterviewServiceImpl implements InterviewService, InterviewHistoryService {
 
 	@Autowired
 	private InterviewRepository interviewRepository;
 
 	@Autowired
 	private InterviewCandidateRepo interviewCandidateRepo;
+
+	@Autowired
+	private InterviewHistoryRepo interviewHistoryRepo;
+
 
 	@Autowired
 	private PositionRepo posRepo;
@@ -46,6 +56,10 @@ public class InterviewServiceImpl implements InterviewService {
 	
 	@Autowired
 	private TableDataExtractor dataExtractor;
+	
+
+	
+  private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 
 	@Override
@@ -119,7 +133,7 @@ public class InterviewServiceImpl implements InterviewService {
 		if(!ProjectEngagementUtility.validateInteger(intwDTO.getEnthusiasm())){
 			throw new IllegalArgumentException("Invalid Enthusiasm Marks");
 		}
-
+		LOGGER.info("interview details update is proccessing");
 		Optional<Interview> opt = interviewRepository.getInterviewDetailByInterviewIdAndRound(interviewId, round);
 
 		if (!opt.isPresent())
@@ -134,11 +148,11 @@ public class InterviewServiceImpl implements InterviewService {
 
 			Integer position_id = intwDTO.getPosition_id();
 			Integer tech_id = intwDTO.getTech_id();
-
+			Optional<InterviewCandidateDetails> candidateDetails=interviewCandidateRepo.findById(intwDTO.getCandidate_id());
 			Optional<PositionModel> posDetails = posRepo.findById(position_id);
 			Optional<AVTechnology> techDetails = techRepo.findById(tech_id);
 
-			// opt.get().setCandidateName(intw.getCandidateName());
+		    opt.get().setCandidateName(intwDTO.getCandidateName());
 			opt.get().setClientName(intwDTO.getClientName());
 			opt.get().setCommunication(intwDTO.getCommunication());
 			opt.get().setDate(localDate);
@@ -150,9 +164,6 @@ public class InterviewServiceImpl implements InterviewService {
 			opt.get().setOfferReleased(intwDTO.getOfferReleased());
 			// HRMS-102 - start
 			opt.get().setStatus(intwDTO.getStatus());
-//			opt.get().setScreeningRound(intwDTO.getScreeningRound());
-//			opt.get().setSelected(intwDTO.getSelected());
-			// HRMS-102 - end
 			opt.get().setSource(intwDTO.getSource());
 			opt.get().setType(intwDTO.getType());
 			opt.get().setWorkExInYears(intwDTO.getWorkExInYears());
@@ -162,9 +173,13 @@ public class InterviewServiceImpl implements InterviewService {
 			if (techDetails.get() != null) {
 				opt.get().setTech_id(techDetails.get());
 			}
+			
+			if (candidateDetails.get() != null) {
+				opt.get().setCandidate_id(candidateDetails.get());
+			}
 
 			Interview updatedRecord = interviewRepository.save(opt.get());
-			
+			LOGGER.info("interview details update saccussefully:="+updatedRecord);
 
 			return updatedRecord;
 		}
@@ -178,9 +193,7 @@ public class InterviewServiceImpl implements InterviewService {
 		if(!ProjectEngagementUtility.validateEmployee(intwDTO.getInterviewerName())){
 			throw new IllegalArgumentException("Invalid Name Details");
 		}
-// 		if(!ProjectEngagementUtility.validateEmployee(intwDTO.getCandidateName())){
-//			throw new IllegalArgumentException("Invalid Candidate Name Details");
-//		}
+
 		if(!ProjectEngagementUtility.validateEmployee(intwDTO.getSource())){
 			throw new IllegalArgumentException("Invalid Source Details");
 		}
@@ -206,9 +219,49 @@ public class InterviewServiceImpl implements InterviewService {
 		if(!ProjectEngagementUtility.validateInteger(intwDTO.getEnthusiasm())){
 			throw new IllegalArgumentException("Invalid Enthusiasm Marks");
 		}
+		LOGGER.info("interview details save data is proccessing");
+		Integer candidate_id = intwDTO.getCandidate_id();
+		Integer position_id = intwDTO.getPosition_id();
+		Integer tech_id = intwDTO.getTech_id();
 		
+		Optional<InterviewCandidateDetails> candidtateDetails = interviewCandidateRepo.findById(candidate_id);
+		Optional<PositionModel> posDetails = posRepo.findById(position_id);
+		Optional<AVTechnology> techDetails = techRepo.findById(tech_id);
+		String date = intwDTO.getDate();
+		LocalDate localDate = LocalDate.parse(date);	
 		Optional<InterviewCandidateDetails> interviewCandidateDetails=interviewCandidateRepo.findCandidateIdByEmailId(intwDTO.getEmail());
-		
+		 Optional<Interview> interviewCan=	interviewRepository.findByCandidate(intwDTO.getCandidate_id(),intwDTO.getRounds());
+		 LOGGER.info("interview data  present in DB: ="+interviewCan);
+		 if (interviewCan.isPresent()) {
+				LocalDate beforeThreeMonthDate = interviewCan.get().getDate().plusMonths(3);
+				LocalDate currentDate = LocalDate.now();
+				if (beforeThreeMonthDate.isBefore(currentDate) || beforeThreeMonthDate.isEqual(currentDate)) {
+					LOGGER.info("update candidate details:"+beforeThreeMonthDate);
+					Interview detailsip = interviewCan.get();
+					saveDataInInterviewHistory(detailsip);
+					detailsip.setCommunication(intwDTO.getCommunication());
+					detailsip.setClientName(intwDTO.getClientName());
+					detailsip.setDate(localDate);
+					detailsip.setEnthusiasm(intwDTO.getEnthusiasm());
+					detailsip.setInterviewerName(intwDTO.getInterviewerName());
+					detailsip.setMarks(intwDTO.getMarks());
+					detailsip.setNotes(intwDTO.getNotes());
+					detailsip.setOfferAccepted(intwDTO.getOfferAccepted());
+					detailsip.setOfferReleased(intwDTO.getOfferReleased());
+					detailsip.setStatus(intwDTO.getStatus());
+					detailsip.setSource(intwDTO.getSource());
+					detailsip.setType(intwDTO.getType());
+					detailsip.setWorkExInYears(intwDTO.getWorkExInYears());
+					detailsip.setTech_id(techDetails.get());
+					detailsip.setPosition_id(posDetails.get());
+					interviewRepository.save(detailsip);
+					return "saved candidate information";
+				} else {
+
+					return "this candidate is not Eligible";
+				}
+			}
+        
 		Integer interviewId = null;
 		if (interviewCandidateDetails.isPresent()) {
 			String sql = "SELECT interview_id FROM employee_schema.interview where candidate_id="
@@ -232,20 +285,6 @@ public class InterviewServiceImpl implements InterviewService {
 		Optional<Interview> opt = interviewRepository.getInterviewDetailByInterviewIdAndRound(interviewId, round);
 
 		if (!opt.isPresent()) {
-
-			Integer candidate_id = intwDTO.getCandidate_id();
-			Integer position_id = intwDTO.getPosition_id();
-			Integer tech_id = intwDTO.getTech_id();
-
-			// ** Converting the date from request into LocalDate ***
-			String date = intwDTO.getDate();
-//			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-			LocalDate localDate = LocalDate.parse(date);
-
-			Optional<InterviewCandidateDetails> candidtateDetails = interviewCandidateRepo.findById(candidate_id);
-			Optional<PositionModel> posDetails = posRepo.findById(position_id);
-			Optional<AVTechnology> techDetails = techRepo.findById(tech_id);
-
 			Interview intwEntity = new Interview();
 			// *** Setting the values from DTO to the entity ****
 			intwEntity.setInterviewId(intwDTO.getInterviewId());
@@ -282,9 +321,35 @@ public class InterviewServiceImpl implements InterviewService {
 			Interview savedRecord = interviewRepository.save(intwEntity);
 
 			if (savedRecord != null)
-				return "saved";
+				return "saved candidate information";
 		}
 		return null;
+	}
+	
+	public void saveDataInInterviewHistory(Interview interview) {
+		LOGGER.info("save inverview data in history table");
+		InterviewHistory interviewHistory =new InterviewHistory();
+		interviewHistory.setCandidateId(interview.getCandidate_id().getCandidateId());
+		interviewHistory.setInterviewId(interview.getInterviewId());
+		interviewHistory.setRounds(interview.getRounds());
+		interviewHistory.setClientName(interview.getClientName());
+		interviewHistory.setCommunication(interview.getCommunication());
+		interviewHistory.setDate(interview.getDate());
+		interviewHistory.setEnthusiasm(interview.getEnthusiasm());
+		interviewHistory.setInterviewerName(interview.getInterviewerName());
+		interviewHistory.setMarks(interview.getMarks());
+		interviewHistory.setNotes(interview.getNotes());
+		interviewHistory.setOfferAccepted(interview.getOfferAccepted());
+		interviewHistory.setOfferReleased(interview.getOfferReleased());	
+		interviewHistory.setStatus(interview.getStatus());
+		interviewHistory.setSource(interview.getSource());
+		interviewHistory.setType(interview.getType());
+		interviewHistory.setWorkexInYears(interview.getWorkExInYears());
+		interviewHistory.setCandidateName(interview.getCandidateName());
+		interviewHistory.setTechId(interview.getTech_id().getTechId());
+		interviewHistory.setPositionId(interview.getPosition_id().getPositionId());	
+		interviewHistoryRepo.save(interviewHistory);
+		
 	}
 	// HRMS-66 END
 
@@ -414,6 +479,11 @@ public class InterviewServiceImpl implements InterviewService {
 		workbook.write(ops);
 		workbook.close();
 		ops.close();
+	}
+
+    @Override
+	public List<InterviewHistory> getAllInterviewHistoryByInterviewId(Integer interviewId) {
+		return interviewHistoryRepo.findByInterviewId(interviewId);
 	}
 
 }

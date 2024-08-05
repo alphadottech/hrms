@@ -18,12 +18,21 @@ public interface AssetInfoRepo extends JpaRepository<AssetInfo, Integer> {
 	Optional<List<AssetInfo>> findAssetInfoListByAssetTypeId(Integer assetTypeId);
 
 	@Query(value = "SELECT * FROM employee_schema.asset where id=?1", nativeQuery = true)
-	Optional<AssetInfo> findAssetByAssetId(Integer assetId);
+	Optional<AssetInfo> findAssetInfoByAssetId(Integer assetId);
 
 	@Query(value = "DELETE FROM employee_schema.asset WHERE asset_type_id=?1", nativeQuery = true)
 	void deleteByAssetTypeId(Integer assetTypeId);
 
 	@Query(value = "SELECT * FROM employee_schema.asset WHERE asset_type_id = ?1", nativeQuery = true)
 	Page<AssetInfo> findListByAssetTypeIdWithPagination(Integer assetTypeId, Pageable pageable);
+
+	@Query(value = "SELECT * FROM employee_schema.asset where emp_id=?1", nativeQuery = true)
+	List<AssetInfo> findAssetsByEmpId(Integer empId);
+
+	@Query(value = "SELECT * FROM employee_schema.asset where asset_adt_id=?1", nativeQuery = true)
+	Optional<AssetInfo> findAssetsByAdtId(String assetADT_ID);
+
+	@Query(value = "SELECT * FROM employee_schema.asset where emp_id=?1", nativeQuery = true)
+	List<AssetInfo> findAssignedAssetList(Integer emp_id);
 
 }
