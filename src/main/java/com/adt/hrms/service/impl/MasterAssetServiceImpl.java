@@ -176,7 +176,6 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				asset.setAsset_type_id(assetDTO.getAssetTypeId());
 				asset.setAssetADT_ID(assetADTId);
 				asset.setAssetStatus(assetDTO.getAssetStatus().toUpperCase());
-//				asset.setEmpId(null);
 				if (assetDTO.getEmpId() == null || assetDTO.getEmpId().equals("")) {
 					asset.setEmp_id(null);
 				} else {
@@ -662,6 +661,62 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 	}
 
 	@Override
+	public ResponseDTO getAllAssignedAssetsByEmpADTId(String empADTId) {
+		log.info("MasterAssetServiceImpl:getAllAssignedAssetsByEmpADTId info level log message");
+		try {
+			if (empADTId == null || empADTId.isEmpty() || empADTId.isBlank()) {
+				throw new IllegalArgumentException("Provide a valid EmployeeADTId, it should not be null or blank");
+			}
+
+			Optional<Employee> employeeExist = employeeRepo.findEmpByAdtId(empADTId);
+			if (employeeExist.isEmpty()) {
+				return buildResponse("NotFound", "Employee not found", null);
+			}
+
+			List<AssetInfoDTO> assetInfoDTOList = new ArrayList<>();
+			List<AssetInfo> assetInfoList = assetInfoRepo.findAssetsByEmpId(employeeExist.get().getEmployeeId());
+
+			if (assetInfoList.isEmpty()) {
+				return buildResponse("NotFound", "Assets not assigned yet", assetInfoDTOList);
+			}
+
+			for (AssetInfo assetInfo : assetInfoList) {
+				AssetInfoDTO assetInfoDTO = new AssetInfoDTO();
+				assetInfoDTO.setEmpADTId(employeeExist.get().getAdtId());
+				assetInfoDTO.setAssetADTId(assetInfo.getAssetADT_ID());
+				assetInfoDTO.setAssetStatus(assetInfo.getAssetStatus());
+
+				Optional<AssetType> assetTypeExist = assetTypeRepo.findById(assetInfo.getAsset_type_id());
+				assetTypeExist.ifPresent(assetType -> assetInfoDTO.setAssetType(assetType.getAssetName()));
+
+				List<AssetAttributeMappingDTO> assetAttributeMappingDTOList = new ArrayList<>();
+				List<AssetAttributeMapping> attributeMappingList = assetAttributeMappingRepo
+						.findAssetMappingListByAssetId(assetInfo.getId());
+
+				for (AssetAttributeMapping attributeMapping : attributeMappingList) {
+					AssetAttributeMappingDTO assetAttributeMappingDTO = new AssetAttributeMappingDTO();
+					assetAttributeMappingDTO
+							.setAssetAttributeName(attributeMapping.getAssetAttribute().getAssetAttributeName());
+					assetAttributeMappingDTO.setAssetAttributeValue(attributeMapping.getAssetAttributeValue());
+					assetAttributeMappingDTOList.add(assetAttributeMappingDTO);
+				}
+
+				assetInfoDTO.setAssetAttributeMappingList(assetAttributeMappingDTOList);
+				assetInfoDTOList.add(assetInfoDTO);
+			}
+
+			return buildResponse("Success", "All assigned assets fetched successfully", assetInfoDTOList);
+
+		} catch (IllegalArgumentException e) {
+			log.error("getAllAssignedAssetsByEmpADTId IllegalArgumentException: {} ", e.getMessage());
+			return buildResponse("Failed", e.getMessage(), null);
+		} catch (Exception e) {
+			log.error("MasterAssetServiceImpl: getAllAssignedAssetsByEmpADTId Exception: {} ", e.getMessage());
+			return buildResponse("Failed", "Internal server error occurred", null);
+		}
+	}
+
+	@Override
 	public ResponseDTO searchEmployeeDetails(String firstName, String lastName, String empAdtId, String firstLetter,
 			int page, int size) {
 		log.info("MasterAssetServiceImpl:searchEmployeeDetails info level log message");
@@ -732,116 +787,6 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 	}
 
 	@Override
-	public ResponseDTO getAllAssignedAssetsByEmpId(Integer empId) {
-		log.info("MasterAssetServiceImpl:getAllAssignedAssetsByEmpId info level log message");
-		try {
-			if (empId == null || empId == 0) {
-				throw new IllegalArgumentException("Provide a valid EmployeeId, it should not be null or blank");
-			}
-
-			Optional<Employee> employeeExist = employeeRepo.findById(empId);
-			if (employeeExist.isEmpty()) {
-				return buildResponse("NotFound", "Employee not found", null);
-			}
-
-			List<AssetInfoDTO> assetInfoDTOList = new ArrayList<>();
-			List<AssetInfo> assetInfoList = assetInfoRepo.findAssetsByEmpId(empId);
-
-			if (assetInfoList.isEmpty()) {
-				return buildResponse("NotFound", "Assets not assigned yet", assetInfoDTOList);
-			}
-
-			for (AssetInfo assetInfo : assetInfoList) {
-				AssetInfoDTO assetInfoDTO = new AssetInfoDTO();
-				assetInfoDTO.setAssetADTId(assetInfo.getAssetADT_ID());
-				assetInfoDTO.setAssetStatus(assetInfo.getAssetStatus());
-
-				Optional<AssetType> assetTypeExist = assetTypeRepo.findById(assetInfo.getAsset_type_id());
-				assetTypeExist.ifPresent(assetType -> assetInfoDTO.setAssetType(assetType.getAssetName()));
-
-				List<AssetAttributeMappingDTO> assetAttributeMappingDTOList = new ArrayList<>();
-				List<AssetAttributeMapping> attributeMappingList = assetAttributeMappingRepo
-						.findAssetMappingListByAssetId(assetInfo.getId());
-
-				for (AssetAttributeMapping attributeMapping : attributeMappingList) {
-					AssetAttributeMappingDTO assetAttributeMappingDTO = new AssetAttributeMappingDTO();
-					assetAttributeMappingDTO
-							.setAssetAttributeName(attributeMapping.getAssetAttribute().getAssetAttributeName());
-					assetAttributeMappingDTO.setAssetAttributeValue(attributeMapping.getAssetAttributeValue());
-					assetAttributeMappingDTOList.add(assetAttributeMappingDTO);
-				}
-
-				assetInfoDTO.setAssetAttributeMappingList(assetAttributeMappingDTOList);
-				assetInfoDTOList.add(assetInfoDTO);
-			}
-
-			return buildResponse("Success", "All assigned assets fetched successfully", assetInfoDTOList);
-
-		} catch (IllegalArgumentException e) {
-			log.error("getAllAssignedAssetsByEmpId IllegalArgumentException: {} ", e.getMessage());
-			return buildResponse("Failed", e.getMessage(), null);
-		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: getAllAssignedAssetsByEmpId Exception: {} ", e.getMessage());
-			return buildResponse("Failed", "Internal server error occurred", null);
-		}
-	}
-
-	@Override
-	public ResponseDTO assignAllAssetsToEmp(AssignAssetsDTO assignAssetsDTO) {
-		log.info("MasterAssetServiceImpl:assignAllAssetsToEmp info level log message");
-		try {
-			if (assignAssetsDTO.getEmpAdtId() == null || assignAssetsDTO.getEmpAdtId().trim().isEmpty()) {
-				throw new IllegalArgumentException("Provide valid EmpAdtId, it should not be null or blank");
-			}
-			if (assignAssetsDTO.getAssetAdtIdList() == null || assignAssetsDTO.getAssetAdtIdList().isEmpty()) {
-				throw new IllegalArgumentException("Provide valid AssetAdtIdList, it should not be null or empty");
-			}
-
-			Optional<Employee> employeeOpt = employeeRepo.findEmpByAdtId(assignAssetsDTO.getEmpAdtId());
-			if (employeeOpt.isEmpty()) {
-				return buildResponse("NotFound", "Employee not found", null);
-			}
-			Employee employee = employeeOpt.get();
-
-			List<AssetInfo> assetInfoList = new ArrayList<>();
-			for (String assetAdtId : assignAssetsDTO.getAssetAdtIdList()) {
-				Optional<AssetInfo> assetOpt = assetInfoRepo.findAssetsByAdtId(assetAdtId);
-				if (assetOpt.isEmpty()) {
-					return buildResponse("NotFound", "AssetAdtId: " + assetAdtId + " not found", null);
-				}
-				assetInfoList.add(assetOpt.get());
-			}
-
-			for (AssetInfo asset : assetInfoList) {
-				if ((asset.getEmp_id() != null) && (!asset.getEmp_id().equals(employee.getEmployeeId()))) {
-					Integer empId = asset.getEmp_id();
-					Optional<Employee> empExist = employeeRepo.findEmployeeById(empId);
-					String empName = empExist.get().getFirstName() + " " + empExist.get().getLastName();
-					return buildResponse("AlreadyExist", "AssetAdtId:" + asset.getAssetADT_ID()
-							+ " is already assigned to Employee:" + empName + ", please select another asset", null);
-				}
-			}
-			AssetInfo updatedAsset = new AssetInfo();
-			for (AssetInfo asset : assetInfoList) {
-				asset.setEmp_id(employee.getEmployeeId());
-				asset.setAssetStatus("ALLOTTED");
-				updatedAsset = assetInfoRepo.save(asset);
-			}
-			if (updatedAsset == null || updatedAsset.equals("")) {
-				return buildResponse("NotSaved", "All assets not assigned", null);
-			}
-
-			return buildResponse("Success", "All assets assigned successfully", null);
-		} catch (IllegalArgumentException e) {
-			log.error("assignAllAssetsToEmp IllegalArgumentException: {} ", e.getMessage());
-			return buildResponse("Failed", e.getMessage(), null);
-		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: assignAllAssetsToEmp Exception: {} ", e.getMessage());
-			return buildResponse("Failed", "Internal server error occurred", null);
-		}
-	}
-
-	@Override
 	public ResponseDTO getAssetInfoByAssetAdtId(String assetAdtId) {
 		log.info("MasterAssetServiceImpl:getAssetInfoByAssetAdtId info level log message");
 
@@ -905,7 +850,55 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 		}
 	}
 
-//	//chlta code ------------------------
+	@Override
+	public ResponseDTO assignAllAssetsToEmp(AssignAssetsDTO assignAssetsDTO) {
+		log.info("MasterAssetServiceImpl:assignAllAssetsToEmp info level log message");
+		try {
+			if (assignAssetsDTO.getEmpAdtId() == null || assignAssetsDTO.getEmpAdtId().trim().isEmpty()) {
+				throw new IllegalArgumentException("Provide valid EmpAdtId, it should not be null or blank");
+			}
+			if (assignAssetsDTO.getAssetAdtIdList() == null || assignAssetsDTO.getAssetAdtIdList().isEmpty()) {
+				throw new IllegalArgumentException("Provide valid AssetAdtIdList, it should not be null or empty");
+			}
+
+			Optional<Employee> employeeOpt = employeeRepo.findEmpByAdtId(assignAssetsDTO.getEmpAdtId());
+			if (employeeOpt.isEmpty()) {
+				return buildResponse("NotFound", "Employee not found", null);
+			}
+
+			Employee employee = employeeOpt.get();
+			List<AssetInfo> assetInfoList = new ArrayList<>();
+
+			for (String assetAdtId : assignAssetsDTO.getAssetAdtIdList()) {
+				Optional<AssetInfo> assetOpt = assetInfoRepo.findAssetsByAdtId(assetAdtId);
+				if (assetOpt.isEmpty()) {
+					return buildResponse("NotFound", "AssetAdtId: " + assetAdtId + " not found", null);
+				}
+				assetInfoList.add(assetOpt.get());
+			}
+
+			AssetInfo updatedAsset = new AssetInfo();
+			for (AssetInfo asset : assetInfoList) {
+				asset.setEmp_id(employee.getEmployeeId());
+				asset.setAssetStatus("ALLOTTED");
+				updatedAsset = assetInfoRepo.save(asset);
+			}
+			if (updatedAsset == null || updatedAsset.equals("")) {
+				return buildResponse("NotSaved", "All assets not assigned", null);
+			}
+			return buildResponse("Success", "All assets assigned successfully", null);
+
+		} catch (IllegalArgumentException e) {
+			log.error("assignAllAssetsToEmp IllegalArgumentException: {} ", e.getMessage());
+			return buildResponse("Failed", e.getMessage(), null);
+		} catch (Exception e) {
+			log.error("MasterAssetServiceImpl: assignAllAssetsToEmp Exception: {} ", e.getMessage());
+			return buildResponse("Failed", "Internal server error occurred", null);
+		}
+	}
+
+	// ==========================================================================================
+	// assignAllAssetsToEmp--old but completed code & running
 //	@Override
 //	public ResponseDTO assignAllAssetsToEmp(AssignAssetsDTO assignAssetsDTO) {
 //		log.info("MasterAssetServiceImpl:assignAllAssetsToEmp info level log message");
@@ -917,65 +910,46 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 //				throw new IllegalArgumentException("Provide valid AssetAdtIdList, it should not be null or empty");
 //			}
 //
-//			Optional<Employee> employeeExist = employeeRepo.findEmpByAdtId(assignAssetsDTO.getEmpAdtId());
-//			if (employeeExist.isEmpty()) {
+//			Optional<Employee> employeeOpt = employeeRepo.findEmpByAdtId(assignAssetsDTO.getEmpAdtId());
+//			if (employeeOpt.isEmpty()) {
 //				return buildResponse("NotFound", "Employee not found", null);
 //			}
+//			Employee employee = employeeOpt.get();
 //
-//			List<String> assetAdtIdList = assignAssetsDTO.getAssetAdtIdList();
 //			List<AssetInfo> assetInfoList = new ArrayList<>();
-//			Optional<AssetInfo> assetInfoExist = null;
-//			for (String assetAdtId : assetAdtIdList) {
-//				assetInfoExist = assetInfoRepo.findAssetsByAdtId(assetAdtId);
-//				if (assetInfoExist.isEmpty()) {
+//			for (String assetAdtId : assignAssetsDTO.getAssetAdtIdList()) {
+//				Optional<AssetInfo> assetOpt = assetInfoRepo.findAssetsByAdtId(assetAdtId);
+//				if (assetOpt.isEmpty()) {
 //					return buildResponse("NotFound", "AssetAdtId: " + assetAdtId + " not found", null);
 //				}
-//				assetInfoList.add(assetInfoExist.get());
+//				assetInfoList.add(assetOpt.get());
 //			}
 //
-////			for (AssetInfo assetInfo : assetInfoList) {
-////				if (assetInfo.getEmp_id() != null
-////						&& !assetInfo.getEmp_id().equals(employeeExist.get().getEmployeeId())) {
-////					String empName = employeeExist.get().getFirstName() + " " + employeeExist.get().getLastName();
-////					return buildResponse(
-////							"AlreadyExist", "AssetAdtId: " + assetInfo.getAssetADT_ID()
-////									+ " is already assigned to Employee: " + empName + ", please select another asset",
-////							null);
-////				}
-////			}
-//			if (assetInfoExist.isPresent()) {
-//				List<AssetInfo> asset = assetInfoRepo.findAssignedAssetList(assetInfoExist.get().getEmp_id());
-////if (!asset.isEmpty()) 
-//				if (!asset.isEmpty()) {
-//					for (AssetInfo assetAssigned : asset) {
-//						if(assetAssigned.getAssetADT_ID() == assetAdtIdList.get().getAssetADT_ID()) {
-//						String empName = employeeExist.get().getFirstName() + " " + employeeExist.get().getLastName();
-//						return buildResponse(
-//								"AlreadyExist", "AssetAdtId:" + assetAssigned.getAssetADT_ID()
-//										+ " is already assigned to Employee:" + empName + " ,please select other asset",
-//								null);
-//						}
-//					}
+//			for (AssetInfo asset : assetInfoList) {
+//				if ((asset.getEmp_id() != null) && (!asset.getEmp_id().equals(employee.getEmployeeId()))) {
+//					Integer empId = asset.getEmp_id();
+//					Optional<Employee> empExist = employeeRepo.findEmployeeById(empId);
+//					String empName = empExist.get().getFirstName() + " " + empExist.get().getLastName();
+//					return buildResponse("AlreadyExist", "AssetAdtId:" + asset.getAssetADT_ID()
+//							+ " is already assigned to Employee:" + empName + ", please select another asset", null);
 //				}
 //			}
-//
 //			AssetInfo updatedAsset = new AssetInfo();
-//			for (AssetInfo assetInfoUpdated : assetInfoList) {
-//				assetInfoUpdated.setEmp_id(employeeExist.get().getEmployeeId());
-//				assetInfoUpdated.setAssetStatus("ALLOTTED");
-//				updatedAsset = assetInfoRepo.save(assetInfoUpdated);
+//			for (AssetInfo asset : assetInfoList) {
+//				asset.setEmp_id(employee.getEmployeeId());
+//				asset.setAssetStatus("ALLOTTED");
+//				updatedAsset = assetInfoRepo.save(asset);
 //			}
-//
 //			if (updatedAsset == null || updatedAsset.equals("")) {
 //				return buildResponse("NotSaved", "All assets not assigned", null);
 //			}
-//			return buildResponse("Success", "All assets assigned successfully", null);
 //
+//			return buildResponse("Success", "All assets assigned successfully", null);
 //		} catch (IllegalArgumentException e) {
-//			log.error("assignAllAssetsToEmp IllegalArgumentException: " + e.getMessage(), e);
+//			log.error("assignAllAssetsToEmp IllegalArgumentException: {} ", e.getMessage());
 //			return buildResponse("Failed", e.getMessage(), null);
 //		} catch (Exception e) {
-//			log.error("MasterAssetServiceImpl: assignAllAssetsToEmp Exception: " + e, e);
+//			log.error("MasterAssetServiceImpl: assignAllAssetsToEmp Exception: {} ", e.getMessage());
 //			return buildResponse("Failed", "Internal server error occurred", null);
 //		}
 //	}

@@ -34,13 +34,13 @@ public interface MasterAssetService {
 
 	public ResponseDTO deleteAssetAttributeById(Integer assetAttributeId);
 
+	public ResponseDTO getAllAssignedAssetsByEmpADTId(String empADTId);
+
 	public ResponseDTO searchEmployeeDetails(String firstName, String lastName, String empAdtId, String firstLetter,
 			int page, int size);
 
-	public ResponseDTO getAllAssignedAssetsByEmpId(Integer empId);
+	public ResponseDTO getAssetInfoByAssetAdtId(String assetAdtId);
 
 	public ResponseDTO assignAllAssetsToEmp(AssignAssetsDTO assignAssetsDTO);
-
-	public ResponseDTO getAssetInfoByAssetAdtId(String assetAdtId);
 
 }
