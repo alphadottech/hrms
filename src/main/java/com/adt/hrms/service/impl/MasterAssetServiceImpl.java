@@ -12,24 +12,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.adt.hrms.model.AssetAttribute;
 import com.adt.hrms.model.AssetAttributeMapping;
-import com.adt.hrms.model.AssetEmployeeMapping;
 import com.adt.hrms.model.AssetInfo;
 import com.adt.hrms.model.AssetType;
 import com.adt.hrms.model.Employee;
 import com.adt.hrms.repository.AssetAttributeMappingRepo;
 import com.adt.hrms.repository.AssetAttributeRepo;
-import com.adt.hrms.repository.AssetEmployeeMappingRepo;
 import com.adt.hrms.repository.AssetInfoRepo;
 import com.adt.hrms.repository.AssetTypeRepo;
 import com.adt.hrms.repository.EmployeeRepo;
 import com.adt.hrms.request.AssetAttributeMappingDTO;
 import com.adt.hrms.request.AssetDTO;
 import com.adt.hrms.request.AssetInfoDTO;
+import com.adt.hrms.request.AssignAssetsDTO;
+import com.adt.hrms.request.EmployeeDTO;
 import com.adt.hrms.request.ResponseDTO;
 import com.adt.hrms.service.MasterAssetService;
 import com.adt.hrms.util.TableDataExtractor;
@@ -59,12 +60,6 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 
 	@Autowired
 	private EmployeeRepo employeeRepo;
-
-	@Autowired
-	private AssetEmployeeMappingRepo assetEmpMappingRepo;
-
-//	@Autowired
-//	private MasterAssetRepository repo;
 
 	private ResponseDTO buildResponse(String status, String message, Object data) {
 		ResponseDTO responseDTO = new ResponseDTO();
@@ -110,8 +105,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				return buildResponse("Success", "All asset type fetched successfully", assetTypesList);
 			}
 		} catch (Exception e) {
-			log.error("getAllAssetType Exception : " + e);
-			e.printStackTrace();
+			log.error("getAllAssetType Exception : {} ", e.getMessage());
 			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
@@ -133,11 +127,10 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				return buildResponse("Success", "AssetAttributes fetched successfully", assetAttributeList);
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("getAllAssetAttributesByAssetTypeId IllegalArgumentException : " + e.getMessage());
+			log.error("getAllAssetAttributesByAssetTypeId IllegalArgumentException : {} ", e.getMessage());
 			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
-			log.error("getAllAssetAttributesByAssetTypeId Exception : " + e);
-			e.printStackTrace();
+			log.error("getAllAssetAttributesByAssetTypeId Exception : {} ", e.getMessage());
 			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
@@ -150,6 +143,7 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 			if (assetDTO.getAssetTypeId() == null || assetDTO.getAssetTypeId() == 0) {
 				throw new IllegalArgumentException("Provide valid AssetTypeId, it should not be 0 or null or invalid");
 			}
+
 			if (assetDTO.getAssetAttributeMappingList() == null) {
 				throw new IllegalArgumentException(
 						"Provide valid AssetAttributeId, it should not be 0 or null or invalid");
@@ -182,6 +176,12 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				asset.setAsset_type_id(assetDTO.getAssetTypeId());
 				asset.setAssetADT_ID(assetADTId);
 				asset.setAssetStatus(assetDTO.getAssetStatus().toUpperCase());
+//				asset.setEmpId(null);
+				if (assetDTO.getEmpId() == null || assetDTO.getEmpId().equals("")) {
+					asset.setEmp_id(null);
+				} else {
+					asset.setEmp_id(assetDTO.getEmpId());
+				}
 
 				AssetInfo savedAssetInfo = assetInfoRepo.save(asset);
 
@@ -205,12 +205,10 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				return buildResponse("NotFound", "AssetType not found", null);
 			}
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-			log.error("saveAssetInfo IllegalArgumentException : " + e.getMessage());
+			log.error("saveAssetInfo IllegalArgumentException : {} ", e.getMessage());
 			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
-			log.error("saveAssetInfo Exception : " + e);
-			e.printStackTrace();
+			log.error("saveAssetInfo Exception : {} ", e.getMessage());
 			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
@@ -275,12 +273,10 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				return buildResponse("NotFound", "AssetInfo not found", null);
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("updateAssetAttributeMappingByAssetId IllegalArgumentException: " + e.getMessage());
-			e.printStackTrace();
+			log.error("updateAssetAttributeMappingByAssetId IllegalArgumentException: {} ", e.getMessage());
 			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: updateAssetAttributeMappingByAssetId Exception: " + e);
-			e.printStackTrace();
+			log.error("MasterAssetServiceImpl: updateAssetAttributeMappingByAssetId Exception: {} ", e.getMessage());
 			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
@@ -313,12 +309,10 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				return buildResponse("NotFound", "AssetInfo not found", null);
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("deleteAssetInfoById IllegalArgumentException : " + e.getMessage());
-			e.printStackTrace();
+			log.error("deleteAssetInfoById IllegalArgumentException : {} ", e.getMessage());
 			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: deleteAssetInfoById Exception : " + e);
-			e.printStackTrace();
+			log.error("MasterAssetServiceImpl: deleteAssetInfoById Exception : {} ", e.getMessage());
 			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
@@ -327,11 +321,9 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 	public ResponseDTO getAllAssetInfoByAssetTypeIdAndPagination(Integer assetTypeId, int page, int size) {
 		log.info("MasterAssetServiceImpl:getAllAssetInfoByAssetTypeIdAndPagination info level log message");
 		try {
-
 			if (assetTypeId == 0 || assetTypeId.equals("")) {
 				throw new IllegalArgumentException("Provide valid AssetTypeId, it should not be 0 or invalid or null");
 			}
-
 			if (size <= 0 || size > MAX_PAGE_SIZE) {
 				size = DEFAULT_PAGE_SIZE;
 			}
@@ -365,169 +357,12 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				return buildResponse("NotFound", "AssetInfoList not found ", null);
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("getAllAssetInfoByAssetTypeIdAndPagination IllegalArgumentException : " + e.getMessage());
-			e.printStackTrace();
+			log.error("getAllAssetInfoByAssetTypeIdAndPagination IllegalArgumentException : {} ", e.getMessage());
+
 			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: getAllAssetInfoByAssetTypeIdAndPagination Exception : " + e);
-			e.printStackTrace();
-			return buildResponse("Failed", "Internal server error occured", null);
-		}
-	}
-
-	@Override
-	public ResponseDTO getAllAssignedAssetsToEmpById(String empId) {
-		log.info("MasterAssetServiceImpl:getAllAssignedAssetsToEmpById info level log message");
-
-		try {
-			if (empId == null || empId.isBlank()) {
-				throw new IllegalArgumentException("Provide a valid EmployeeId, it should not be null or blank");
-			}
-
-			Optional<Employee> employeeExist = employeeRepo.findById(Integer.parseInt(empId));
-			if (employeeExist.isEmpty() || employeeExist.get() == null) {
-				return buildResponse("NotFound", "Employee not found", null);
-			}
-
-			Optional<List<AssetEmployeeMapping>> assetEmpMappingExist = assetEmpMappingRepo
-					.findAssetsByEmpId(Integer.parseInt(empId));
-			if (assetEmpMappingExist.isEmpty() || assetEmpMappingExist.get().isEmpty()) {
-				return buildResponse("Success", "Assets not assigned yet", null);
-			}
-
-			List<String> assetADTIds = new ArrayList<>();
-			for (AssetEmployeeMapping empMapping : assetEmpMappingExist.get()) {
-				Optional<AssetInfo> assetInfoOptional = assetInfoRepo.findById(empMapping.getAsset_id());
-
-				if (assetInfoOptional.isEmpty()) {
-					return buildResponse("NotFound", "Asset not found", null);
-				}
-				assetADTIds.add(assetInfoOptional.get().getAssetADT_ID());
-			}
-			return buildResponse("Success", "All assigned assets fetched successfully", assetADTIds);
-
-		} catch (IllegalArgumentException e) {
-			log.error("getAllAssignedAssetsToEmpById IllegalArgumentException: " + e.getMessage(), e);
-			return buildResponse("Failed", e.getMessage(), null);
-		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: getAllAssignedAssetsToEmpById Exception: " + e, e);
-			return buildResponse("Failed", "Internal server error occurred", null);
-		}
-	}
-
-	@Override
-	public ResponseDTO getAssetInfoById(Integer assetId) {
-		log.info("MasterAssetServiceImpl:getAssetInfoById info level log message");
-		try {
-			if (assetId == null || assetId == 0) {
-				throw new IllegalArgumentException("Provide a valid AssetInfoId, it should not be 0 or null");
-			}
-
-			Optional<AssetInfo> assetInfoOptional = assetInfoRepo.findById(assetId);
-			AssetInfo assetInfo = assetInfoOptional.get();
-			if (assetInfoOptional.isEmpty()) {
-				return buildResponse("NotFound", "AssetInfo not found", null);
-			}
-
-			List<AssetAttributeMapping> assetAttributeMappingsList = assetAttributeMappingRepo
-					.findAssetMappingListByAssetId(assetInfo.getId());
-			if (assetAttributeMappingsList.isEmpty()) {
-				return buildResponse("NotFound", "AssetAttributeMapping not found", null);
-			}
-
-			Optional<AssetType> assetTypeOptional = assetTypeRepo.findById(assetInfo.getAsset_type_id());
-			AssetType assetType = assetTypeOptional.get();
-			if (assetTypeOptional.isEmpty()) {
-				return buildResponse("NotFound", "AssetType not found", null);
-			}
-
-			List<AssetAttributeMappingDTO> assetAttributeMappingDTOList = new ArrayList<>();
-			for (AssetAttributeMapping assetAttributeMapping : assetAttributeMappingsList) {
-				AssetAttributeMappingDTO assetAttributeMappingDTO = new AssetAttributeMappingDTO();
-
-				Optional<AssetAttribute> assetAttributeOptional = assetAttributeRepo
-						.findById(assetAttributeMapping.getAsset_attribute_id());
-				if (assetAttributeOptional.isPresent()) {
-					AssetAttribute assetAttribute = assetAttributeOptional.get();
-					assetAttributeMappingDTO.setAssetAttributeName(assetAttribute.getAssetAttributeName());
-				}
-
-				assetAttributeMappingDTO.setAssetAttributeValue(assetAttributeMapping.getAssetAttributeValue());
-				assetAttributeMappingDTOList.add(assetAttributeMappingDTO);
-			}
-
-			AssetInfoDTO assetInfoDTO = new AssetInfoDTO();
-
-			Optional<AssetEmployeeMapping> assetEmployeeMappingExist = assetEmpMappingRepo.findByAssetId(assetId);
-			Optional<Employee> employeeExist = employeeRepo.findById(assetEmployeeMappingExist.get().getEmpId());
-			if (assetEmployeeMappingExist.isPresent() && employeeExist.isPresent()) {
-				assetInfoDTO.setEmpId(employeeExist.get().getAdtId());
-			} else {
-				assetInfoDTO.setEmpId(null);
-			}
-			assetInfoDTO.setAssetADTId(assetInfo.getAssetADT_ID());
-			assetInfoDTO.setAssetType(assetType.getAssetName());
-			assetInfoDTO.setAssetAbbreviation(assetType.getAssetAbbreviation());
-			assetInfoDTO.setAssetStatus(assetInfo.getAssetStatus());
-			assetInfoDTO.setAssetAttributeMappingList(assetAttributeMappingDTOList);
-
-			return buildResponse("Success", "AssetInfo fetched successfully", assetInfoDTO);
-
-		} catch (IllegalArgumentException e) {
-			log.error("getAssetInfoById IllegalArgumentException : " + e.getMessage());
-			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
-		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: getAssetInfoById Exception : " + e);
-			e.printStackTrace();
-			return buildResponse("Failed", "Internal server error occurred", null);
-		}
-	}
-
-	@Override
-	public ResponseDTO assignAssetToEmp(AssetEmployeeMapping assetEmployeeMapping) {
-		log.info("MasterAssetServiceImpl:assignAssetToEmp info level log message");
-		try {
-			if (assetEmployeeMapping.getAsset_id() == 0 || assetEmployeeMapping.getAsset_id().equals("")
-					|| assetEmployeeMapping.getAsset_id() == null) {
-				throw new IllegalArgumentException("Provide valid AssetId, it should not be 0 or invalid or null");
-			}
-			if (assetEmployeeMapping.getEmpId() == 0 || assetEmployeeMapping.getEmpId().equals("")
-					|| assetEmployeeMapping.getEmpId() == null) {
-				throw new IllegalArgumentException("Provide valid EmployeeId, it should not be 0 or invalid or null");
-			}
-
-			Optional<Employee> employeeExist = employeeRepo.findEmployeeById(assetEmployeeMapping.getEmpId());
-			if (!employeeExist.isPresent()) {
-				return buildResponse("NotFound", "Employee not Found", null);
-			}
-
-			Optional<AssetInfo> assetInfoExist = assetInfoRepo
-					.findAssetInfoByAssetId(assetEmployeeMapping.getAsset_id());
-			if (!assetInfoExist.isPresent()) {
-				return buildResponse("NotFound", "Asset data not found", null);
-			}
-
-			Optional<AssetEmployeeMapping> assetEmpMappingExist = assetEmpMappingRepo
-					.findByAssetId(assetEmployeeMapping.getAsset_id());
-			if (assetEmpMappingExist.isPresent()) {
-				return buildResponse("AlreadyExist", "This asset is already assigned, please select another asset",
-						null);
-			}
-
-			AssetEmployeeMapping assigned = assetEmpMappingRepo.save(assetEmployeeMapping);
-			if (assigned == null || assigned.equals("")) {
-				return buildResponse("NotSaved", "Asset not assigned yet", null);
-			}
-			return buildResponse("Success", "Asset assigned successfully", null);
-
-		} catch (IllegalArgumentException e) {
-			log.error("assignAssetToEmp IllegalArgumentException : " + e.getMessage());
-			e.printStackTrace();
-			return buildResponse("Failed", e.getMessage(), null);
-		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: assignAssetToEmp Exception : " + e);
-			e.printStackTrace();
+			log.error("MasterAssetServiceImpl: getAllAssetInfoByAssetTypeIdAndPagination Exception : {} ",
+					e.getMessage());
 			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
@@ -579,12 +414,10 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 			return buildResponse("Success", "AssetType saved successfully", null);
 
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-			log.error("addAssetType IllegalArgumentException: " + e.getMessage());
+			log.error("addAssetType IllegalArgumentException: {} ", e.getMessage());
 			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
-			e.printStackTrace();
-			log.error("MasterAssetServiceImpl: addAssetType Exception: ", e);
+			log.error("MasterAssetServiceImpl: addAssetType Exception: {} ", e.getMessage());
 			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
@@ -605,12 +438,10 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				return buildResponse("Success", "AssetType fetched successfully", assetType.get());
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("getAssetTypeById IllegalArgumentException : " + e.getMessage());
-			e.printStackTrace();
+			log.error("getAssetTypeById IllegalArgumentException : {} ", e.getMessage());
 			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: getAssetTypeById Exception : " + e);
-			e.printStackTrace();
+			log.error("MasterAssetServiceImpl: getAssetTypeById Exception : {} ", e.getMessage());
 			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
@@ -655,12 +486,10 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				return buildResponse("NotFound", "AssetType not found", null);
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("updateAssetTypeById IllegalArgumentException: " + e.getMessage());
-			e.printStackTrace();
+			log.error("updateAssetTypeById IllegalArgumentException: {} ", e.getMessage());
 			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: updateAssetTypeById Exception: ", e);
-			e.printStackTrace();
+			log.error("MasterAssetServiceImpl: updateAssetTypeById Exception: {} ", e.getMessage());
 			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
@@ -712,12 +541,10 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 			}
 
 		} catch (IllegalArgumentException e) {
-			log.error("deleteAssetTypeById IllegalArgumentException : " + e.getMessage());
-			e.printStackTrace();
+			log.error("deleteAssetTypeById IllegalArgumentException : {} ", e.getMessage());
 			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: deleteAssetTypeById Exception: " + e);
-			e.printStackTrace();
+			log.error("MasterAssetServiceImpl: deleteAssetTypeById Exception: {} ", e.getMessage());
 			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
@@ -753,12 +580,10 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				return buildResponse("NotFound", "AssetType not found", null);
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("addAssetAttributesByAssetTypeId IllegalArgumentException : " + e.getMessage());
-			e.printStackTrace();
+			log.error("addAssetAttributesByAssetTypeId IllegalArgumentException : {} ", e.getMessage());
 			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: addAssetAttributesByAssetTypeId Exception : " + e);
-			e.printStackTrace();
+			log.error("MasterAssetServiceImpl: addAssetAttributesByAssetTypeId Exception : {} ", e.getMessage());
 			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
@@ -794,12 +619,10 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				return buildResponse("NotFound", "AssetAttribute not found ", null);
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("updateAssetAttributeById IllegalArgumentException : " + e.getMessage());
-			e.printStackTrace();
+			log.error("updateAssetAttributeById IllegalArgumentException : {} ", e.getMessage());
 			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: updateAssetAttributeById Exception : " + e);
-			e.printStackTrace();
+			log.error("MasterAssetServiceImpl: updateAssetAttributeById Exception : {} ", e.getMessage());
 			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
@@ -830,203 +653,331 @@ public class MasterAssetServiceImpl implements MasterAssetService {
 				return buildResponse("NotFound", "AssetAttribute not found ", null);
 			}
 		} catch (IllegalArgumentException e) {
-			log.error("deleteAssetAttributeById IllegalArgumentException : " + e.getMessage());
-			e.printStackTrace();
+			log.error("deleteAssetAttributeById IllegalArgumentException : {} ", e.getMessage());
 			return buildResponse("Failed", e.getMessage(), null);
 		} catch (Exception e) {
-			log.error("MasterAssetServiceImpl: deleteAssetAttributeById Exception : " + e);
-			e.printStackTrace();
+			log.error("MasterAssetServiceImpl: deleteAssetAttributeById Exception: {} ", e.getMessage());
 			return buildResponse("Failed", "Internal server error occured", null);
 		}
 	}
 
+	@Override
+	public ResponseDTO searchEmployeeDetails(String firstName, String lastName, String empAdtId, String firstLetter,
+			int page, int size) {
+		log.info("MasterAssetServiceImpl:searchEmployeeDetails info level log message");
+		try {
+			if (firstName != null && !firstName.isEmpty() && containsDigit(firstName)) {
+				throw new IllegalArgumentException("First name cannot contain digits or numbers");
+			} else if (firstName == "") {
+				throw new IllegalArgumentException("First name cannot be empty");
+			}
+			if (lastName != null && !lastName.isEmpty() && containsDigit(lastName)) {
+				throw new IllegalArgumentException("Last name cannot contain digits or numbers");
+			} else if (lastName == "") {
+				throw new IllegalArgumentException("Last name cannot be empty");
+			}
+			if ((empAdtId != null && !empAdtId.isEmpty()) && !containsDigit(empAdtId)) {
+				throw new IllegalArgumentException("Provide valid EmployeeADT_Id");
+			} else if (empAdtId == "") {
+				throw new IllegalArgumentException("EmployeeADT_Id cannot be empty or null");
+			}
+
+			Pageable pageable = PageRequest.of(page, size);
+			Specification<Employee> spec = Specification.where(null);
+
+			if (firstName != null && !firstName.isEmpty()) {
+				spec = spec.or(
+						(root, query, cb) -> cb.like(cb.lower(root.get("firstName")), firstName.toLowerCase() + "%"));
+			}
+			if (lastName != null && !lastName.isEmpty()) {
+				spec = spec
+						.or((root, query, cb) -> cb.like(cb.lower(root.get("lastName")), lastName.toLowerCase() + "%"));
+			}
+			if (empAdtId != null && !empAdtId.isEmpty()) {
+				spec = spec.or((root, query, cb) -> cb.like(cb.lower(root.get("adtId")), empAdtId.toLowerCase() + "%")); // Changed
+			}
+
+			Page<Employee> emp = employeeRepo.findAll(spec, pageable);
+			if (emp.isEmpty() || emp == null) {
+				return buildResponse("NotFound", "Employee not found", null);
+			}
+
+			List<EmployeeDTO> empDTOList = new ArrayList<>();
+			for (Employee employee : emp) {
+				EmployeeDTO empDTO = new EmployeeDTO();
+
+				empDTO.setFirstName(employee.getFirstName());
+				empDTO.setLastName(employee.getLastName());
+				empDTO.setEmpAdtId(employee.getAdtId());
+				empDTOList.add(empDTO);
+			}
+			return buildResponse("Success", "Employee fetched successfully", empDTOList);
+
+		} catch (IllegalArgumentException e) {
+			log.error("searchEmployeeDetails IllegalArgumentException : {} ", e.getMessage());
+			return buildResponse("Failed", e.getMessage(), null);
+		} catch (Exception e) {
+			log.error("MasterAssetServiceImpl: searchEmployeeDetails Exception: {} ", e.getMessage());
+			return buildResponse("Failed", "Internal server error occurred", null);
+		}
+	}
+
+	private boolean containsDigit(String str) {
+		for (char c : str.toCharArray()) {
+			if (Character.isDigit(c)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public ResponseDTO getAllAssignedAssetsByEmpId(Integer empId) {
+		log.info("MasterAssetServiceImpl:getAllAssignedAssetsByEmpId info level log message");
+		try {
+			if (empId == null || empId == 0) {
+				throw new IllegalArgumentException("Provide a valid EmployeeId, it should not be null or blank");
+			}
+
+			Optional<Employee> employeeExist = employeeRepo.findById(empId);
+			if (employeeExist.isEmpty()) {
+				return buildResponse("NotFound", "Employee not found", null);
+			}
+
+			List<AssetInfoDTO> assetInfoDTOList = new ArrayList<>();
+			List<AssetInfo> assetInfoList = assetInfoRepo.findAssetsByEmpId(empId);
+
+			if (assetInfoList.isEmpty()) {
+				return buildResponse("NotFound", "Assets not assigned yet", assetInfoDTOList);
+			}
+
+			for (AssetInfo assetInfo : assetInfoList) {
+				AssetInfoDTO assetInfoDTO = new AssetInfoDTO();
+				assetInfoDTO.setAssetADTId(assetInfo.getAssetADT_ID());
+				assetInfoDTO.setAssetStatus(assetInfo.getAssetStatus());
+
+				Optional<AssetType> assetTypeExist = assetTypeRepo.findById(assetInfo.getAsset_type_id());
+				assetTypeExist.ifPresent(assetType -> assetInfoDTO.setAssetType(assetType.getAssetName()));
+
+				List<AssetAttributeMappingDTO> assetAttributeMappingDTOList = new ArrayList<>();
+				List<AssetAttributeMapping> attributeMappingList = assetAttributeMappingRepo
+						.findAssetMappingListByAssetId(assetInfo.getId());
+
+				for (AssetAttributeMapping attributeMapping : attributeMappingList) {
+					AssetAttributeMappingDTO assetAttributeMappingDTO = new AssetAttributeMappingDTO();
+					assetAttributeMappingDTO
+							.setAssetAttributeName(attributeMapping.getAssetAttribute().getAssetAttributeName());
+					assetAttributeMappingDTO.setAssetAttributeValue(attributeMapping.getAssetAttributeValue());
+					assetAttributeMappingDTOList.add(assetAttributeMappingDTO);
+				}
+
+				assetInfoDTO.setAssetAttributeMappingList(assetAttributeMappingDTOList);
+				assetInfoDTOList.add(assetInfoDTO);
+			}
+
+			return buildResponse("Success", "All assigned assets fetched successfully", assetInfoDTOList);
+
+		} catch (IllegalArgumentException e) {
+			log.error("getAllAssignedAssetsByEmpId IllegalArgumentException: {} ", e.getMessage());
+			return buildResponse("Failed", e.getMessage(), null);
+		} catch (Exception e) {
+			log.error("MasterAssetServiceImpl: getAllAssignedAssetsByEmpId Exception: {} ", e.getMessage());
+			return buildResponse("Failed", "Internal server error occurred", null);
+		}
+	}
+
+	@Override
+	public ResponseDTO assignAllAssetsToEmp(AssignAssetsDTO assignAssetsDTO) {
+		log.info("MasterAssetServiceImpl:assignAllAssetsToEmp info level log message");
+		try {
+			if (assignAssetsDTO.getEmpAdtId() == null || assignAssetsDTO.getEmpAdtId().trim().isEmpty()) {
+				throw new IllegalArgumentException("Provide valid EmpAdtId, it should not be null or blank");
+			}
+			if (assignAssetsDTO.getAssetAdtIdList() == null || assignAssetsDTO.getAssetAdtIdList().isEmpty()) {
+				throw new IllegalArgumentException("Provide valid AssetAdtIdList, it should not be null or empty");
+			}
+
+			Optional<Employee> employeeOpt = employeeRepo.findEmpByAdtId(assignAssetsDTO.getEmpAdtId());
+			if (employeeOpt.isEmpty()) {
+				return buildResponse("NotFound", "Employee not found", null);
+			}
+			Employee employee = employeeOpt.get();
+
+			List<AssetInfo> assetInfoList = new ArrayList<>();
+			for (String assetAdtId : assignAssetsDTO.getAssetAdtIdList()) {
+				Optional<AssetInfo> assetOpt = assetInfoRepo.findAssetsByAdtId(assetAdtId);
+				if (assetOpt.isEmpty()) {
+					return buildResponse("NotFound", "AssetAdtId: " + assetAdtId + " not found", null);
+				}
+				assetInfoList.add(assetOpt.get());
+			}
+
+			for (AssetInfo asset : assetInfoList) {
+				if ((asset.getEmp_id() != null) && (!asset.getEmp_id().equals(employee.getEmployeeId()))) {
+					Integer empId = asset.getEmp_id();
+					Optional<Employee> empExist = employeeRepo.findEmployeeById(empId);
+					String empName = empExist.get().getFirstName() + " " + empExist.get().getLastName();
+					return buildResponse("AlreadyExist", "AssetAdtId:" + asset.getAssetADT_ID()
+							+ " is already assigned to Employee:" + empName + ", please select another asset", null);
+				}
+			}
+			AssetInfo updatedAsset = new AssetInfo();
+			for (AssetInfo asset : assetInfoList) {
+				asset.setEmp_id(employee.getEmployeeId());
+				asset.setAssetStatus("ALLOTTED");
+				updatedAsset = assetInfoRepo.save(asset);
+			}
+			if (updatedAsset == null || updatedAsset.equals("")) {
+				return buildResponse("NotSaved", "All assets not assigned", null);
+			}
+
+			return buildResponse("Success", "All assets assigned successfully", null);
+		} catch (IllegalArgumentException e) {
+			log.error("assignAllAssetsToEmp IllegalArgumentException: {} ", e.getMessage());
+			return buildResponse("Failed", e.getMessage(), null);
+		} catch (Exception e) {
+			log.error("MasterAssetServiceImpl: assignAllAssetsToEmp Exception: {} ", e.getMessage());
+			return buildResponse("Failed", "Internal server error occurred", null);
+		}
+	}
+
+	@Override
+	public ResponseDTO getAssetInfoByAssetAdtId(String assetAdtId) {
+		log.info("MasterAssetServiceImpl:getAssetInfoByAssetAdtId info level log message");
+
+		if (assetAdtId == null || assetAdtId.isEmpty() || assetAdtId.isBlank()) {
+			throw new IllegalArgumentException("Provide valid AssetAdtId, it should not be null or blank");
+		}
+
+		try {
+			AssetInfo assetInfo = assetInfoRepo.findAssetsByAdtId(assetAdtId)
+					.orElseThrow(() -> new IllegalArgumentException("AssetAdtId:" + assetAdtId + " not found"));
+
+			AssetType assetType = assetTypeRepo.findById(assetInfo.getAsset_type_id())
+					.orElseThrow(() -> new IllegalArgumentException("AssetType not found"));
+
+			if ("ALLOTTED".equalsIgnoreCase(assetInfo.getAssetStatus())) {
+				Employee emp = employeeRepo.findEmployeeById(assetInfo.getEmp_id())
+						.orElseThrow(() -> new IllegalArgumentException("Employee not found"));
+				String empName = emp.getFirstName() + " " + emp.getLastName();
+				return buildResponse("AlreadyExist", "AssetAdtId:" + assetAdtId + " is already assigned to Employee:"
+						+ empName + ", please select another asset", null);
+			}
+
+			if ("DEFECTIVE".equalsIgnoreCase(assetInfo.getAssetStatus())
+					|| "DISCARDED".equalsIgnoreCase(assetInfo.getAssetStatus())) {
+				return buildResponse("Success", "AssetAdtId:" + assetAdtId + " is either defective or discarded", null);
+			}
+
+			List<AssetAttributeMappingDTO> assetAttributeMappingDTOList = new ArrayList<>();
+			List<AssetAttributeMapping> assetAttributeMappingsList = assetAttributeMappingRepo
+					.findAssetMappingListByAssetId(assetInfo.getId());
+
+			for (AssetAttributeMapping assetAttributeMapping : assetAttributeMappingsList) {
+				AssetAttributeMappingDTO assetAttributeMappingDTO = new AssetAttributeMappingDTO();
+				AssetAttribute assetAttribute = assetAttributeRepo
+						.findById(assetAttributeMapping.getAsset_attribute_id()).orElse(null);
+				if (assetAttribute != null) {
+					assetAttributeMappingDTO.setAssetAttributeName(assetAttribute.getAssetAttributeName());
+					assetAttributeMappingDTO.setAssetAttributeValue(assetAttributeMapping.getAssetAttributeValue());
+				}
+				assetAttributeMappingDTOList.add(assetAttributeMappingDTO);
+			}
+
+			AssetInfoDTO assetDTO = new AssetInfoDTO();
+			if (assetInfo.getEmp_id() == null) {
+				assetDTO.setEmpADTId(null);
+			}
+//			assetDTO.setEmpId(employeeRepo.findById(assetInfo.getEmp_id()).map(Employee::getAdtId).orElse(null));
+			assetDTO.setAssetADTId(assetInfo.getAssetADT_ID());
+			assetDTO.setAssetType(assetType.getAssetName());
+			assetDTO.setAssetStatus(assetInfo.getAssetStatus());
+			assetDTO.setAssetAttributeMappingList(assetAttributeMappingDTOList);
+
+			return buildResponse("Success", "This asset available to assign", assetDTO);
+
+		} catch (IllegalArgumentException e) {
+			log.error("getAssetInfoByAssetAdtId IllegalArgumentException: ", e.getMessage());
+			return buildResponse("Failed", e.getMessage(), null);
+		} catch (Exception e) {
+			log.error("MasterAssetServiceImpl: getAssetInfoByAssetAdtId Exception: {} ", e.getMessage());
+			return buildResponse("Failed", "Internal server error occurred", null);
+		}
+	}
+
+//	//chlta code ------------------------
 //	@Override
-//	public ResponseDTO saveAssetDetailsWithAttributes(CreateAssetDTO createAssetDTO) {
-//		ResponseDTO responseDTO = new ResponseDTO();
-//		log.info("MasterAssetServiceImpl:masterAsset:saveAssetDetailsWithAttributes info level log message");
+//	public ResponseDTO assignAllAssetsToEmp(AssignAssetsDTO assignAssetsDTO) {
+//		log.info("MasterAssetServiceImpl:assignAllAssetsToEmp info level log message");
 //		try {
+//			if (assignAssetsDTO.getEmpAdtId() == null || assignAssetsDTO.getEmpAdtId().trim().isEmpty()) {
+//				throw new IllegalArgumentException("Provide valid EmpAdtId, it should not be null or blank");
+//			}
+//			if (assignAssetsDTO.getAssetAdtIdList() == null || assignAssetsDTO.getAssetAdtIdList().isEmpty()) {
+//				throw new IllegalArgumentException("Provide valid AssetAdtIdList, it should not be null or empty");
+//			}
 //
-//			if (createAssetDTO == null || createAssetDTO.equals("")) {
-//				throw new IllegalArgumentException("CreateAssetDTO should not be null or invalid");
+//			Optional<Employee> employeeExist = employeeRepo.findEmpByAdtId(assignAssetsDTO.getEmpAdtId());
+//			if (employeeExist.isEmpty()) {
+//				return buildResponse("NotFound", "Employee not found", null);
 //			}
-//			if (createAssetDTO.getAssetName() == null || createAssetDTO.getAssetName().equals("")) {
-//				throw new IllegalArgumentException("Asset Name should not be null or invalid");
+//
+//			List<String> assetAdtIdList = assignAssetsDTO.getAssetAdtIdList();
+//			List<AssetInfo> assetInfoList = new ArrayList<>();
+//			Optional<AssetInfo> assetInfoExist = null;
+//			for (String assetAdtId : assetAdtIdList) {
+//				assetInfoExist = assetInfoRepo.findAssetsByAdtId(assetAdtId);
+//				if (assetInfoExist.isEmpty()) {
+//					return buildResponse("NotFound", "AssetAdtId: " + assetAdtId + " not found", null);
+//				}
+//				assetInfoList.add(assetInfoExist.get());
 //			}
-//			if (createAssetDTO.getAssetAttributeList() == null || createAssetDTO.getAssetAttributeList().equals("")) {
-//				throw new IllegalArgumentException("Asset Attribute list should not be null or invalid");
-//			}
-//			for (AssetAttribute assetAttribute : createAssetDTO.getAssetAttributeList()) {
-//				if (assetAttribute.getAssetAttributeName() == null
-//						|| assetAttribute.getAssetAttributeName().equals("")) {
-//					throw new IllegalArgumentException("Asset Attribute name should not be null or invalid");
+//
+////			for (AssetInfo assetInfo : assetInfoList) {
+////				if (assetInfo.getEmp_id() != null
+////						&& !assetInfo.getEmp_id().equals(employeeExist.get().getEmployeeId())) {
+////					String empName = employeeExist.get().getFirstName() + " " + employeeExist.get().getLastName();
+////					return buildResponse(
+////							"AlreadyExist", "AssetAdtId: " + assetInfo.getAssetADT_ID()
+////									+ " is already assigned to Employee: " + empName + ", please select another asset",
+////							null);
+////				}
+////			}
+//			if (assetInfoExist.isPresent()) {
+//				List<AssetInfo> asset = assetInfoRepo.findAssignedAssetList(assetInfoExist.get().getEmp_id());
+////if (!asset.isEmpty()) 
+//				if (!asset.isEmpty()) {
+//					for (AssetInfo assetAssigned : asset) {
+//						if(assetAssigned.getAssetADT_ID() == assetAdtIdList.get().getAssetADT_ID()) {
+//						String empName = employeeExist.get().getFirstName() + " " + employeeExist.get().getLastName();
+//						return buildResponse(
+//								"AlreadyExist", "AssetAdtId:" + assetAssigned.getAssetADT_ID()
+//										+ " is already assigned to Employee:" + empName + " ,please select other asset",
+//								null);
+//						}
+//					}
 //				}
 //			}
 //
-//			Optional<AssetType> assetTypeExist = assetTypeRepo.findByAssetName(createAssetDTO.getAssetName());
-//
-//			AssetType assetType;
-//			AssetType assetTypeSaved = null;
-//			AssetAttribute assetAttributeSaved = null;
-//
-//			if (assetTypeExist.isPresent()) {
-//				assetTypeSaved = assetTypeExist.get();
-//			} else {
-//				assetType = new AssetType();
-//				assetType.setAssetName(createAssetDTO.getAssetName());
-//				assetTypeSaved = assetTypeRepo.save(assetType);
+//			AssetInfo updatedAsset = new AssetInfo();
+//			for (AssetInfo assetInfoUpdated : assetInfoList) {
+//				assetInfoUpdated.setEmp_id(employeeExist.get().getEmployeeId());
+//				assetInfoUpdated.setAssetStatus("ALLOTTED");
+//				updatedAsset = assetInfoRepo.save(assetInfoUpdated);
 //			}
-//			List<AssetAttribute> attributesFinalList = new ArrayList<>();
-//			for (AssetAttribute assetAttri : createAssetDTO.getAssetAttributeList()) {
 //
-//				Optional<AssetAttribute> assetAttributeExist = assetAttributeRepo
-//						.findByAssetAttributeName(assetAttri.getAssetAttributeName(), assetTypeSaved.getId());
-//
-//				if (assetAttributeExist.isPresent()) {
-//					assetAttributeSaved = assetAttributeExist.get();
-//				} else {
-//					assetAttributeSaved = new AssetAttribute();
-//					assetAttributeSaved.setAssetAttributeName(assetAttri.getAssetAttributeName());
-//					assetAttributeSaved.setAsset_type_id(assetTypeSaved.getId());
-//					assetAttributeSaved.setAssetType(assetTypeSaved);
-//				}
-//				AssetAttribute savedAttribute = assetAttributeRepo.save(assetAttributeSaved);
-//				attributesFinalList.add(savedAttribute);
+//			if (updatedAsset == null || updatedAsset.equals("")) {
+//				return buildResponse("NotSaved", "All assets not assigned", null);
 //			}
-//			createAssetDTO.setAssetAttributeList(attributesFinalList);
-//
-//			responseDTO
-//					.setMessage(assetTypeExist.isPresent() ? "Data Updated Successfully" : "Data Saved Successfully");
-//			responseDTO.setStatus("success");
-//			responseDTO.setData(createAssetDTO);
+//			return buildResponse("Success", "All assets assigned successfully", null);
 //
 //		} catch (IllegalArgumentException e) {
-//			log.error("saveAssetDetailsWithAttributes IllegalArgumentException : " + e.getMessage());
-//			responseDTO.setMessage(e.getMessage());
-//			responseDTO.setStatus("failed");
-//			responseDTO.setData(null);
+//			log.error("assignAllAssetsToEmp IllegalArgumentException: " + e.getMessage(), e);
+//			return buildResponse("Failed", e.getMessage(), null);
 //		} catch (Exception e) {
-//			log.error("saveAssetDetailsWithAttributes Exception : " + e);
-//			e.printStackTrace();
-//			responseDTO.setMessage(e.getMessage());
-//			responseDTO.setStatus("failed");
-//			responseDTO.setData(null);
+//			log.error("MasterAssetServiceImpl: assignAllAssetsToEmp Exception: " + e, e);
+//			return buildResponse("Failed", "Internal server error occurred", null);
 //		}
-//		return responseDTO;
 //	}
 
-//	@Override
-//	public boolean saveMasterAsset(MasterAsset asset) {
-//		if (!AssetUtility.checkvalidate(asset.getAssetUser())) {
-//			throw new IllegalArgumentException("invalid Asset User...");
-//		}
-//		if (!AssetUtility.validateName(asset.getAssetName())) {
-//			throw new IllegalArgumentException("invalid Asset Name..");
-//		}
-//		if (!AssetUtility.validateId(asset.getAssetId())) {
-//			throw new IllegalArgumentException("invalid Asset ID ");
-//		}
-//		if (!AssetUtility.validateId(asset.getAssetNo())) {
-//			throw new IllegalArgumentException("invalid Asset Number");
-//		}
-//		if (!AssetUtility.checkvalidate(asset.getAssetType())) {
-//			throw new IllegalArgumentException("invalid Asset Type...");
-//		}
-//		if (!AssetUtility.validateProcessor(asset.getProcessor())) {
-//			throw new IllegalArgumentException("invalid Processor Details");
-//		}
-//		if (!AssetUtility.validateRAM(asset.getRam())) {
-//			throw new IllegalArgumentException("invalid RAM Details");
-//		}
-//		if (!AssetUtility.validateDiskType(asset.getDiskType())) {
-//			throw new IllegalArgumentException("invalid Disc Type Details");
-//		}
-//		if (!AssetUtility.validateProcessor(asset.getOperatingSystem())) {
-//			throw new IllegalArgumentException("invalid Operating System Details");
-//		}
-//		if (!AssetUtility.validateProcessor(asset.getWarrenty())) {
-//			throw new IllegalArgumentException("invalid Warranty Details");
-//		}
-//		MasterAsset masterasset = repo.save(asset);
-//
-//		return masterasset != null;
-//	}
-//
-//	@Override
-//	public MasterAsset TakeAssetById(Integer id) {
-//		Optional<MasterAsset> getById = repo.findById(id);
-//		return getById.get();
-//	}
-//
-//	@Override
-//	public List<MasterAsset> SearchByAssetUser(String assetUser) {
-//		return repo.findByAssetUser(assetUser);
-//	}
-//
-//	@Override
-//	public List<MasterAsset> SearchByStatus(String status) {
-//		return repo.findByStatus(status);
-//	}
-//
-//	@Override
-//	public List<MasterAsset> SearchByAssetType(String assetType) {
-//		return repo.findByAssetType(assetType);
-//	}
-//
-//	@Override
-//	public String updateMasterAssetById(MasterAsset masterAsset) {
-//		if (!AssetUtility.checkvalidate(masterAsset.getAssetUser())) {
-//			throw new IllegalArgumentException("invalid Asset User...");
-//		}
-//		if (!AssetUtility.validateName(masterAsset.getAssetName())) {
-//			throw new IllegalArgumentException("invalid Asset Name..");
-//		}
-//		if (!AssetUtility.validateId(masterAsset.getAssetId())) {
-//			throw new IllegalArgumentException("invalid Asset ID ");
-//		}
-//		if (!AssetUtility.validateId(masterAsset.getAssetNo())) {
-//			throw new IllegalArgumentException("invalid Asset Number");
-//		}
-//		if (!AssetUtility.checkvalidate(masterAsset.getAssetType())) {
-//			throw new IllegalArgumentException("invalid Asset Type...");
-//		}
-//		if (!AssetUtility.validateProcessor(masterAsset.getProcessor())) {
-//			throw new IllegalArgumentException("invalid Processor Details");
-//		}
-//		if (!AssetUtility.validateRAM(masterAsset.getRam())) {
-//			throw new IllegalArgumentException("invalid RAM Details");
-//		}
-//		if (!AssetUtility.validateDiskType(masterAsset.getDiskType())) {
-//			throw new IllegalArgumentException("invalid Disc Type Details");
-//		}
-//		if (!AssetUtility.validateProcessor(masterAsset.getOperatingSystem())) {
-//			throw new IllegalArgumentException("invalid Operating System Details");
-//		}
-//		if (!AssetUtility.validateProcessor(masterAsset.getWarrenty())) {
-//			throw new IllegalArgumentException("invalid Warranty Details");
-//		}
-//		MasterAsset dbAsset = repo.findAssetById(masterAsset.getId());
-//		if (dbAsset != null) {
-//			dbAsset.setAssetName(masterAsset.getAssetName());
-//			dbAsset.setAssetNo(masterAsset.getAssetNo());
-//			dbAsset.setAssetType(masterAsset.getAssetType());
-//			dbAsset.setAssetUser(masterAsset.getAssetUser());
-//			dbAsset.setDiskType(masterAsset.getDiskType());
-//			dbAsset.setOperatingSystem(masterAsset.getOperatingSystem());
-//			dbAsset.setProcessor(masterAsset.getProcessor());
-//			dbAsset.setRam(masterAsset.getRam());
-//			dbAsset.setStatus(masterAsset.getStatus());
-//			dbAsset.setWarrenty(masterAsset.getWarrenty());
-//			dbAsset.setPurchesDate(masterAsset.getPurchesDate());
-//			dbAsset.setWarrentyDate(masterAsset.getWarrentyDate());
-//
-//			return repo.save(dbAsset).getAssetId() + " Updated Successfully";
-//		}
-//
-//		return masterAsset.getAssetId() + " Not Updated ";
-//	}
-//
-//	@Override
-//	public List<MasterAsset> findAllMasterAsset() {
-//		return (List<MasterAsset>) repo.findAll();
-//	}
 }

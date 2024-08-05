@@ -13,22 +13,22 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.adt.hrms.model.MasterAsset;
-import com.adt.hrms.repository.MasterAssetRepository;
+//import com.adt.hrms.model.MasterAsset;
+//import com.adt.hrms.repository.MasterAssetRepository;
 
 
 @SpringBootTest(classes = { MasterAssetServiceImplTest.class })
 public class MasterAssetServiceImplTest {
 
-	@Mock
-	MasterAssetRepository repo;
+//	@Mock
+//	MasterAssetRepository repo;
 
 	@InjectMocks
 	MasterAssetServiceImpl assetImpl;
 
-	public List<MasterAsset> assets;
-
-	public MasterAsset asset;
+//	public List<MasterAsset> assets;
+//
+//	public MasterAsset asset;
 	private static final int id = 1;
 	private static final String assetUser = "assetUser";
 	private static final String assetStatus = "assetStatus";

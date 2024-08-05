@@ -1,8 +1,8 @@
 package com.adt.hrms.service;
 
-import com.adt.hrms.model.AssetEmployeeMapping;
 import com.adt.hrms.model.AssetType;
 import com.adt.hrms.request.AssetDTO;
+import com.adt.hrms.request.AssignAssetsDTO;
 import com.adt.hrms.request.ResponseDTO;
 
 public interface MasterAssetService {
@@ -16,12 +16,6 @@ public interface MasterAssetService {
 	public ResponseDTO deleteAssetInfoById(Integer assetId);
 
 	public ResponseDTO getAllAssetInfoByAssetTypeIdAndPagination(Integer assetTypeId, int page, int size);
-
-	public ResponseDTO getAllAssignedAssetsToEmpById(String empId);
-
-	public ResponseDTO getAssetInfoById(Integer assetId);
-
-	public ResponseDTO assignAssetToEmp(AssetEmployeeMapping assetEmployeeMapping);
 
 	public ResponseDTO updateAssetAttributeMappingByAssetId(AssetDTO assetDTO);
 
@@ -40,13 +34,13 @@ public interface MasterAssetService {
 
 	public ResponseDTO deleteAssetAttributeById(Integer assetAttributeId);
 
-//	public ResponseDTO saveAssetDetailsWithAttributes(CreateAssetDTO createAssetDTO);
-//	public boolean saveMasterAsset(MasterAsset asset);
-//	public MasterAsset TakeAssetById(Integer id);
-//	public List<MasterAsset> SearchByAssetUser(String assetUser);
-//	public List<MasterAsset> SearchByStatus(String status);
-//	public List<MasterAsset> SearchByAssetType(String assetType);
-//	public String updateMasterAssetById(MasterAsset masterAsset);
-//	public List<MasterAsset> findAllMasterAsset();
+	public ResponseDTO searchEmployeeDetails(String firstName, String lastName, String empAdtId, String firstLetter,
+			int page, int size);
+
+	public ResponseDTO getAllAssignedAssetsByEmpId(Integer empId);
+
+	public ResponseDTO assignAllAssetsToEmp(AssignAssetsDTO assignAssetsDTO);
+
+	public ResponseDTO getAssetInfoByAssetAdtId(String assetAdtId);
 
 }
