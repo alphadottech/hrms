@@ -17,7 +17,7 @@ ENV JAVA_HOME /usr/lib/java-17-openjdk
 ENV PATH $JAVA_HOME/bin:$PATH
 
 # Copy the JAR file
-ARG JAR_FILE=./target/hrms-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=./target/hrms-0.0.1-RELEASE.jar
 COPY ${JAR_FILE} /usr/app/hrms.jar
 
 # Final image
