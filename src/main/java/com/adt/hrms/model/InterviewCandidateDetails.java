@@ -51,13 +51,13 @@ public class InterviewCandidateDetails {
 	private String technicalStack;
 
 	@Column(name = "cv_shortlisted")
-	private boolean cvShortlisted;
+	private Boolean cvShortlisted;
 
 	@Column(name = "last_ctc")
-	private double lastCTC;
+	private Double lastCTC;
 
 	@Column(name = "expected_ctc")
-	private double expectedCTC;
+	private Double expectedCTC;
 
 	@Column(name = "passing_year")
 	private String passingYear;

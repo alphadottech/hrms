@@ -127,7 +127,7 @@ public class InterviewCandidateServiceImpl implements InterviewCandidateService 
 		candidateDetails.get().setEmailId(interviewCandidateDetails.getEmailId());
 		candidateDetails.get().setContactNo(interviewCandidateDetails.getContactNo());
 		candidateDetails.get().setAddress(interviewCandidateDetails.getAddress());
-		candidateDetails.get().setCvShortlisted(interviewCandidateDetails.isCvShortlisted());
+		candidateDetails.get().setCvShortlisted(interviewCandidateDetails.getCvShortlisted());
 		candidateDetails.get().setLastCTC(interviewCandidateDetails.getLastCTC());
 		candidateDetails.get().setExpectedCTC(interviewCandidateDetails.getExpectedCTC());
 		candidateDetails.get().setPassingYear(interviewCandidateDetails.getPassingYear());
