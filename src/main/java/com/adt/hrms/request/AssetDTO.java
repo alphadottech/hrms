@@ -15,8 +15,8 @@ public class AssetDTO {
 
 	private Integer empId;
 	private String asset_Id;
-	private Integer assetTypeId;
+	private String assetTypeName;
 	private String assetStatus;
 
-	private List<AssetAttributeMapping> assetAttributeMappingList;
+	private List<AssetAttributeMappingDTO> assetAttributeMappingList;
 }

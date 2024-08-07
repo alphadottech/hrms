@@ -7,21 +7,11 @@ import com.adt.hrms.request.ResponseDTO;
 
 public interface MasterAssetService {
 
-	public ResponseDTO getAllAssetType();
-
-	public ResponseDTO getAllAssetAttributesByAssetTypeId(Integer assetTypeId);
-
-	public ResponseDTO saveAssetInfo(AssetDTO assetDTO);
-
-	public ResponseDTO deleteAssetInfoById(Integer assetId);
-
-	public ResponseDTO getAllAssetInfoByAssetTypeIdAndPagination(Integer assetTypeId, int page, int size);
-
-	public ResponseDTO updateAssetAttributeMappingByAssetId(AssetDTO assetDTO);
-
 	public ResponseDTO addAssetType(AssetType assetType);
 
 	public ResponseDTO getAssetTypeById(Integer assetTypeId);
+
+	public ResponseDTO getAllAssetType();
 
 	public ResponseDTO updateAssetTypeById(Integer assetTypeId, AssetType assetType);
 
@@ -29,17 +19,27 @@ public interface MasterAssetService {
 
 	public ResponseDTO addAssetAttributesByAssetTypeId(Integer assetTypeId, String assetAttributeName);
 
+	public ResponseDTO getAllAssetAttributesByAssetTypeId(Integer assetTypeId);
+
 	public ResponseDTO updateAssetAttributeById(Integer assetAttributeId, Integer assetTypeId,
 			String assetAttributeName);
 
 	public ResponseDTO deleteAssetAttributeById(Integer assetAttributeId);
 
+	public ResponseDTO saveAssetInfo(AssetDTO assetDTO);
+
+	public ResponseDTO getAllAssetInfoByAssetTypeIdAndPagination(Integer assetTypeId, int page, int size);
+
+	public ResponseDTO updateAssetAttributeMappingByAssetId(AssetDTO assetDTO);
+
+	public ResponseDTO deleteAssetInfoById(Integer assetId);
+
+	public ResponseDTO getAssetInfoByAssetAdtId(String assetAdtId);
+
 	public ResponseDTO getAllAssignedAssetsByEmpADTId(String empADTId);
 
 	public ResponseDTO searchEmployeeDetails(String firstName, String lastName, String empAdtId, String firstLetter,
 			int page, int size);
-
-	public ResponseDTO getAssetInfoByAssetAdtId(String assetAdtId);
 
 	public ResponseDTO assignAllAssetsToEmp(AssignAssetsDTO assignAssetsDTO);
 
