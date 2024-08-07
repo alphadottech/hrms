@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AssetAttributeMappingDTO {
-	
+
 	private String assetAttributeName;
 	private String assetAttributeValue;
 

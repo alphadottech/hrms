@@ -34,8 +34,10 @@ public class AssetInfo {
 	@Column(name = "asset_adt_id")
 	private String assetADT_ID;
 
-	@Column(name = "asset_status")
-	private String assetStatus;
+	@OneToOne
+	@JoinColumn(name = "asset_status_id", referencedColumnName = "id", nullable = true, insertable = false, updatable = false)
+	private AssetStatus assetStatus;
+	private Integer asset_status_id;
 
 	@ManyToOne
 	@JoinColumn(name = "emp_id", referencedColumnName = "EMPLOYEE_ID", nullable = true, insertable = false, updatable = false)
