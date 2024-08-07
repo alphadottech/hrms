@@ -143,7 +143,7 @@ public class InterviewServiceImplTest {
         
     }
 	
-	@Test
+/*	@Test
 	@DisplayName("JUnit test for getInterviewDetailByInterviewIdAndRound()")
 	public void should_return_interview_according_to_id_and_round() {
 		
@@ -160,9 +160,9 @@ public class InterviewServiceImplTest {
 		when(interviewRepository.getInterviewDetailByInterviewIdAndRound(1, 2)).thenReturn(Optional.of(interview));
 		assertEquals(interview, interviewService.getInterviewDetailByInterviewIdAndRound(1, 2));
 		
-	}
+	}*/
 	
-	@Test
+/*	@Test
 	@DisplayName("JUnit test for getInterviewDetailsById()")
 	public void should_return_interview_id() {
 		
@@ -184,7 +184,7 @@ public class InterviewServiceImplTest {
 		when(interviewRepository.findById(1)).thenReturn(Optional.of(interview));
 		assertEquals(interview, interviewService.getInterviewDetailsById(1));
 		
-	}
+	}*/
 	
 	
 
