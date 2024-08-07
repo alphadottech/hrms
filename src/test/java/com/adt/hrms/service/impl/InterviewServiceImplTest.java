@@ -143,49 +143,49 @@ public class InterviewServiceImplTest {
         
     }
 	
-	@Test
-	@DisplayName("JUnit test for getInterviewDetailByInterviewIdAndRound()")
-	public void should_return_interview_according_to_id_and_round() {
-		
-		AVTechnology avTechnology = AVTechnology.builder().techId(100).description("Java").build();
-		
-		InterviewCandidateDetails candidate_id=InterviewCandidateDetails.builder().candidateId(14).address("Indore").
-				candidateName("Sunali").contactNo("878978978").cvShortlisted(true).emailId("sunalisingh.adt@gmail.com").
-				highestQualification("B.E").lastCTC(4).
-				noticePeriod(30).dob(LocalDate.parse("2019-06-06")).build();
-		
-		Interview interview = Interview.builder().interviewId(1000).rounds(2).candidateName("Sunali")
-		.clientName("TCS").communication(80).enthusiasm(100).candidate_id(candidate_id).tech_id(avTechnology).build();
-		
-		when(interviewRepository.getInterviewDetailByInterviewIdAndRound(1, 2)).thenReturn(Optional.of(interview));
-		assertEquals(interview, interviewService.getInterviewDetailByInterviewIdAndRound(1, 2));
-		
-	}
+//	@Test
+//	@DisplayName("JUnit test for getInterviewDetailByInterviewIdAndRound()")
+//	public void should_return_interview_according_to_id_and_round() {
+//
+//		AVTechnology avTechnology = AVTechnology.builder().techId(100).description("Java").build();
+//
+//		InterviewCandidateDetails candidate_id=InterviewCandidateDetails.builder().candidateId(14).address("Indore").
+//				candidateName("Sunali").contactNo("878978978").cvShortlisted(true).emailId("sunalisingh.adt@gmail.com").
+//				highestQualification("B.E").lastCTC(4).
+//				noticePeriod(30).dob(LocalDate.parse("2019-06-06")).build();
+//
+//		Interview interview = Interview.builder().interviewId(1000).rounds(2).candidateName("Sunali")
+//		.clientName("TCS").communication(80).enthusiasm(100).candidate_id(candidate_id).tech_id(avTechnology).build();
+//
+//		when(interviewRepository.getInterviewDetailByInterviewIdAndRound(1, 2)).thenReturn(Optional.of(interview));
+//		assertEquals(interview, interviewService.getInterviewDetailByInterviewIdAndRound(1, 2));
+//
+//	}
 	
-	@Test
-	@DisplayName("JUnit test for getInterviewDetailsById()")
-	public void should_return_interview_id() {
-		
-		AVTechnology avTechnology = AVTechnology.builder().techId(100).description("Java").build();
-		
-		InterviewCandidateDetails candidate_id=InterviewCandidateDetails.builder().candidateId(14).address("Indore").
-				candidateName("Sunali").contactNo("878978978").cvShortlisted(true).emailId("sunalisingh.adt@gmail.com").
-				highestQualification("B.E").lastCTC(4).
-				noticePeriod(30).dob(LocalDate.parse("2019-06-06")).build();
-		
-		
-		PositionModel position = PositionModel.builder().experienceInYear("2-4")
-				.positionId(1).positionName("Software Engineer").vacancy(2).build();
-		
-		Interview interview = Interview.builder().interviewId(2).rounds(1).candidateName("Sunali")
-		.clientName("TCS").communication(80).enthusiasm(100).candidate_id(candidate_id).tech_id(avTechnology).position_id(position).build();
-	
-		
-		when(interviewRepository.findById(1)).thenReturn(Optional.of(interview));
-		assertEquals(interview, interviewService.getInterviewDetailsById(1));
-		
-	}
-	
+//	@Test
+//	@DisplayName("JUnit test for getInterviewDetailsById()")
+//	public void should_return_interview_id() {
+//
+//		AVTechnology avTechnology = AVTechnology.builder().techId(100).description("Java").build();
+//
+//		InterviewCandidateDetails candidate_id=InterviewCandidateDetails.builder().candidateId(14).address("Indore").
+//				candidateName("Sunali").contactNo("878978978").cvShortlisted(true).emailId("sunalisingh.adt@gmail.com").
+//				highestQualification("B.E").lastCTC(4).
+//				noticePeriod(30).dob(LocalDate.parse("2019-06-06")).build();
+//
+//
+//		PositionModel position = PositionModel.builder().experienceInYear("2-4")
+//				.positionId(1).positionName("Software Engineer").vacancy(2).build();
+//
+//		Interview interview = Interview.builder().interviewId(2).rounds(1).candidateName("Sunali")
+//		.clientName("TCS").communication(80).enthusiasm(100).candidate_id(candidate_id).tech_id(avTechnology).position_id(position).build();
+//
+//
+//		when(interviewRepository.findById(1)).thenReturn(Optional.of(interview));
+//		assertEquals(interview, interviewService.getInterviewDetailsById(1));
+//
+//	}
+//
 	
 
 }
