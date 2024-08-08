@@ -199,10 +199,10 @@ public class EmployeeOperationController {
 	}
 
 	@PreAuthorize("@auth.allow('GET_ALL_DOCUMENT_DETAILS_BY_EMP_ID')")
-	@GetMapping("/getAllDocumentDetailsByEmpId/{empId}")
-	public ResponseEntity<List<EmployeeDocument>> getAllDocumentDetailsByEmpId(@PathVariable int empId) {
+	@GetMapping("/getAllDocumentDetailsByEmpId/{empId}/{documentCategoryType}")
+	public ResponseEntity<List<EmployeeDocument>> getAllDocumentDetailsByEmpId(@PathVariable int empId,@PathVariable String documentCategoryType ) {
 		LOGGER.info("EmployeeDocument:employee:getAllDocumentDetails info level log message");
-		return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetailsByEmpId(empId), HttpStatus.OK);
+		return new ResponseEntity<>(employeeDocumentService.getAllDocumentDetailsByEmpId(empId,documentCategoryType), HttpStatus.OK);
 	}
 
 	@PreAuthorize("@auth.allow('UPDATE_PAYROLL_DETAILS_BY_USER',T(java.util.Map).of('currentUser', #emp.getEmpId()))")

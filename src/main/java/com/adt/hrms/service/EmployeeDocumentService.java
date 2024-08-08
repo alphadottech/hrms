@@ -28,7 +28,7 @@ public interface EmployeeDocumentService {
 
     List<String> createFolder(String documentCategoryType,String folderName, Drive service) throws GeneralSecurityException, IOException;
 
-    List<EmployeeDocument> getAllDocumentDetailsByEmpId(int empId);
+    List<EmployeeDocument> getAllDocumentDetailsByEmpId(int empId,String documentCategoryType);
 
     String deleteDocument(int empId, int docTypeId,String documentCategoryType);
 

@@ -202,8 +202,8 @@ public class EmployeeDocumentServiceImpl implements EmployeeDocumentService {
     }
 
     @Override
-    public List<EmployeeDocument> getAllDocumentDetailsByEmpId(int empId) {
-        List<EmployeeDocument> response = employeeDocumentRepo.findAllDocumentDetailsByEmpId(empId);
+    public List<EmployeeDocument> getAllDocumentDetailsByEmpId(int empId,String documentCategoryType) {
+        List<EmployeeDocument> response = employeeDocumentRepo.findAllDocumentDetailsByEmpId(empId,documentCategoryType);
         return response;
     }
 
